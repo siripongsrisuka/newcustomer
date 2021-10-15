@@ -3,112 +3,107 @@ import { Text, StyleSheet, View,TouchableOpacity, TouchableWithoutFeedback, Imag
 import Colors from "../constants/Colors";
 import Dimensions from "../constants/Dimensions";
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
+import db from "../../db/firestore";
 
 const  ShopPointDetail = ({route}) => {
     const { shopId } = route.params;
-    const {state : {shopMember,shopProfile},getShopProfile}= useContext(ShopMemberContext)
-    const [imageVisible, setImageVisible] = useState(false);
+    const {state : {shopMember,shopProfile,shopProduct},getShopProfile,getShopMember}= useContext(ShopMemberContext)
     const [redeemVisible, setRedeemVisible] = useState(false);
     const [image, setImage] = useState();
+    const [data, setData] = useState();
     let aShop = shopProfile.filter((item) => {return(item.shopId == shopId )})
     let reward = aShop[0].reward
-    console.log(reward)
     let aShopMember = shopMember.filter((item) => {return(item.shopId == shopId )})
-    console.log(aShopMember)
+
+    const confirmReward = () => {
+      aShopMember[0].remainPoint = aShopMember[0].remainPoint - data.pointConsume
+      let newReward = {
+        rewardId:String(new Date()),
+        qty:1,
+        status:'request',
+        imageId:data.imageId
+      }
+      //update Context
+      aShopMember[0].reward.push(newReward)
+      //update Firebase
+      db.collection("shopMember").doc(aShopMember[0].doc).update({
+        reward: aShopMember[0].reward,
+        remainPoint:aShopMember[0].remainPoint
+      })
+
+
+      setRedeemVisible(false)
+      getShopMember(shopMember)
+    }
 
     return (
-        <View style={{backgroundColor:'white',flex:1,justifyContent:'center'}} >
+        <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center'}} >
+
+          
+
+
          {/* part 1 รายละเอียดร้านค้า*/}
-          <ImageBackground source={{uri : aShop[0].imageId}} style={{width:Dimensions.Width,height:Dimensions.Width/1.5,justifyContent:'flex-end'}}>
+        
+         <ImageBackground source={{uri : aShop[0].imageId}} style={{width:Dimensions.Width,height:Dimensions.Width/0.9,justifyContent:'flex-end'}}>
               <View style={{backgroundColor:'white',width:Dimensions.Width,opacity:0.8,padding:5,borderTopRightRadius:10,borderTopLeftRadius:10}} >
                 <View style={{alignSelf:'center'}} >
-                    <Text style={{fontSize:20,fontWeight:'bold'}}>{aShop[0].shopName}</Text>
+                    <Text style={{fontSize:20,fontFamily: 'Prompt_600SemiBold'}}>{aShop[0].shopName}</Text>
+                </View>
+                <View style={{flexDirection:'row',width:'90%'}} >
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>ที่อยู่ : </Text>
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={1}>{aShop[0].address}</Text>
                 </View>
                 <View style={{flexDirection:'row'}} >
-                    <Text style={{fontSize:16,fontWeight:'bold'}}>ที่อยู่ : </Text>
-                    <Text style={{fontSize:16}} numberOfLines={2}>{aShop[0].address}</Text>
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>เบอร์ติดต่อ : </Text>
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={2}>{aShop[0].tel}</Text>
                 </View>
                 <View style={{flexDirection:'row'}} >
-                    <Text style={{fontSize:16,fontWeight:'bold'}}>เบอร์ติดต่อ : </Text>
-                    <Text style={{fontSize:16}} numberOfLines={2}>{aShop[0].tel}</Text>
-                </View>
-                <View style={{flexDirection:'row'}} >
-                    <Text style={{fontSize:16,fontWeight:'bold'}}>แต้มสะสม : </Text>
-                    <Text style={{fontSize:16}} numberOfLines={2}>{aShopMember[0].remainPoint}</Text>
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>แต้มสะสม : </Text>
+                    <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={2}>{aShopMember[0].remainPoint}</Text>
                 </View>
               </View>
           </ImageBackground>
-    
-
-          <ScrollView>      
-    {/* part 2 เส้นแบ่งแลกของรางวัล*/}
-            <View style={{alignSelf:'center',marginTop:10}} >
-                <Text numberOfLines={2} style={{fontSize:18,fontWeight:'bold'}}>แลกของรางวัล</Text>
+        
+          
+          <View style={{alignSelf:'center',marginTop:10}} >
+                <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_500Medium'}}>มาแลกรางวัลจาก {aShop[0].shopName} กันเถอะ!!</Text>
             </View>
+             
+    {/* part 2 เส้นแบ่งแลกของรางวัล*/}
+            
 
     {/* part 3 รายละเอียดของรางวัล*/}
-            
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={reward}
-              keyExtractor={(item) => item.rewardId}
-              renderItem={({ item }) => {
-              return (
-                <View style={styles.reward} >
-                  <Text style = {{alignSelf:'center',fontSize:24,fontWeight:'bold',color:'black'}} >{item.rewardName}</Text>
-                  
-                  <View style = {{flexDirection:'row',alignSelf:'center'}} >
-                      
-                      <View style={{marginLeft:10,justifyContent:'center'}} >
-                         
-                      
-                          <Text style={{fontSize:20,fontWeight:'bold',color:'black'}}>{item.pointConsume} คะแนน = </Text>
-                      </View>
-                      <View>
-                          <TouchableOpacity onPress = {() => {setImage(item.imageId),setImageVisible(true)}} >
-                              <Image source={{uri : item.imageId}} style={{height:Dimensions.Width/3,width:Dimensions.Width/3}}/>
-                          </TouchableOpacity>
-                      </View>
-                  </View>
-                  <View style={{flexDirection:'row',padding:8}} >
-                    <Text style={{fontSize:16,fontWeight:'bold',color:'black'}}>รายละเอียด : </Text>
-                    <Text style={{fontSize:16}} numberOfLines={2}>{item.detail}</Text>
-                </View>
-                  
-                  <TouchableOpacity onPress = {() => {setRedeemVisible(true)}} >
-                      <View style = {styles.redeem}>
-                          <Text style={{fontSize:20,fontWeight:'bold',color:'white'}}>แลกรางวัล</Text>
-                      </View>
-                  </TouchableOpacity>      
-              </View>
-              )}}
-            />
-
-    {/* part 4 modal ของรางวัล เพื่อยืนยันการแลก*/}
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={imageVisible}
-              onRequestClose={() => {
-                setImageVisible(!imageVisible);
-              }}
-            >
-                <TouchableOpacity 
-                  style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)'}} 
-                  activeOpacity={1} 
-                  onPress={() => {setImageVisible(false)}}
-                >
-
-                    <TouchableWithoutFeedback>
-                        <View style={styles.modalView}>
-                            <View  >
-                                <Image source={{uri : image}} style={{height:Dimensions.Width/1.5,width:Dimensions.Width/1.5}}/>
-                            </View>
+            <View style={{alignItems:'center',marginBottom:40}} >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={reward}
+                numColumns={2}
+                keyExtractor={(item) => item.imageId}
+                renderItem={({ item }) => {
+                return (
+                  <View style={styles.reward} >
+                    <View style = {{alignSelf:'center',width:'100%'}} >
+                        
+                        <View style={{width:'100%',borderTopRightRadius:8,borderTopLeftRadius:8}}  >
+                            <Image resizeMode='center' source={{uri : item.imageId}} style={{height:Dimensions.Width/3.5,width:Dimensions.Width/3.5}}/>
                         </View>
-                       
-                    </TouchableWithoutFeedback>
-                </TouchableOpacity> 
-            </Modal>
+                        <View style={{marginLeft:5,justifyContent:'center',alignItems:'center'}} >
+                            <Text style={{fontSize:20,fontFamily: 'Prompt_500Medium',color:'black'}}>{item.pointConsume} คะแนน</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity onPress = {() => {setRedeemVisible(true),setData(item),setImage(item.imageId)}} >
+                        <View style={{borderTopWidth:1,padding:5,borderColor:Colors.InputColor,width:'90%',alignSelf:'center'}} >
+                        <View style = {styles.redeem}>
+                            <Text style={{fontSize:18,fontFamily: 'Prompt_500Medium',color:'white'}}>แลกรางวัล</Text>
+                        </View>
+                        </View>
+                        
+                    </TouchableOpacity>  
+                </View>
+                )}}
+              />
+            </View>
+            
 
     {/* part 5 Modal ยืนยันแลกของรางวัล*/}
             <Modal
@@ -127,21 +122,20 @@ const  ShopPointDetail = ({route}) => {
 
                     <TouchableWithoutFeedback>
                         <View style={styles.modalView}>
-                            <View>
-                              <Text>ชื่อสินค้า</Text>
-                              <Text>ที่อยู่ในการจัดส่ง</Text>
-                              <Text>ระยะเวลาในการจัดส่ง</Text>
+                            <View style={{alignItems:'center'}} >
+                              <Text style={{fontSize:20,fontFamily: 'Prompt_500Medium'}} >ยืนยันแลกของรางวัล?</Text>
+                              <Image resizeMode='center' source={{uri : image}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
                               
                             </View>
-                            <TouchableOpacity onPress ={()=> {setRedeemVisible(false)}} >
-                            <Text>ยืนยัน</Text>
+                            <TouchableOpacity onPress ={confirmReward} style = {{...styles.redeem,...{backgroundColor:Colors.gold}}} >
+                            <Text style={{fontSize:20,fontFamily: 'Prompt_400Regular',color:'white'}}>ตกลง</Text>
                             </TouchableOpacity>
                         </View>
                        
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 
             </Modal>
-          </ScrollView>
+          
           
         </View>
     );
@@ -149,14 +143,14 @@ const  ShopPointDetail = ({route}) => {
 
 const styles = StyleSheet.create({
     redeem: {
-        backgroundColor:Colors.gold2,
+        backgroundColor:"#ff6900",
         alignItems:'center',
-        width:'40%',
+        width:'80%',
         alignSelf:'center',
-        borderRadius:8,
-        height:40,
+        borderRadius:50,
+        height:30,
         justifyContent:'center',
-        marginTop:10,
+        // marginTop:10,
     },
     modalView: {
       width:'80%',
@@ -180,18 +174,19 @@ const styles = StyleSheet.create({
       fontSize:18,
     },
     reward : {
-      // width:'95%',
-      margin:10,
+      width:'47%',
+      margin:5,
       backgroundColor:'white',
-      backgroundColor:'white',
-      padding:10,
+
       borderRadius:8,
       shadowColor:'black',
         shadowOpacity: 0.26,
         shadowOffset: {width: 0, height:2},
         shadowRadius:10,
-        elevation:3
-    }
+      elevation:3,
+
+    },
+    
 })
 
 export default ShopPointDetail;

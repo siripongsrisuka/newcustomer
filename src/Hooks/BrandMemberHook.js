@@ -9,16 +9,15 @@ const BrandMemberHook = () => {
     const {state : {brandMember,brandProfile},getBrandMember,getBrandProfile}= useContext(BrandMemberContext)
 
     const fetchBrandMember = async () => {
-        await db.collection('brandMember').where("userId","==","GkZhwokCkUgdKrmqhxRw").get().then(function(snapshot){
+        await db.collection('brandMember').where("userId","==","bpAX4bbGeYpD2mlPmhEj").get().then(function(snapshot){
             snapshot.forEach(function(docs){
                 let addId = docs.data()
-                addId.brandMemberDocId = docs.id
+                addId.doc = docs.id
                 db.collection('brand').where("brandId","==",addId.brandId).get().then(function(snapshot){
                     snapshot.forEach(function(docs){
                         let brand = docs.data()
                         addId.brandAdsImage = brand.brandAdsImage
-                        addId.brandLogoId = brand.brandLogoId
-                        
+                        addId.brandLogoId = brand.imageId
                         brandProfile.push(docs.data())
                         getBrandProfile(brandProfile);
                         

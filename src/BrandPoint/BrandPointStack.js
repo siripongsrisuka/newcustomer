@@ -13,7 +13,7 @@ const  BrandPoint = () => {
         initialRouteName='BrandPointScreen'
         screenOptions={{
           headerStyle: {
-            backgroundColor: Colors.BackgroundColor,
+            backgroundColor: Colors.primaryColor,
           },
           headerTintColor: "#fff",
           headerTitleStyle: {
@@ -25,7 +25,7 @@ const  BrandPoint = () => {
             name="BrandPointScreen"
             component={BrandPointScreen}
             options={{
-              headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+              headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
               title: "แลกรางวัลจากแบรนด์",
             }}
           />
@@ -33,7 +33,7 @@ const  BrandPoint = () => {
             name="BrandPointDetails"
             component={BrandPointDetails}
             options={{
-              headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+              headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
               title: "แลกรางวัล",
             }}
           />

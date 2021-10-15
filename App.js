@@ -15,6 +15,30 @@ import {Provider as CustomerProfileProvider} from './src/context/CustomerProfile
 
 
 import { Fontisto, MaterialIcons, FontAwesome, Ionicons   } from '@expo/vector-icons'; 
+import * as Font from "expo-font";
+import AppLoading from 'expo-app-loading';
+// import { useFonts, Inter_900Black,Prompt_400Regular } from '@expo-google-fonts/inter';
+import {
+  useFonts,
+  Prompt_100Thin,
+  Prompt_100Thin_Italic,
+  Prompt_200ExtraLight,
+  Prompt_200ExtraLight_Italic,
+  Prompt_300Light,
+  Prompt_300Light_Italic,
+  Prompt_400Regular,
+  Prompt_400Regular_Italic,
+  Prompt_500Medium,
+  Prompt_500Medium_Italic,
+  Prompt_600SemiBold,
+  Prompt_600SemiBold_Italic,
+  Prompt_700Bold,
+  Prompt_700Bold_Italic,
+  Prompt_800ExtraBold,
+  Prompt_800ExtraBold_Italic,
+  Prompt_900Black,
+  Prompt_900Black_Italic,
+} from '@expo-google-fonts/prompt';
 
 
 
@@ -26,12 +50,13 @@ function MyTabs() {
   return (
     <Tab.Navigator 
      tabBarOptions = {{
-       activeTintColor:'white',
-       inactiveTintColor:'white',
-       activeBackgroundColor:Colors.primaryColor,
-       inactiveBackgroundColor:'#827d7d',
+       activeTintColor:Colors.primaryColor,
+       inactiveTintColor:Colors.bottom,
+       activeBackgroundColor:'white',
+       inactiveBackgroundColor:'white',
        showLabel:'true',
        keyboardHidesTabBar:'true',
+       
      }}
      backBehavior='initialRoute'
      initialRouteName="Redeem" 
@@ -40,32 +65,35 @@ function MyTabs() {
       <Tab.Screen name="Redeem" component={Redeem} 
         options={{
           // tabBarBadge:'3',
-          tabBarLabel: 'หน้าหลัก',
+          tabBarLabel: 'โปรโมชั่น',
           tabBarColor:Colors.primaryColor,
+          
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="newspaper-o" size={24} color= {color} />
-          )}}/>
+            <Fontisto name="shopping-sale" size={24} color= {color} />
+          
+          )}}
+          />
       <Tab.Screen name="BrandPoint" component={BrandPoint} 
         options={{
           tabBarLabel: 'แบรนด์',
           tabBarColor:Colors.primaryColor,
           tabBarIcon: ({ color }) => (
-            <MaterialIcons name="redeem" size={24} color="white" />
+            <MaterialIcons name="redeem" size={24} color={color}/>
           )}}/>
       <Tab.Screen name="ShopPoint" component={ShopPoint} 
         options={{
           tabBarLabel: 'ร้านค้า',
           tabBarColor:Colors.primaryColor,
           tabBarIcon: ({ color }) => (
-            <Fontisto name="shopping-package" size={24} color="white" />
+            <Fontisto name="shopping-package" size={24} color={color} />
           )}}/>
       <Tab.Screen name="Profile" component={Profile} 
         options={{
-          tabBarLabel: 'โปรไฟล์',
+          tabBarLabel: 'ฉัน',
           size:24,
           tabBarColor:Colors.primaryColor,
           tabBarIcon: ({ color }) => (
-            <Ionicons name="person" size={24} color="white" />
+            <Ionicons name="person" size={24} color={color}/>
           )}}/>
     </Tab.Navigator>
   );
@@ -73,6 +101,33 @@ function MyTabs() {
 
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Prompt_100Thin,
+    Prompt_100Thin_Italic,
+    Prompt_200ExtraLight,
+    Prompt_200ExtraLight_Italic,
+    Prompt_300Light,
+    Prompt_300Light_Italic,
+    Prompt_400Regular,
+    Prompt_400Regular_Italic,
+    Prompt_500Medium,
+    Prompt_500Medium_Italic,
+    Prompt_600SemiBold,
+    Prompt_600SemiBold_Italic,
+    Prompt_700Bold,
+    Prompt_700Bold_Italic,
+    Prompt_800ExtraBold,
+    Prompt_800ExtraBold_Italic,
+    Prompt_900Black,
+    Prompt_900Black_Italic,
+  });
+
+  let fontSize = 24;
+  let paddingVertical = 6;
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <ShopMemberProvider>
       <BrandMemberProvider>

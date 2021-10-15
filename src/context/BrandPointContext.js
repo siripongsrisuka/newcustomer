@@ -4,7 +4,7 @@ import BrandPointData from '../Data/Brand'
 const BrandReducer = (state,action) => {
 
     switch(action.type){
-        case 'getBrandData':
+        case 'fetchBrandPoint':
             return [...state,...action.payload];
         case 'decreasePoint':
             return state.map((brand) => {
@@ -17,8 +17,8 @@ const BrandReducer = (state,action) => {
 };
 
 
-const getBrandData = (dispatch) => async() => {
-    await dispatch({type:'getBrandData',payload:BrandPointData});
+const fetchBrandPoint = (dispatch) => async() => {
+    await dispatch({type:'fetchBrandPoint',payload:BrandPointData});
 };
 
 
@@ -31,6 +31,6 @@ const decreasePoint = (dispatch) => (redeem) => {
 
 export const {Context,Provider} = CreateDataContext(
     BrandReducer,
-    {getBrandData,decreasePoint},
+    {fetchBrandPoint,decreasePoint},
     []
 )

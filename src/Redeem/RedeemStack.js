@@ -2,8 +2,8 @@ import React from "react";
 import Colors from '../constants/Colors';
 import { createStackNavigator } from "@react-navigation/stack";
 import RedeemScreen from'./RedeemScreen';
-import RedeemDetail from "./RedeemDetail";
-import BrandCoupon from "./BrandCoupon";
+import redeemCoupon from "./RedeemCoupon";
+import redeemReward from "./RedeemReward";
 const RedeemStack = createStackNavigator();
 
 const  Redeem = () => {
@@ -12,7 +12,7 @@ const  Redeem = () => {
           initialRouteName='RedeemScreen'
           screenOptions={{
             headerStyle: {
-              backgroundColor: Colors.BackgroundColor,
+              backgroundColor: Colors.primaryColor,
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -25,22 +25,23 @@ const  Redeem = () => {
               options={{
                 headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
                 title: "หน้าหลัก",
+                headerShown:false
               }}
           />
           <RedeemStack.Screen
-              name="RedeemDetail"
-              component={RedeemDetail}
+              name="redeemCoupon"
+              component={redeemCoupon}
               options={{
-                headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+                headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
                 title: "คูปองของฉัน",
               }}
           />
           <RedeemStack.Screen
-              name="BrandCoupon"
-              component={BrandCoupon}
+              name="redeemReward"
+              component={redeemReward}
               options={{
-                headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
-                title: "คูปอง",
+                headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
+                title: "รางวัลของฉัน",
               }}
           />
         

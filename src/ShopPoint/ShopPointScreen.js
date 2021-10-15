@@ -7,9 +7,8 @@ import db from '../../db/firestore'
 
 const  ShopPointScreen = ({navigation}) => {
     const {state : {shopMember,shopProfile},getShopProfile}= useContext(ShopMemberContext)
-    const checkShop = async (shopId) => {
-        let copyShopProfile = shopProfile.slice()
-        let filter = copyShopProfile.filter((item) => {return(item.shopId == shopId)})
+    const checkShop =  (shopId) => {
+        let filter = shopProfile.filter((item) => {return(item.shopId == shopId)})
          if (filter.length == 0){
             db.collection('shop').where("shopId","==",shopId).get().then(function(snapshot){
                 snapshot.forEach(function(docs){
@@ -22,17 +21,19 @@ const  ShopPointScreen = ({navigation}) => {
         }
         
     }
+    console.log(shopMember)
     return (
         <View style = {styles.container} >
-            <View style = {{flex:1,borderColor:'#b5b5b5',flexDirection:'row',padding:10}} >
+            <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center'}} >
                 <Text style={{fontSize:24}}>ร้านที่คุณสนับสนุน : </Text>
                 <Text style={{fontSize:24,color:Colors.primaryColor}}>{shopMember.length} </Text>
-                <Text style={{fontSize:24}}>ร้าน</Text>
+                <Text style={{fontSize:24}}>ร้านค้า</Text>
             </View>
-            <View style={{borderWidth:1,alignItems:'center'}} >
+            <View style={{alignItems:'center',flex:1}} >
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={shopMember}
+                    
                     keyExtractor={(item) => item.shopId}
                     renderItem={({ item }) => {
                     return (

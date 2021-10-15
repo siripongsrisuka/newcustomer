@@ -28,33 +28,32 @@ const ShopMemberHook = () => {
         await db.collection('shopMember').where("userId","==","GkZhwokCkUgdKrmqhxRw").get().then(function(snapshot){
             snapshot.forEach(function(docs){
                 let addId = docs.data()
-                addId.shopMemberDocId = docs.id
+                addId.doc = docs.id
                 shopMember.push(addId)
                 db.collection('shopProduct').where("shopId","==",addId.shopId).where("type","==","coBrand").get().then(function(snapshot){
                     snapshot.forEach(function(docs){
-                        let shop = docs.data()
-                        let filter = productCobrand.filter((item)=>{return(item.sku == shop.sku )})
+                        let product = docs.data()
+                        let filter = productCobrand.filter((item)=>{return(item.sku == product.sku )})
                         if(filter.length == 1){
-                            shop.imageId = filter[0].imageId
-                            shop.shopImageId = addId.shopImageId
-                            shop.shopName = addId.shopName
-                            shop.shopTel = addId.shopTel
-                            shopProduct.push(shop)
+                            product.imageId = filter[0].imageId
+                            product.shopImageId = addId.shopImageId
+                            product.shopName = addId.shopName
+                            product.shopTel = addId.shopTel
+                            shopProduct.push(product)
                             getShopProduct(shopProduct);
                         } else {
-                            db.collection('productCobrand').where("sku","==",shop.sku).get().then(function(snapshot){
+                            db.collection('productCobrand').where("sku","==",product.sku).get().then(function(snapshot){
                                 snapshot.forEach(function(docs){
                                     let xxx = docs.data()
                                     let promotion = xxx.promotion
                                     if(promotion.length > 0){
-                                        shop.promotionDetail = promotion[0].detail
-                                        if(promotion[0].detail == 'ลดราคา'){
+                                        if(promotion[0].detail == 'Price off'){
                                             priceOff.push(docs.data())
                                             getPriceOff(priceOff)
-                                        } else if(promotion[0].detail == 'ซื้อ 1 แถม 1'){
+                                        } else if(promotion[0].detail == 'Buy 1 get 1'){
                                             buy1Get1.push(docs.data())
                                             getBuy1Get1(buy1Get1)
-                                        } else if(promotion[0].detail == 'ซื้อ 2 ชิ้นถูกกว่า'){
+                                        } else if(promotion[0].detail == 'Buy 2 Cheaper'){
                                             buy2Cheaper.push(docs.data())
                                             getBuy2Cheaper(buy2Cheaper)
                                         } else {
@@ -62,11 +61,11 @@ const ShopMemberHook = () => {
                                             getBuy2Free1(buy2Free1)
                                         }
                                     }
-                                    shop.imageId = xxx.imageId
-                                    shop.shopName = addId.shopName
-                                    shop.shopImageId = addId.shopImageId
-                                    shop.shopTel = addId.shopTel
-                                    shopProduct.push(shop)
+                                    product.imageId = xxx.imageId
+                                    product.shopName = addId.shopName
+                                    product.shopImageId = addId.shopImageId
+                                    product.shopTel = addId.shopTel
+                                    shopProduct.push(product)
                                     getShopProduct(shopProduct); 
                                 })
                             })

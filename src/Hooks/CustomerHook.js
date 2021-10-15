@@ -5,10 +5,12 @@ import {Context as CustomerProfileContext} from '../context/CustomerProfileConte
 const CustomerHook = () => {
     const {state : {customerProfile},fetchUserProfile}= useContext(CustomerProfileContext)
     const fetchCustomerProfile = async () => {
-        let userId = 'GkZhwokCkUgdKrmqhxRw'
+        let userId = ' bpAX4bbGeYpD2mlPmhEj'
         await db.collection('customer').where("customerId","==",userId).get().then(function(snapshot){
             snapshot.forEach(function(docs){
-                customerProfile.push(docs.data())
+                let object = docs.data()
+                object.doc = docs.id
+                customerProfile.push(object)
                 fetchUserProfile(customerProfile)
             })
         });
