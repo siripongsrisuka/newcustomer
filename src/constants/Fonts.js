@@ -5,6 +5,7 @@ export default {
     lgb:{fontSize:18,fontFamily: 'Prompt_600SemiBold'},
     lg:{fontSize:18,fontFamily: 'Prompt_400Regular'},
     md: {fontSize:16,fontFamily: 'Prompt_400Regular'},
+    mdb: {fontSize:16,fontFamily: 'Prompt_600SemiBold'},
     mdw:{fontSize:16,fontFamily: 'Prompt_400Regular',color:'white'},
     sm: {fontFamily: 'Prompt_400Regular'},
     smw: {fontFamily: 'Prompt_400Regular',color:'white'},

@@ -4,6 +4,7 @@ import Dimensions from '../constants/Dimensions'
 import Colors from "../constants/Colors";
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
 import db from '../../db/firestore'
+import Fonts from "../constants/Fonts";
 
 const  ShopPointScreen = ({navigation}) => {
     const {state : {shopMember,shopProfile},getShopProfile}= useContext(ShopMemberContext)
@@ -24,16 +25,15 @@ const  ShopPointScreen = ({navigation}) => {
     console.log(shopMember)
     return (
         <View style = {styles.container} >
-            <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center'}} >
-                <Text style={{fontSize:24}}>ร้านที่คุณสนับสนุน : </Text>
-                <Text style={{fontSize:24,color:Colors.primaryColor}}>{shopMember.length} </Text>
-                <Text style={{fontSize:24}}>ร้านค้า</Text>
+            <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center',justifyContent:'center'}} >
+                <Text style={Fonts.md}>ร้านที่คุณสนับสนุน : </Text>
+                <Text style={{...Fonts.md,...{color:Colors.primaryColor}}}>{shopMember.length} </Text>
+                <Text style={Fonts.md}>ร้านค้า</Text>
             </View>
             <View style={{alignItems:'center',flex:1}} >
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={shopMember}
-                    
                     keyExtractor={(item) => item.shopId}
                     renderItem={({ item }) => {
                     return (
@@ -45,10 +45,10 @@ const  ShopPointScreen = ({navigation}) => {
                                     </View>
                                     <View style={{marginLeft:10, width:"50%",marginTop:10,justifyContent:'space-between'}} >
                                         <View>
-                                            <Text numberOfLines={2} style={{fontSize:18,fontWeight:'bold'}} >{item.shopName}</Text>
+                                            <Text numberOfLines={1} style={Fonts.lg} >{item.shopName}</Text>
                                         </View>
                                         <View style = {{marginBottom:10}} >
-                                            <Text>แต้มสะสม :{item.remainPoint} </Text>
+                                            <Text style={Fonts.sm} >แต้มสะสม :{item.remainPoint} </Text>
                                         </View>
                                     </View>
                                 </View>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         height:Dimensions.Height/6,
         margin:5,
         backgroundColor:'white',
-        borderRadius:8,
+        borderRadius:15,
         shadowColor:'black',
           shadowOpacity: 0.26,
           shadowOffset: {width: 0, height:2},
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     image : {
         width:"100%",
         height:"100%",
-        resizeMode:'stretch',
-        borderRadius:8,
+        borderTopLeftRadius:15,
+        borderBottomLeftRadius:15
     },
 
 })

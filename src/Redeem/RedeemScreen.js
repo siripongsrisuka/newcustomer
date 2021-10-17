@@ -22,9 +22,9 @@ import QRCode from 'react-native-qrcode-svg';
 import { BrandMemberHook } from "../Hooks";
 import { CustomerHook } from "../Hooks";
 import { ShopMemberHook } from "../Hooks";
-import { LinearGradient } from 'expo-linear-gradient';
 import Fonts from "../constants/Fonts";
 import Carousel from "../../component/Carousel";
+import Catalog from "../../component/Catalog";
 
 
 const  RedeemScreen = ({navigation}) => {
@@ -80,7 +80,7 @@ const  RedeemScreen = ({navigation}) => {
 
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
-                <Carousel data ={rawdata} />
+        <Carousel data ={rawdata} />
 
         <View style={styles.bar} >
             <TouchableOpacity 
@@ -98,7 +98,6 @@ const  RedeemScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
 
-
         <View style={{height:40,marginTop:50}} >
           <ScrollView horizontal showsHorizontalScrollIndicator={false} >
               {(promotionType == 'Buy 1 get 1')
@@ -107,12 +106,9 @@ const  RedeemScreen = ({navigation}) => {
                       <Text style={Fonts.md}>1 แถม 1</Text>
                     </View>
                 </TouchableOpacity>
-                :<TouchableOpacity 
-                    style={styles.border}
-                    onPress={() => {setPromotionType('Buy 1 get 1')}}
-                  > 
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 1 get 1')}}> 
                     <Text style={Fonts.md}>1 แถม 1</Text>
-                  </TouchableOpacity> 
+                </TouchableOpacity> 
               }
               {(promotionType == 'Price off')
                 ?<TouchableOpacity  style={styles.border} >
@@ -120,13 +116,8 @@ const  RedeemScreen = ({navigation}) => {
                       <Text style={Fonts.md} >ลดราคา</Text>
                   </View>
                 </TouchableOpacity>
-                :<TouchableOpacity 
-                    style={styles.border}
-                    onPress={() => {setPromotionType('Price off')}}
-                >
-                  <View style={styles.notChoose}>
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Price off')}}>
                     <Text style={Fonts.md} >ลดราคา</Text>
-                  </View>
                 </TouchableOpacity> 
               }
               {(promotionType == 'Buy 2 Cheaper')
@@ -135,13 +126,8 @@ const  RedeemScreen = ({navigation}) => {
                     <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
                   </View>
                 </TouchableOpacity>
-                :<TouchableOpacity 
-                    style={styles.border}
-                    onPress={() => {setPromotionType('Buy 2 Cheaper')}}
-                >
-                  <View style={styles.notChoose}>
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 Cheaper')}}>
                     <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
-                  </View>
                 </TouchableOpacity>
               }
               {(promotionType == 'Buy 2 get 1')
@@ -150,210 +136,61 @@ const  RedeemScreen = ({navigation}) => {
                     <Text style={Fonts.md} >2 แถม 1</Text>
                   </View>
                 </TouchableOpacity >
-                :<TouchableOpacity 
-                  style={styles.border}
-                  onPress={() => {setPromotionType('Buy 2 get 1')}}
-                >
-                  <View style={styles.notChoose}>
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 get 1')}}>
                     <Text style={Fonts.md} >2 แถม 1</Text>
-                  </View>
                 </TouchableOpacity >
               }
           </ScrollView>
         </View>
         
-        
-            
-            {promotionType == 'Price off' && (
-                <View style={{...styles.card,...{marginBottom:275}}} >
-                    <LinearGradient
-                        colors={['#e43a15', '#ff6a00']}
-                        style={{height:50,alignItems:'center',justifyContent:'center',borderRadius:30}} 
-                    >
-                        <Text style={Fonts.xlwb} >ลดราคา</Text>
-                    </LinearGradient>
-                  <FlatList
-                    data={priceOff}
-                    keyExtractor={(item) => item.sku}
-                    renderItem={({ item }) => {
-                    return (
-                      <TouchableOpacity onPress ={() => showProduct(item)} style={styles.newpromotion}  >
-                        <LinearGradient
-                          colors={['#ee0979', '#ff6a00']}
-                          style={{width:"100%",borderTopRightRadius:20,borderTopLeftRadius:20,padding:7}}>
-                          <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_400Regular',color:'white',textAlign:'center'}}>{item.name}</Text>
-                        </LinearGradient>
-                        <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/2.5,height:Dimensions.Width/2.5}} />
-                        {/* <Text>{item.name}</Text> */}
-                        <View style={{flexDirection:'row',borderTopWidth:1,width:'90%',borderColor:Colors.InputColor,justifyContent:'center'}} >
-                          <Text style={{textDecorationLine:'line-through',fontFamily: 'Prompt_400Regular'}} >{item.price} บาท</Text>
-                        </View>
-                        <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_500Medium'}}>{item.price - item.promotion[0].discount} บาท</Text>
-                      </TouchableOpacity>
-                    )}}
-                  />
-                </View>
-            )}
-            {promotionType == 'Buy 1 get 1' && (
-                <View style={{...styles.card,...{marginBottom:275}}} >
-                {/* <View style={{backgroundColor:Colors.primaryColor,height:50,alignItems:'center',justifyContent:'center',borderRadius:30}} >
-                      <Text style={Fonts.xlwb} >ซื้อ 1 แถม 1</Text>
-                  </View> */}
-                  <LinearGradient
-                      colors={['#e43a15', '#ff6a00']}
-                      style={{height:50,alignItems:'center',justifyContent:'center',borderRadius:30}} 
-                    >
-                   <Text style={Fonts.xlwb} > 1 แถม 1</Text>
-                  </LinearGradient>
-                <FlatList
-                  data={buy1Get1}
-                  keyExtractor={(item) => item.sku}
-                  renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity onPress ={() => showProduct(item)} 
-                    style={styles.newpromotion} >
-                      <LinearGradient
-                        colors={['#ee0979', '#ff6a00']}
-                        style={{width:"100%",borderTopRightRadius:20,borderTopLeftRadius:20,padding:7}}>
-                        <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_400Regular',color:'white',textAlign:'center'}}>{item.name}</Text>
-                      </LinearGradient>
-                      
-                      <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/2.5,height:Dimensions.Width/2.5}} />
-                      <View style={{flexDirection:'row',borderTopWidth:1,width:'90%',borderColor:Colors.InputColor,justifyContent:'center'}} >
-                        <Text style={Fonts.sm} >2 ชิ้นปกติ </Text>
-                        <Text style={{textDecorationLine:'line-through',fontFamily: 'Prompt_400Regular'}}>{2*item.price} </Text>
-                        <Text style={Fonts.sm} >บาท</Text>
-                      </View>
-                      <View style={{flexDirection:'row',alignItems:'flex-end'}} >
-                        <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_500Medium'}}>{item.price} </Text>
-                        <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_400Regular'}}>บาท</Text>
-                      </View >
-                    </TouchableOpacity>
-                  )}}
-                />
-            </View>
-            )}
+        {promotionType == 'Price off' && (<Catalog data={priceOff} press ={showProduct}/>)}
+        {promotionType == 'Buy 1 get 1' && (<Catalog data={buy1Get1} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
+        {promotionType == 'Buy 2 Cheaper' && (<Catalog data={buy2Cheaper} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
+        {promotionType == 'Buy 2 get 1' && (<Catalog data={buy2Free1} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)}
 
-            {promotionType == 'Buy 2 Cheaper' && (
-              <View style={{...styles.card,...{marginBottom:275}}} >
-                <LinearGradient
-                      colors={['#e43a15', '#ff6a00']}
-                      style={{height:50,alignItems:'center',justifyContent:'center',borderRadius:30}} 
-                    >
-                   <Text style={Fonts.xlwb} > 2 ชิ้นถูกกว่า</Text>
-                  </LinearGradient>
-                <FlatList
-                  data={buy2Cheaper}
-                  showsVerticalScrollIndicator={false}
-                  numColumns={2}
-                  keyExtractor={(item) => item.sku}
-                  renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity onPress ={() => showProduct(item)} style={styles.newpromotion}  >
-                        <LinearGradient
-                          colors={['#ee0979', '#ff6a00']}
-                          style={{width:"100%",borderTopRightRadius:20,borderTopLeftRadius:20,padding:7}}>
-                          <Text numberOfLines={1} style={{fontSize:18,fontFamily: 'Prompt_400Regular',color:'white',textAlign:'center'}}>{item.name}</Text>
-                        </LinearGradient>
-                      <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/4,height:Dimensions.Width/4}} />
-                      {/* <Text>{item.name}</Text> */}
-                      <View style={{flexDirection:'row',borderTopWidth:1,width:'90%',borderColor:Colors.InputColor,justifyContent:'center'}} >
-                        <Text style={Fonts.sm} >2 ชิ้นปกติ </Text>
-                        <Text style={{textDecorationLine:'line-through',fontFamily: 'Prompt_400Regular'}}>{2*item.price} </Text>
-                        <Text style={Fonts.sm} >บาท</Text>
-                      </View>
-                      <View style={{flexDirection:'row',alignItems:'flex-end'}} >
-                        <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_500Medium'}}>{(2*item.price)  - item.promotion[0].discount}  </Text>
-                        <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_400Regular'}}>บาท</Text>
-                      </View >
-                    </TouchableOpacity>
-                  )}}
-                />
-              </View>
-            )}
-            {promotionType == 'Buy 2 get 1' && (
-              <View style={{...styles.card,...{marginBottom:275}}} >
-                <LinearGradient
-                  colors={['#e43a15', '#ff6a00']}
-                  style={{height:50,alignItems:'center',justifyContent:'center',borderRadius:30}} 
-                >
-                   <Text style={Fonts.xlwb} > 2 แถม 1</Text>
-                </LinearGradient>
-                <FlatList
-                  data={buy2Free1}
-                  numColumns={2}
-                  showsVerticalScrollIndicator={false}
-                  keyExtractor={(item) => item.sku}
-                  renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity onPress ={() => showProduct(item)} style={styles.newpromotion}  >
-                        <LinearGradient
-                          colors={['#ee0979', '#ff6a00']}
-                          style={{width:"100%",borderTopRightRadius:20,borderTopLeftRadius:20,padding:7}}>
-                          <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_400Regular',color:'white',textAlign:'center'}}>{item.name}</Text>
-                        </LinearGradient>
-                        <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/2.5,height:Dimensions.Width/2.5}} />
-                        <View style={{flexDirection:'row',borderTopWidth:1,width:'90%',borderColor:Colors.InputColor,justifyContent:'center'}} >
-                          <Text style={Fonts.sm} >3 ชิ้นปกติ </Text>
-                          <Text style={{textDecorationLine:'line-through',fontFamily: 'Prompt_400Regular'}}>{3*item.price} </Text>
-                          <Text style={Fonts.sm} >บาท</Text>
-                        </View>
-                        <View style={{flexDirection:'row',alignItems:'flex-end'}} >
-                          <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_500Medium'}}>{(3*item.price)  - item.promotion[0].discount} </Text>
-                          <Text style={{fontSize:28,color:'red',fontFamily: 'Prompt_400Regular'}}>บาท</Text>
-                        </View >
-                    </TouchableOpacity>
-                  )}}
-                />
-            </View>
-            )}
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={couponVisible}
-                onRequestClose={() => {
-                  setCouponVisible(false);
-                }}
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={couponVisible}
+            onRequestClose={() => {
+              setCouponVisible(false);
+            }}
+        >
+            <TouchableOpacity 
+                style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center'}} 
+                activeOpacity={1} 
+                onPress={() => {setCouponVisible(false)}}
             >
-                <TouchableOpacity 
-                    style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center'}} 
-                    activeOpacity={1} 
-                    onPress={() => {setCouponVisible(false)}}
-                >
-                    <TouchableWithoutFeedback>
-                        <View style={{ margin: 20, backgroundColor: "white",alignSelf:'center',padding:20,alignItems:'center',borderRadius:30}}>
-                            <Text style={Fonts.md}>กรุณาแสดง Qrcode ต่อร้านค้า</Text>
-                            <QRCode
-                                value={token}
-                                logo={require('../../image/241742403_188453900052739_8567756178149387658_n.jpg')}
-                                logoSize={Dimensions.Width/7}
-                                size={Dimensions.Width/1.5}
-                            />
-                            <Text style={Fonts.lg} >คุณ {name}</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </TouchableOpacity>
-            </Modal>
-
-            <View style={styles.centeredView}>
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                >
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center'}} >      
-                        <Image source = {require('../../image/241742403_188453900052739_8567756178149387658_n.jpg')} style={{width:Dimensions.Width/1.5, height:Dimensions.Width/1.5}}/>            
-                        <View style = {{height:80,width:Dimensions.Width}} >
-                            <PacmanIndicator color= {Colors.primaryColor} size = {60} />
-                        </View>
-                      </View>
+                <TouchableWithoutFeedback>
+                    <View style={{ margin: 20, backgroundColor: "white",alignSelf:'center',padding:20,alignItems:'center',borderRadius:30}}>
+                        <Text style={Fonts.md}>กรุณาแสดง Qrcode ต่อร้านค้า</Text>
+                        <QRCode
+                            value={token}
+                            logo={require('../../image/241742403_188453900052739_8567756178149387658_n.jpg')}
+                            logoSize={Dimensions.Width/7}
+                            size={Dimensions.Width/1.5}
+                        />
+                        <Text style={Fonts.lg} >คุณ {name}</Text>
                     </View>
-                  </View>
-                </Modal>
-            </View> 
+                </TouchableWithoutFeedback>
+            </TouchableOpacity>
+        </Modal>
+
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+        >
+            <View style={styles.modalView}>
+              <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center'}} >      
+                <Image source = {require('../../image/241742403_188453900052739_8567756178149387658_n.jpg')} style={{width:Dimensions.Width/1.5, height:Dimensions.Width/1.5}}/>            
+                <View style = {{height:80,width:Dimensions.Width}} >
+                    <PacmanIndicator color= {Colors.primaryColor} size = {60} />
+                </View>
+              </View>
+            </View>
+        </Modal>
+    
         <TouchableOpacity style={styles.coupon} onPress ={useCoupon}  >
             <Text style={Fonts.mdw}>ใช้</Text>
             <Text style={Fonts.mdw} >คูปอง</Text>
@@ -379,32 +216,54 @@ const  RedeemScreen = ({navigation}) => {
                                     <Image source={{uri:image}} style={{height:Dimensions.Width/2.5,width:Dimensions.Width/2.5}}/>
                                 </View>
                                 <View style={{flex:1,paddingTop:10}}>
-                                  <Text style={{fontSize:18,fontWeight:'bold'}} >{productName}</Text>
+                                  <Text style={Fonts.lg} >{productName}</Text>
                                 </View>
                             </View>
-                                
-                            
-                            <Text style={{fontSize:22}} >ค้นพบ : {filterShop.length} ร้านค้าใกล้คุณ</Text>
+
+                            <Text style={Fonts.lg} >ค้นพบ : {filterShop.length} ร้านค้าใกล้คุณ</Text>
+                           
                             <FlatList
                               data={filterShop}
                               keyExtractor={(item) => item.shopId}
+                              scrollEnabled
                               renderItem={({ item }) => {
                               return (
                                 <View style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}}  >
                                   <View >
-                                      <Image source={{uri:item.shopImageId}} style={{width:100,height:100}} />
+                                      <Image source={{uri:item.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
                                   </View>
                                   <View style={{paddingLeft:5,width:'50%'}} >
-                                      <Text style={{fontSize:20,fontWeight:'bold',color:Colors.primaryColor}} >มีสินค้า {item.instock} ชิ้น</Text>
-                                      <Text style={{fontWeight:'bold'}} >{item.shopName}</Text>
+                                      <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {item.instock} ชิ้น</Text>
+                                      <Text style={Fonts.md} >{item.shopName}</Text>
                                       <View style={{flexDirection:'row'}} >
-                                          <Text style={{fontWeight:'bold'}}>โทร : </Text>
+                                          <Text style={Fonts.sm}>โทร : </Text>
                                           <Text>{item.shopTel}</Text>
                                       </View>
                                   </View>    
                                 </View>
                               )}}
                             />
+                         
+                            {/* <ScrollView contentContainerStyle={{paddingVertical: 20}}>
+                            {filterShop?.length > 0 && filterShop.map((a,i) => (
+                              <View style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}} key={i}  >
+                              <View >
+                                  <Image source={{uri:a.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
+                              </View>
+                              <View style={{paddingLeft:5,width:'50%'}} >
+                                  <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {a.instock} ชิ้น</Text>
+                                  <Text style={Fonts.md} >{a.shopName}</Text>
+                                  <View style={{flexDirection:'row'}} >
+                                      <Text style={Fonts.sm}>โทร : </Text>
+                                      <Text>{a.shopTel}</Text>
+                                  </View>
+                              </View>    
+                            </View>
+                            ))}
+                            <Text>fdfdfdfdfdf</Text>
+                            </ScrollView> */}
+                            
+                            
                         </View>
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 
@@ -414,14 +273,6 @@ const  RedeemScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    main: {
-      flex:1,
-    },
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    },
     modalView: {
       backgroundColor: "white",
       padding: 35,
@@ -458,13 +309,6 @@ const styles = StyleSheet.create({
       elevation: 5,
       opacity:0.7
     },
-    card: {
-      width:Dimensions.Width-15,
-      margin:5,
-      padding:5,
-      backgroundColor:'white',
-      borderRadius:8,
-  },
     product:{
       backgroundColor: "white",
       alignItems: "center",
@@ -478,14 +322,9 @@ const styles = StyleSheet.create({
       elevation: 5,
       width:Dimensions.Width/1.2,
       maxHeight:"80%",
-      borderRadius:8
+      borderRadius:15,
+      padding:10
     },
-  notChoose: {
-    justifyContent:'center',
-    alignItems:'center',
-    height:35,
-    width:100,
-  },
   choose: {
     justifyContent:'center',
     alignItems:'center',
@@ -514,24 +353,6 @@ const styles = StyleSheet.create({
     width:110,
     alignItems:'center',
   },
-  newpromotion : {
-    width:'47%',
-    alignItems:'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
-    backgroundColor:'white',
-    borderRadius:30,
-    marginTop:12,
-    marginLeft:5,
-    marginBottom:5,
-    marginRight:5
-  },
   bar : {
     shadowColor: "#000",
     shadowOffset: {
@@ -547,7 +368,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     position:'absolute',
     height:60,
-    marginTop:180,
+    marginTop:Dimensions.Width/2,
     zIndex:999,
     flexDirection:'row',
     alignItems:'center',

@@ -7,4 +7,5 @@ export default {
     gold2:'#ffe18f',
     promotion:"#eb2d49",
     bottom:"#a6a6a6",
+    absolute:'#aba9a9'
 };

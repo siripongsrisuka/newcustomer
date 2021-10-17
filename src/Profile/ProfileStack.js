@@ -12,7 +12,7 @@ const  Profile = () => {
       initialRouteName='ProfileScreen'
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors.BackgroundColor,
+          backgroundColor: Colors.primaryColor,
         },
         headerTintColor: "#fff",
         headerTitleStyle: {
@@ -23,7 +23,7 @@ const  Profile = () => {
             name="ProfileScreen"
             component={ProfileScreen}
             options={{
-              headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+              headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
               title: "โปรไฟล์ของคุณ",
             }}/>
            

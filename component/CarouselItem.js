@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     image: {
         width: width,
         height:width/1.9,
-        // borderRadius:10
     },
     ItemTitle: {
         color:'white',

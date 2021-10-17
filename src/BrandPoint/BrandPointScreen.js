@@ -1,7 +1,6 @@
 import React, {useEffect,useContext,useState} from "react";
 import { Text, StyleSheet, View, FlatList, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, Button, ImageBackground } from "react-native";
 import Dimensions from '../constants/Dimensions'
-import {Context as BrandPointContext} from '../context/BrandPointContext';
 import {Context as BrandMemberContext} from '../context/BrandMemberContext'
 import db from "../../db/firestore";
 
@@ -72,10 +71,10 @@ const  BrandPointDetails = ({navigation}) => {
         
     return (
         <View style = {styles.container} >
-            <View style = {{flexDirection:'row',justifyContent:'space-between',width:'100%',height:50}} >
+            <View style = {{flexDirection:'row',justifyContent:'space-between',width:'100%',height:40}} >
                 <View style = {{flex:1,borderRightWidth:1,justifyContent:'center',alignItems:'center',flexDirection:'row',borderColor:'#b5b5b5'}} >
                     <Text style={Fonts.md}>แบรนด์ที่คุณมีส่วนร่วม : </Text>
-                    <Text style={{fontSize:30,color:Colors.primaryColor}}>{brandMember.length}</Text>
+                    <Text style={{...Fonts.md,...{color:Colors.primaryColor}}}>{brandMember.length}</Text>
                 </View>
             </View>
             <FlatList
@@ -96,11 +95,11 @@ const  BrandPointDetails = ({navigation}) => {
                             )}
                             {item.status !== 'unknow' && (
                                 <View style = {styles.absulute} >
-                                    <Text style = {Fonts.lg} >คุณมี {item.remainPoint} แต้ม</Text>
+                                    <Text style={Fonts.mdw} >คุณมี {item.remainPoint} แต้ม</Text>
                                 </View>
                             )}
                             {item.status !== 'unknow' && (
-                                <TouchableOpacity onPress= {() => {navigation.navigate("BrandPointDetails",{brandId:item.brandId})}} >
+                                <TouchableOpacity onPress= {() => {navigation.navigate("BrandPointDetails",{brandId:item.brandId})}} style={{borderRadius:30}} >
                                     <Image style = {styles.image}  source={{uri: item.brandAdsImage,}} />
                                 </TouchableOpacity>
                             )}
@@ -186,10 +185,10 @@ const styles = StyleSheet.create({
     },
     card: {
         width:Dimensions.Width-20,
-        height:Dimensions.Height/2.5,
+        height:Dimensions.Width-20,
         margin:5,
         backgroundColor:'white',
-        borderRadius:8,
+        borderRadius:30,
         shadowColor:'black',
           shadowOpacity: 0.26,
           shadowOffset: {width: 0, height:2},
@@ -198,21 +197,21 @@ const styles = StyleSheet.create({
           justifyContent:'center'
     },
     image : {
-        width:"100%",
-        height:"100%",
-        resizeMode:'stretch',
+        width:Dimensions.Width-20,
+        height:Dimensions.Width-20,
+        borderRadius:30,
     },
     absulute: {
         height:50, 
         width:200,
-        backgroundColor:'#4c4e52',
+        backgroundColor:Colors.absolute,
         justifyContent:'center',
         alignItems:'center',
         opacity:0.8,
         position:'absolute',
         left:10,
         top:5,
-        borderRadius:8,
+        borderRadius:30,
         zIndex:10
     },
     register:{

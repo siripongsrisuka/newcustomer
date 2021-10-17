@@ -16,7 +16,6 @@ import Dimensions from "../constants/Dimensions";
 import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
 
-
 const  redeemReward = ({route}) => {
     const {state : {brandMember}}= useContext(BrandMemberContext);
     const {state : {shopMember},getShopMember}= useContext(ShopMemberContext);
@@ -87,6 +86,7 @@ const  redeemReward = ({route}) => {
                 data={shopReward}
                 keyExtractor={(item) => item.rewardId}
                 numColumns={2}
+                showsVerticalScrollIndicator={false}
                 renderItem={({item}) => {
                   return (
                     <TouchableOpacity style={styles.brandCoupon} onPress={() => {setModalVisible(true),setData(item)}}  >
@@ -115,45 +115,43 @@ const  redeemReward = ({route}) => {
                     activeOpacity={1} 
                     onPress={() => {setModalVisible(false)}}
                   >
-  
                       <TouchableWithoutFeedback>
-                          <View style={{backgroundColor:'white',width:Dimensions.Width/1.2,borderRadius:8}}>
+                          <View style={{backgroundColor:'white',width:Dimensions.Width/1.2,borderRadius:30}}>
                               <View style={{alignItems:'center',paddingTop:10}} >
                                 <Text style={Fonts.lg} >{data.shopName}</Text>
                                 <Image resizeMode='center' source={{uri : data.imageId}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
                                 
                               </View>
-                              <TouchableOpacity style = {{...styles.redeem,...{backgroundColor:Colors.gold,alignItems:'center'}}} onPress={useShopReward}>
+                              <TouchableOpacity style = {{backgroundColor:Colors.gold,alignItems:'center',borderBottomLeftRadius:30,borderBottomRightRadius:30}} onPress={useShopReward}>
                                 <Text style={Fonts.lg}>ร้านค้ากดยืนยันการแลกรางวัล</Text>
                                 <Text style={{color:'red',fontFamily: 'Prompt_400Regular'}} >**หากกดใช้แล้วจะไม่สามารถยกเลิกได้</Text>
                               </TouchableOpacity>
                           </View>
-                         
                       </TouchableWithoutFeedback>
                   </TouchableOpacity> 
               </Modal>
             )}
           </View>
-          :<FlatList
-            data={brandReward}
-            keyExtractor={(item) => item.rewardId}
-            renderItem={({item}) => {
-              return (
-                <TouchableOpacity style={styles.choose} onPress={() => {setModalVisible(true),setData(item)}}  >
-                  <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row',}} >
-                    <Image 
-                      source={{uri:item.imageId}} 
-                      style={{width:200,height:100}}
-                      resizeMode='stretch'
-                    />
-                    <Text style={{fontSize:18,fontWeight:'bold'}} >{item.shopName}</Text>
-                    
+          :<View style={{flex:1,alignItems:'center'}}>
+            <FlatList
+              data={brandReward}
+              numColumns={2}
+              keyExtractor={(item) => item.rewardId}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.brandCoupon}  >
+                      <Image 
+                        source={{uri:item.rewardImageId}} 
+                        style={{width:'100%',height:Dimensions.Width/4,borderTopLeftRadius:15,borderTopRightRadius:15}}
+                      />
+                      <Text style={Fonts.lgb} >{item.rewardName}</Text>
+                      <Text style={{fontSize:14,color:Colors.primaryColor,fontFamily: 'Prompt_400Regular'}} >{item.status}</Text>
                   </View>
-                  <Text style={{fontSize:18,color:Colors.primaryColor}} >คลิกเพื่อใช้รางวัล</Text>
-                </TouchableOpacity>
-              )
-            }}
-          />
+                )
+              }}
+            />
+          </View>
           }
         </View>
     )
@@ -162,7 +160,7 @@ const  redeemReward = ({route}) => {
 const styles = StyleSheet.create({
     brandCoupon:{
       backgroundColor: 'white',
-      borderRadius: 8,
+      borderRadius: 15,
       shadowColor: 'black',
       shadowOpacity: 0.26,
       shadowOffset: { width: 0, height: 2 },
@@ -171,7 +169,6 @@ const styles = StyleSheet.create({
       alignItems:'center',
       margin:5,
       width:Dimensions.Width/2.2,
-      // height:Dimensions.Width/2.2,
     },
     coupon : {
       flex:1.5,

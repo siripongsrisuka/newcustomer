@@ -12,7 +12,7 @@ const  ShopPoint = () => {
       initialRouteName='ShopPointScreen'
       screenOptions={{
         headerStyle: {
-          backgroundColor: Colors.BackgroundColor,
+          backgroundColor: Colors.primaryColor,
         },
         headerTintColor: "#fff",
         headerTitleStyle: {
@@ -23,7 +23,7 @@ const  ShopPoint = () => {
             name="ShopPointScreen"
             component={ShopPointScreen}
             options={{
-              headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+              headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
               title: "แลกรางวัลจากร้านค้า",
             }}
           />
@@ -31,7 +31,7 @@ const  ShopPoint = () => {
             name="ShopPointDetail"
             component={ShopPointDetail}
             options={{
-              headerTitleStyle : {alignSelf:'center',fontSize:25, fontWeight:'bold'},
+              headerTitleStyle : {alignSelf:'center',fontSize:25,fontFamily: 'Prompt_400Regular'},
               title: "แลกรางวัล",
               headerShown:false
             }}
