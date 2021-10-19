@@ -1,7 +1,12 @@
 
 import * as firebase from 'firebase';
 
+import 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
+import 'firebase/functions';
+
+// import {initializeApp} from 'firebase/app'
 
 const configuration = {
     apiKey: "AIzaSyCsbx70zCFK-kQH64Na70LcBOPxuW1jkH4",
@@ -14,10 +19,10 @@ const configuration = {
 }
 
 firebase.initializeApp(configuration);
+// initializeApp(configuration)
 
 const db = firebase.firestore();
-
-
+export const firebaseAuth = firebase.auth();
 
 
 export const getCustomerProfile = () => {
@@ -57,6 +62,11 @@ export const fetchBrandMember = () => {
 
     
    
+}
+
+
+export const signOut = async () => {
+    return await firebaseAuth().signOut();
 }
 
 export default db;
