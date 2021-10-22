@@ -1,4 +1,4 @@
-import React, {useContext, useState,useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -21,24 +21,28 @@ const LoginOrRegistor = ({navigation,route}) => {
   const [objPhoneConfirm, setObjPhoneConfirm] = useState(null);
   const [otp, setOtp] = useState(null);
   const [phone, setPhone] = useState();
-  const checkPhoneNumber = () => {
-    if(phone.length != 10){
+/*   const checkPhoneNumber = () => {
+    if(phone?.length != 10){
       alert('กรุณากรอกหมายเลขโทรศัพท์มือถือให้พอดี 10 หลัก')
       return 
     } else if(phone.substring(0,1) != '0' ){
       alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
       return 
     } else {
-        phoneLogin2(phone),navigation.navigate('FirebaseOtpVerifyScreen')
+        // phoneLogin2(phone),navigation.navigate('FirebaseOtpVerifyScreen')
 
-/*         db.collection('shop').where("tel","==",phone).get().then((qsnapshot) => {
+        db.collection('shop').where("tel","==",phone).get().then((qsnapshot) => {
           if (qsnapshot.docs.length > 0) {
               phoneLogin2(phone),navigation.navigate('FirebaseOtpVerifyScreen')
           } else {
             alert('กรุณาสมัครสมาชิก เพื่อเข้าใช้งานระบบ')
           }
-        }) */
+        })
     }
+  } */
+
+  const checkPhoneNumber = () => {
+    phoneLogin2(phone),navigation.navigate('aa')
   }
 
   return (

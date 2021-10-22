@@ -14,11 +14,17 @@ import { AuthContext } from '../context';
 const EmptyScreen = ({navigation}) => {
     const {state,tryLocalSignIn} = useContext(AuthContext);
 
-    useEffect(() => tryLocalSignIn().then(()=> navigation.navigate('WaitProcessScreen')) , [])
+    useEffect(()=>{
+        async function checkAuth(){
+           await tryLocalSignIn()
+        }
+
+        checkAuth().then(()=> navigation.navigate('WaitProcessScreen'))
+        
+    },[])
     
     return (
         <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center'}} >
-            <Text>Empty Screen</Text>     
         </View>
     )
 };

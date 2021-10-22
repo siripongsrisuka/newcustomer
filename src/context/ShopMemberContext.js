@@ -29,16 +29,16 @@ const shopMemberReuscer = (state,action) => {
 
 const getShopMember = (dispatch) =>  (data) => {
      dispatch({type:'getShopMember',payload:data});
-      console.log("getShopMember")
-    console.log(data)
-    console.log("getShopMember")
+    //   console.log("getShopMember")
+    // console.log(data)
+    // console.log("getShopMember")
 };
 
 const getShopProfile = (dispatch) =>  (data) => {
     dispatch({type:'getShopProfile',payload:data});
-        console.log("getShopProfile")
-    console.log(data)
-    console.log("getShopProfile")
+    //     console.log("getShopProfile")
+    // console.log(data)
+    // console.log("getShopProfile")
 };
 
 

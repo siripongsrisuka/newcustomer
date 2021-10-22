@@ -22,7 +22,7 @@ const LoadingScreen = ({navigation}) => {
         const loadStock = async() => {
             await fetchCustomerProfile()
             
-            console.log('shopMember')
+            // console.log('shopMember')
 
             setTimeout(() => {
                 navigation.navigate("Redeem")

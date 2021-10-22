@@ -1,4 +1,4 @@
-import React, {useEffect,useContext,useState} from "react";
+import React, {useContext,useState} from "react";
 import { Text, StyleSheet, View, FlatList, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, Button, ImageBackground } from "react-native";
 import Dimensions from '../constants/Dimensions'
 import {Context as BrandMemberContext} from '../context/BrandMemberContext'

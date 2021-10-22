@@ -11,7 +11,7 @@ import CreateDataContext from './CreateDataContext';
 const authReducer = (state,action) => {
     switch(action.type){
         case 'signIn':
-            return{...state,token:action.payload};
+            return{...state,token:action.payload,loading:false};
         case 'signOut':
             return{...state,token:null};
         case 'verifyPhone':
@@ -109,8 +109,6 @@ const confirmOtp2 = (dispatch) => async (objPhoneConfirm=null,otp=null) => {
     try{
         const credential = await firebase.auth.PhoneAuthProvider.credential(objPhoneConfirm.verificationId,otp)
         const res = await firebaseAuth().signInWithCredential(credential)
-
-        alert(res.user.uid)
 
         await AsyncStorage.setItem('@๊uidToken',res.user.uid);
         // db.collection('shop').where("shopId","==",res.user.uid).get().then((qsnapshot) => {
@@ -216,11 +214,6 @@ const confirmOtp2 = (dispatch) => async (objPhoneConfirm=null,otp=null) => {
 const tryExpoFirebaseOtp = (dispatch) => async(objRes) =>{
 
     await AsyncStorage.setItem('@๊uidToken',objRes.user.uid);
-    console.log("tryExpoFirebaseOtp")
-    console.log(objRes.user.uid)
-    console.log("tryExpoFirebaseOtp")
-
-    alert(objRes.user.uid)
     dispatch({type:'signIn',payload:objRes.user.uid})
 }
 
@@ -233,5 +226,5 @@ const signOut = (dispatch) => async() => {
 export const {Provider,Context} = CreateDataContext(
     authReducer,
     {signOut,tryLocalSignIn,phoneLogin2,confirmOtp2,tryExpoFirebaseOtp},
-    {token:null,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:''}
+    {token:null,loading:true,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:''}
 );

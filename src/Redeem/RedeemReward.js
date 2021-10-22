@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useState, useContext} from "react";
 import { 
   Text, 
   StyleSheet, 
@@ -23,6 +23,7 @@ const  redeemReward = ({route}) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [storeVisible, setStoreVisible] = useState(true)
     const [RewardType, setRewardType] = useState('store')
+
   let shopReward = []
   shopMember.forEach((item) => {
     item.reward.forEach((r) => {

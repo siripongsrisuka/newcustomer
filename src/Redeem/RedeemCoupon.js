@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useContext} from "react";
 import { 
   Text, 
   StyleSheet, 
@@ -18,7 +18,7 @@ const  redeemCoupon = () => {
             allCoupon.push(coupon)
         })
     });
-
+    
     return(
         <View style={{flex:1}} >
             <FlatList

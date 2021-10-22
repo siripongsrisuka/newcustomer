@@ -40,7 +40,8 @@ export default function App() {
         }
       : undefined
   );
-  const attemptInvisibleVerification = false;
+  // const attemptInvisibleVerification = false;
+  const attemptInvisibleVerification = true;
 
   return (
     <View style={{ padding: 20, marginTop: 50 }}>

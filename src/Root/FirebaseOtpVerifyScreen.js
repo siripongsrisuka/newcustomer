@@ -19,9 +19,9 @@ const FirebaseOtpVerifyScreen = ({navigation,route}) => {
 
   const [internalVal,setInternalVal] = useState("");
 
-  useEffect(() => {
-    console.log(objPhoneConfirm)
-  },[])
+  // useEffect(() => {
+  //   console.log(objPhoneConfirm)
+  // },[])
 
 
   const onChangeText = (val) => {
@@ -35,6 +35,10 @@ const FirebaseOtpVerifyScreen = ({navigation,route}) => {
 
   useEffect(() => {
     textInput.focus()
+
+    return ()=>{
+      textInput.current = false
+    }
   },[])
 
   return (

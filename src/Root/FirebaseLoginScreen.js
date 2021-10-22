@@ -32,18 +32,18 @@ const FirebaseLoginScreen = ({navigation,route}) => {
   const [objPhoneConfirm, setObjPhoneConfirm] = useState(null);
   const [otp, setOtp] = useState(null);
 
-  useEffect(()=>{
-    GoogleSignin.configure({
-      webClientId:'107386561764-3u4ugc5rbm88bhl8h32eqhrcko7tru95.apps.googleusercontent.com',
-    })
-  },[])
+  // useEffect(()=>{
+  //   GoogleSignin.configure({
+  //     webClientId:'107386561764-3u4ugc5rbm88bhl8h32eqhrcko7tru95.apps.googleusercontent.com',
+  //   })
+  // },[])
 
-  useEffect(()=>{
-    firebaseAuth().onAuthStateChanged(user => {
+  // useEffect(()=>{
+  //   firebaseAuth().onAuthStateChanged(user => {
 
-      // alert('yyyyyyyd')
-    })
-  },[])
+  //     // alert('yyyyyyyd')
+  //   })
+  // },[])
 
 
 

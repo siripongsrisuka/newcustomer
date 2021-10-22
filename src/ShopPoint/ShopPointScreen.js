@@ -22,7 +22,7 @@ const  ShopPointScreen = ({navigation}) => {
         }
         
     }
-    console.log(shopMember)
+    // console.log(shopMember)
     return (
         <View style = {styles.container} >
             <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center',justifyContent:'center'}} >

@@ -1,13 +1,15 @@
 import React, {useState, useEffect, useContext} from "react";
-import { Text, StyleSheet, View, TextInput,TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TextInput,TouchableOpacity,Button } from "react-native";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'; 
 import Colors from "../constants/Colors";
 import db from "../../db/firestore";
-import {Context as CustomerProfileContext} from '../context/CustomerProfileContext'
+// import {Context as CustomerProfileContext} from '../context/CustomerProfileContext'
+import { AuthContext,CustomerProfileContext } from "../context";
 
 
 const  ProfileScreen = () => {
-    const {state : {customerProfile}}= useContext(CustomerProfileContext)
+    const {signOut} = useContext(AuthContext)
+    const {state : {customerProfile}} = useContext(CustomerProfileContext)
     const [customerName, setCustomerName] = useState(customerProfile[0].customerName);
     // const [email, setEmail] = useState(customerProfile[0].email);
     const [tel, setTel] = useState(customerProfile[0].tel);
@@ -22,10 +24,10 @@ const  ProfileScreen = () => {
     //     setAddress(customerProfile[0].address);
     //     setBirthday(customerProfile[0].birthday);
     // },[]);
-    console.log(customerProfile)
+    // console.log(customerProfile)
     const customerUpdate = () => {
-        console.log(customerName)
-        console.log(customerProfile[0].doc)
+        // console.log(customerName)
+        // console.log(customerProfile[0].doc)
         db.collection('customer').doc(customerProfile[0].doc).update({
             customerName:customerName,
             // email:email,
@@ -108,6 +110,10 @@ const  ProfileScreen = () => {
                     />
                 </View>
            </View>
+           <Button
+                title="Log Out"
+                onPress={()=>{signOut()}}
+            />
 
             {editable
                 ?<TouchableOpacity onPress = {customerUpdate} style = {styles.button}>

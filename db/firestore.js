@@ -52,11 +52,11 @@ export const getCustomerProfile = () => {
 
 export const fetchBrandMember = () => {
     let data = []
-    console.log(data)
+    // console.log(data)
     return db.collection('brandMember').where("userId","==","siripong").where("brandId","==","pepsi").get().then(function(snapshot){
         snapshot.forEach(function(docs){
             data.push(docs.data())
-            console.log(data)
+            // console.log(data)
         })
     });
 
@@ -66,7 +66,7 @@ export const fetchBrandMember = () => {
 
 
 export const signOut = async () => {
-    return await firebaseAuth().signOut();
+    await firebaseAuth.signOut();
 }
 
 export default db;
