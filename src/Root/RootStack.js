@@ -21,8 +21,8 @@ const Root = ({navigation}) => (
         <RootStack.Screen name='aa' component={aa} />
 
         {/* ฝากแพ็คทำต่อทีเอา UI จากฝั่งร้านค้ามาโปะให้แล้วแต่ยังไม่ได้ต่อ */}
-        {/* <RootStack.Screen name="RegisterForm" component={RegisterForm}/>
-        <RootStack.Screen name="FirebaseOtpVerifyScreen" component={FirebaseOtpVerifyScreen}/> */}
+        <RootStack.Screen name="RegisterForm" component={RegisterForm}/>
+        <RootStack.Screen name="FirebaseOtpVerifyScreen" component={FirebaseOtpVerifyScreen}/>
 
         
 
