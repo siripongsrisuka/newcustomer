@@ -7,7 +7,7 @@ import CarouselItem from './CarouselItem'
 const {width, height} = Dimensions.get('window')
 
 const Carousel = ({data}) => {
-    const flatListRef = useRef()
+    const flatListRef = useRef(null)
     const scrollX = new Animated.Value(0)
     let position = Animated.divide(scrollX ,width)
 

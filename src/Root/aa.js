@@ -1,8 +1,4 @@
-
-
-
-
-import * as React from 'react';
+import React,{useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,6 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+
+
+
 import * as firebase from 'firebase';
 
 import { AuthContext, phoneLogin2 } from '../context';
@@ -32,7 +31,7 @@ export default function App() {
   const {state:{verificationId},tryExpoFirebaseOtp,phoneLogin2} = React.useContext(AuthContext)
 
   const recaptchaVerifier = React.useRef(null);
-  const [phoneNumber, setPhoneNumber] = React.useState('+66853331882');
+  const [phoneNumber, setPhoneNumber] = React.useState('0853331882');
   // const [verificationId, setVerificationId] = React.useState();
   const [verificationCode, setVerificationCode] = React.useState();
   const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
@@ -44,15 +43,22 @@ export default function App() {
         }
       : undefined
   );
-  // const attemptInvisibleVerification = false;
   const attemptInvisibleVerification = true;
 
+  useEffect(()=>{
+    alert(JSON.stringify(firebaseConfig))
+
+    return () => {
+      recaptchaVerifier.current = null
+    }
+  },[])
 
   return (
     <View style={{ padding: 20, marginTop: 50 }}>
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
-        firebaseConfig={firebaseConfig}
+        // firebaseConfig={firebaseConfig}
+        firebaseConfig={firebase.app().options}
         attemptInvisibleVerification={attemptInvisibleVerification}
       />
       <Text style={{ marginTop: 20 }}>Enter phone number</Text>
