@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-  TextInput
+  TextInput,
 } from 'react-native';
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
@@ -15,38 +15,71 @@ import db from '../../db/firestore'
 import { AuthContext } from '../context';
 
 
+
+
 const LoginOrRegistor = ({navigation,route}) => {
   const {phoneLogin2} = useContext(AuthContext);
   const [phoneNumber,setPhoneNumber]= useState();
-  const [objPhoneConfirm, setObjPhoneConfirm] = useState(null);
-  const [otp, setOtp] = useState(null);
-  const [phone, setPhone] = useState();
-/*   const checkPhoneNumber = () => {
-    if(phone?.length != 10){
+
+
+  const [phone, setPhone] = useState("");
+
+
+
+
+  const checkPhoneNumber = () => {
+    if(phone.length != 10){
       alert('กรุณากรอกหมายเลขโทรศัพท์มือถือให้พอดี 10 หลัก')
       return 
     } else if(phone.substring(0,1) != '0' ){
       alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
       return 
     } else {
-        // phoneLogin2(phone),navigation.navigate('FirebaseOtpVerifyScreen')
+        
+        navigation.navigate('FirebaseOtpVerifyScreen',{phone:phone})
 
-        db.collection('shop').where("tel","==",phone).get().then((qsnapshot) => {
+        // navigation.navigate('aa01')
+
+/*         db.collection('customer').where("tel","==",phone).get().then((qsnapshot) => {
           if (qsnapshot.docs.length > 0) {
-              phoneLogin2(phone),navigation.navigate('FirebaseOtpVerifyScreen')
+            try {
+              const thGlobalPhoneNum = '+66' + phone.substring(1)
+              const phoneProvider = new firebase.auth.PhoneAuthProvider();
+              const verificationId = phoneProvider.verifyPhoneNumber(
+                thGlobalPhoneNum,
+                recaptchaVerifier.current
+              );
+              // setVerificationId(verificationId);
+              alert(verificationId)
+              // navigation.navigate('FirebaseOtpVerifyScreen',{verificationId:verificationId})
+              // showMessage({
+              //   text: 'Verification code has been sent to your phone.',
+              // });
+            } catch (err) {
+              alert({ text: `Error: ${err.message}`, color: 'red' });
+            }
+              
           } else {
             alert('กรุณาสมัครสมาชิก เพื่อเข้าใช้งานระบบ')
           }
-        })
+        }) */
     }
-  } */
-
-  const checkPhoneNumber = () => {
-    phoneLogin2(phone),navigation.navigate('aa')
   }
+
+  // const active = () => {
+
+  // }
+  // const checkPhoneNumber = () => {
+  //   phoneLogin2(phone),navigation.navigate('aa')
+  // }
 
   return (
     <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}  >
+        {/* <FirebaseRecaptchaVerifierModal
+          ref={recaptchaVerifier}
+          firebaseConfig={firebase.app().options}
+          attemptInvisibleVerification={attemptInvisibleVerification}
+        />  */}
         <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
         
         {Platform.OS === 'android' ? (
@@ -59,7 +92,7 @@ const LoginOrRegistor = ({navigation,route}) => {
                 maxLength={10}
                 onChangeText={setPhone}
                 keyboardType='phone-pad'
-                style={{margin:10,borderRadius:30,fontSize:18,backgroundColor:Colors.InputColor,width:Dimensions.Width/1.2,alignItems:'center'}}
+                style={{margin:10,borderRadius:10,fontSize:18,backgroundColor:Colors.InputColor,width:Dimensions.Width/1.2,alignItems:'center',height:50}}
             />
         </View>
       ) : null}
