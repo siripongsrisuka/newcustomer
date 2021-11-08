@@ -18,14 +18,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.packgift.newcustomer"
+      "bundleIdentifier": "com.shopcham.shopchamcustomer"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.packgift.newcustomer"
+      "package": "com.shopcham.shopchamcustomer"
     },
     "web": {
       "favicon": "./assets/favicon.png"
