@@ -77,7 +77,7 @@ const tryExpoFirebaseOtp = (dispatch) => async(objPhoneConfirm,verificationCode)
         const objRes = await firebase.auth().signInWithCredential(credential);
         await AsyncStorage.setItem('@๊uidToken',objRes.user.uid);
         dispatch({type:'signIn',payload:objRes.user.uid})
-        console.log({ text: 'Phone authentication successful 👍' });
+        
     } catch (err) {
         console.log("Error Code:"+err.code+"\nMessage:"+err.message)
         switch(err.code){

@@ -28,10 +28,10 @@ import { AuthContext, phoneLogin2 } from '../context';
 
 export default function App() {
 
-  const {state:{verificationId},tryExpoFirebaseOtp,phoneLogin2} = React.useContext(AuthContext)
+  const {state:{objPhoneConfirm},tryExpoFirebaseOtp,phoneLogin2} = React.useContext(AuthContext)
 
   const recaptchaVerifier = React.useRef(null);
-  const [phoneNumber, setPhoneNumber] = React.useState('0853331882');
+  const [phoneNumber, setPhoneNumber] = React.useState('');
   // const [verificationId, setVerificationId] = React.useState();
   const [verificationCode, setVerificationCode] = React.useState();
   const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
@@ -46,7 +46,6 @@ export default function App() {
   const attemptInvisibleVerification = true;
 
   useEffect(()=>{
-    alert(JSON.stringify(firebaseConfig))
 
     return () => {
       recaptchaVerifier.current = null
@@ -87,9 +86,9 @@ export default function App() {
       />
       <Button
         title="Confirm Verification Code"
-        // disabled={!verificationId}
+        // disabled={!objPhoneConfirm}
         onPress={async () => {
-          tryExpoFirebaseOtp(verificationId,verificationCode)
+          tryExpoFirebaseOtp(objPhoneConfirm,verificationCode)
         }}
       />
 
