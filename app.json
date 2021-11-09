@@ -2,11 +2,11 @@
   "expo": {
     "name": "newcustomer",
     "slug": "newcustomer",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/shopcham_customer_logo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/shopcham_customer_splash.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
