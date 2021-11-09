@@ -1,13 +1,16 @@
 import React from 'react'
-import {View, StyleSheet, Text, Image, Dimensions} from 'react-native'
+import {View, StyleSheet, Text, Image, Dimensions,TouchableOpacity} from 'react-native'
 
 const {width, height} = Dimensions.get('window')
 
 const CarouselItem = ({item}) => {
     return(
-        <View style={styles.cardView} >
+        <TouchableOpacity style={styles.cardView} onPress={()=>{alert(item.uri)}} >
             <Image style={styles.image} source = {{uri:item.uri}} />
-        </View>
+        </TouchableOpacity>
+    //     <View style={styles.cardView} >
+    //     <Image style={styles.image} source = {{uri:item.uri}} />
+    // </View>
     )
 }
 

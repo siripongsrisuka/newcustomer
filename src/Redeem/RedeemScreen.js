@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors'
-import db,{getCustomerProfile,getBrandMember} from "../../db/firestore";
+import db from "../../db/firestore";
 import {Context as BrandMemberContext} from '../context/BrandMemberContext';
 import {Context as CustomerProfileContext} from '../context/CustomerProfileContext'
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
@@ -35,7 +35,7 @@ const  RedeemScreen = ({navigation}) => {
     const [productVisible, setProductVisible] = useState(false);
     const {state : {brandMember}}= useContext(BrandMemberContext);
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
-    const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1,shopMember}}= useContext(ShopMemberContext)
+    const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1}}= useContext(ShopMemberContext)
     const [fetchCustomerProfile]= CustomerHook();
     const [fetchBrandMember]= BrandMemberHook();
     const [fetchShopMember]= ShopMemberHook();
@@ -43,16 +43,21 @@ const  RedeemScreen = ({navigation}) => {
     const [filterShop, setFilterShop] = useState([])
     const [productName, setProductName] = useState('')
     const [promotionType, setPromotionType] = useState('Buy 1 get 1')
+    const [carousel, setCarousel] = useState()
+    
     
     useEffect(()=>{
-        const loadStock = async() => {
-          await fetchCustomerProfile() 
-          await fetchBrandMember()
-          await fetchShopMember()
-          await setTimeout(() => {
-            setModalVisible(false)  
-          },100)
-        }
+      const loadStock = async() => {
+        await fetchCustomerProfile() 
+        await fetchBrandMember()
+        await fetchShopMember()
+        await db.collection('Carousel').get().then(function(snapshot){
+          snapshot.forEach(function(docs){
+            let xx = docs.data()
+            setCarousel(xx.picture)
+          })}).then((d)=>{setModalVisible(false)})
+      }
+        
         loadStock();
     },[])
 
@@ -80,7 +85,8 @@ const  RedeemScreen = ({navigation}) => {
 
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
-        <Carousel data ={rawdata} />
+        {carousel !== undefined && <Carousel data ={carousel} />}
+        
 
         <View style={styles.bar} >
             <TouchableOpacity 
@@ -243,27 +249,6 @@ const  RedeemScreen = ({navigation}) => {
                                 </View>
                               )}}
                             />
-                         
-                            {/* <ScrollView contentContainerStyle={{paddingVertical: 20}}>
-                            {filterShop?.length > 0 && filterShop.map((a,i) => (
-                              <View style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}} key={i}  >
-                              <View >
-                                  <Image source={{uri:a.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
-                              </View>
-                              <View style={{paddingLeft:5,width:'50%'}} >
-                                  <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {a.instock} ชิ้น</Text>
-                                  <Text style={Fonts.md} >{a.shopName}</Text>
-                                  <View style={{flexDirection:'row'}} >
-                                      <Text style={Fonts.sm}>โทร : </Text>
-                                      <Text>{a.shopTel}</Text>
-                                  </View>
-                              </View>    
-                            </View>
-                            ))}
-                            <Text>fdfdfdfdfdf</Text>
-                            </ScrollView> */}
-                            
-                            
                         </View>
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 

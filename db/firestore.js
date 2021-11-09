@@ -64,6 +64,34 @@ export const fetchBrandMember = () => {
    
 }
 
+export const fetchCarousel = () => {
+  let data = []
+    // console.log(data)
+    return db.collection('Carousel').get().then(function(snapshot){
+        snapshot.forEach(function(docs){
+          let xx = docs.data()
+          // console.log("xx")
+          // console.log(xx.picture[0])
+          // console.log("xx")
+            data.push(xx.picture[0])
+            // console.log(data)
+        })
+    });
+    
+      // return db
+      // .collection('Carousel')
+      // .get()
+      // .then((qsnapshot) => {
+      //   let arrObject = []
+      //   if (qsnapshot.docs.length > 0) {
+      //     qsnapshot.forEach(doc=>{
+      //       arrObject.push(doc.data())
+      //     })
+      //     return arrObject[0].picture
+      //   }
+      // })
+  }
+
 
 export const signOut = async () => {
     await firebaseAuth.signOut();
