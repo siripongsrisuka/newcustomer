@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState,useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -50,6 +50,12 @@ export default function ImageCarousel(props) {
   function handleCarouselScrollEnd(item, index) {
     setCurrentIndex(index);
   }
+
+  useEffect(()=>{
+    return ()=>{
+      carouselRef.current = null
+    }
+  },[])
 
   function renderItem({item, index}) {
     const {uri, title, content} = item;

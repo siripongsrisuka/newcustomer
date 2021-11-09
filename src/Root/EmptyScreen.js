@@ -19,7 +19,11 @@ const EmptyScreen = ({navigation}) => {
            await tryLocalSignIn()
         }
 
+
+        // alert('EmptyScreen')
         checkAuth().then(()=> navigation.navigate('WaitProcessScreen'))
+
+        // checkAuth()
         
     },[])
     

@@ -1,4 +1,4 @@
-import React, {useContext, useState,useRef} from 'react';
+import React, {useContext, useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,27 +13,19 @@ import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
 import db from '../../db/firestore'
 import { AuthContext } from '../context';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+
+
 
 
 const LoginOrRegistor = ({navigation,route}) => {
   const {phoneLogin2} = useContext(AuthContext);
   const [phoneNumber,setPhoneNumber]= useState();
-  const recaptchaVerifier = useRef(null);
-  const [objPhoneConfirm, setObjPhoneConfirm] = useState(null);
-  const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
-  const [message, showMessage] = React.useState(
-    !firebaseConfig || Platform.OS === 'web'
-      ? {
-          text:
-            'To get started, provide a valid firebase config in App.js and open this snack on an iOS or Android device.',
-        }
-      : undefined
-  );
-  // const attemptInvisibleVerification = false;
-  const attemptInvisibleVerification = true;
-  const [otp, setOtp] = useState(null);
+
+
   const [phone, setPhone] = useState("");
+
+
+
 
   const checkPhoneNumber = () => {
     if(phone.length != 10){
@@ -43,8 +35,10 @@ const LoginOrRegistor = ({navigation,route}) => {
       alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
       return 
     } else {
-        phoneLogin2(phone,recaptchaVerifier.current)
-        navigation.navigate('FirebaseOtpVerifyScreen')
+        
+        navigation.navigate('FirebaseOtpVerifyScreen',{phone:phone})
+
+        // navigation.navigate('aa01')
 
 /*         db.collection('customer').where("tel","==",phone).get().then((qsnapshot) => {
           if (qsnapshot.docs.length > 0) {
@@ -81,11 +75,11 @@ const LoginOrRegistor = ({navigation,route}) => {
 
   return (
     <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}  >
-        <FirebaseRecaptchaVerifierModal
+        {/* <FirebaseRecaptchaVerifierModal
           ref={recaptchaVerifier}
-          firebaseConfig={firebaseConfig}
+          firebaseConfig={firebase.app().options}
           attemptInvisibleVerification={attemptInvisibleVerification}
-        />
+        />  */}
         <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
         
         {Platform.OS === 'android' ? (

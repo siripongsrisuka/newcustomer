@@ -14,11 +14,13 @@ const authReducer = (state,action) => {
         case 'signIn':
             return{...state,token:action.payload,loading:false};
         case 'signOut':
-            return{...state,token:null};
+            return{...state,token:null, objPhoneConfirm:null};
+        case 'recapchaVerify':
+            return {...state,recaptchaVerifier:action.payload};
         case 'verifyPhone':
-            return {...state,objPhoneConfirm:action.payload}
-        case 'verificationId':
-            return {...state,verificationId:action.payload}
+            return {...state,objPhoneConfirm:action.payload};
+        case 'objPhoneConfirm':
+            return {...state,objPhoneConfirm:action.payload};
         default:
             return state;
     }
@@ -38,42 +40,44 @@ const tryLocalSignIn = dispatch => async () =>{
 
 };
 
+const recapchaVerify = (dispatch) => (recaptchaVerifier) =>{
+    dispatch({type:'recapchaVerify',payload:recaptchaVerifier})
+}
+
 
 // non auto confirm OTP
 // put phoneNumer -> get verifyId & send OTP -> put OTP back -> check verifyId & OTP is get along -> get credential ->sigIn with the credential
 const phoneLogin2 = (dispatch) => async (phoneNum='',recaptchaVerifier ='') => {
     
-          // The FirebaseRecaptchaVerifierModal ref implements the
-          // FirebaseAuthApplicationVerifier interface and can be
-          // passed directly to `verifyPhoneNumber`.
+    console.log('xxxxx',recaptchaVerifier)
     try {
         const thGlobalPhoneNum = '+66' + phoneNum.substring(1)
+
         const phoneProvider = new firebase.auth.PhoneAuthProvider();
-        const verificationId = await phoneProvider.verifyPhoneNumber(
+        const objPhoneConfirm = await phoneProvider.verifyPhoneNumber(
           thGlobalPhoneNum,
           recaptchaVerifier
         );
-        // setVerificationId(verificationId);
-        dispatch({type:'verificationId',payload:verificationId});
+        dispatch({type:'objPhoneConfirm',payload:objPhoneConfirm});
 
-      } catch (err) {
-        console.log({ text: `Error: ${err.message}`, color: 'red' });
-      }
+    } catch (err) {
+        alert('error')
+    }
 
 };
 
 
-const tryExpoFirebaseOtp = (dispatch) => async(verificationId,verificationCode) =>{
+const tryExpoFirebaseOtp = (dispatch) => async(objPhoneConfirm,verificationCode) =>{
     try {
         const credential = firebase.auth.PhoneAuthProvider.credential(
-            verificationId,
+            objPhoneConfirm,
             verificationCode
         );
         
         const objRes = await firebase.auth().signInWithCredential(credential);
         await AsyncStorage.setItem('@๊uidToken',objRes.user.uid);
         dispatch({type:'signIn',payload:objRes.user.uid})
-        console.log({ text: 'Phone authentication successful 👍' });
+
     } catch (err) {
         console.log("Error Code:"+err.code+"\nMessage:"+err.message)
         switch(err.code){
@@ -99,6 +103,6 @@ const signOut = (dispatch) => async() => {
 
 export const {Provider,Context} = CreateDataContext(
     authReducer,
-    {signOut,tryLocalSignIn,phoneLogin2,tryExpoFirebaseOtp},
-    {token:null,loading:true,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:'',verificationId:''}
+    {signOut,tryLocalSignIn,recapchaVerify,phoneLogin2,tryExpoFirebaseOtp},
+    {token:null,loading:true,recaptchaVerifier:null,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:''}
 );
