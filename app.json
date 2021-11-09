@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/shopcham_customer_logo.png",
     "splash": {
-      "image": "./assets/shopcham_customer_splash.jpg",
+      "image": "./assets/shopcham_customer_splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
