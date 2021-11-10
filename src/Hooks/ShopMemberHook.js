@@ -47,10 +47,10 @@ const ShopMemberHook = () => {
                                     let xxx = docs.data()
                                     let promotion = xxx.promotion
                                     if(promotion.length > 0){
-                                        if(promotion[0].detail == 'Price off'){
+                                        if(promotion[0].detail == 'Price Off'){
                                             priceOff.push(docs.data())
                                             getPriceOff(priceOff)
-                                        } else if(promotion[0].detail == 'Buy 1 get 1'){
+                                        } else if(promotion[0].detail == 'Buy 1 Get 1'){
                                             buy1Get1.push(docs.data())
                                             getBuy1Get1(buy1Get1)
                                         } else if(promotion[0].detail == 'Buy 2 Cheaper'){

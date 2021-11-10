@@ -42,8 +42,9 @@ const  RedeemScreen = ({navigation}) => {
     const [image, setImage] = useState('')
     const [filterShop, setFilterShop] = useState([])
     const [productName, setProductName] = useState('')
-    const [promotionType, setPromotionType] = useState('Buy 1 get 1')
+    const [promotionType, setPromotionType] = useState('Buy 1 Get 1')
     const [carousel, setCarousel] = useState()
+    const [modalAds, setModalAds] = useState()
     
     
     useEffect(()=>{
@@ -75,14 +76,6 @@ const  RedeemScreen = ({navigation}) => {
         setProductName(item.name)
     }
 
-    const rawdata = [
-      {uri:"https://image.makewebeasy.net/makeweb/0/l3UtzXJ4K/DefaultData%2FAA4ED92E_8459_4E25_A5AA_07C67B349078.png?v=202012190947",id:1},
-      {uri:'https://image.makewebeasy.net/makeweb/0/l3UtzXJ4K/DefaultData%2FDBD52E06_C48F_4EC8_B364_A53F9200B4FA.png?v=202012190947',id:2},
-      {uri:'https://image.makewebeasy.net/makeweb/0/l3UtzXJ4K/DefaultData%2FD9A5AE20_BF26_407F_8763_7152BBDBC504.png?v=202012190947',id:3},
-      {uri:'https://image.makewebeasy.net/makeweb/0/l3UtzXJ4K/DefaultData%2F29BA1F3F_F8B9_43DF_A3EA_33B7BE22D3FC.png?v=202012190947',id:4},
-      {uri:'https://image.makewebeasy.net/makeweb/0/l3UtzXJ4K/DefaultData%2F6EF600DE_DB2E_4F04_BD98_6C1916B2F21F.png?v=202012190947',id:5}
-    ]
-
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
         {carousel !== undefined && <Carousel data ={carousel} />}
@@ -106,23 +99,23 @@ const  RedeemScreen = ({navigation}) => {
 
         <View style={{height:40,marginTop:50}} >
           <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-              {(promotionType == 'Buy 1 get 1')
+              {(promotionType == 'Buy 1 Get 1')
                 ?<TouchableOpacity style={styles.border} >
                     <View style={styles.choose} >
                       <Text style={Fonts.md}>1 แถม 1</Text>
                     </View>
                 </TouchableOpacity>
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 1 get 1')}}> 
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 1 Get 1')}}> 
                     <Text style={Fonts.md}>1 แถม 1</Text>
                 </TouchableOpacity> 
               }
-              {(promotionType == 'Price off')
+              {(promotionType == 'Price Off')
                 ?<TouchableOpacity  style={styles.border} >
                   <View style={styles.choose} >
                       <Text style={Fonts.md} >ลดราคา</Text>
                   </View>
                 </TouchableOpacity>
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Price off')}}>
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Price Off')}}>
                     <Text style={Fonts.md} >ลดราคา</Text>
                 </TouchableOpacity> 
               }
@@ -136,23 +129,23 @@ const  RedeemScreen = ({navigation}) => {
                     <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
                 </TouchableOpacity>
               }
-              {(promotionType == 'Buy 2 get 1')
+              {(promotionType == 'Buy 2 Get 1')
                 ?<TouchableOpacity  style={styles.border}>
                   <View style={styles.choose} >
                     <Text style={Fonts.md} >2 แถม 1</Text>
                   </View>
                 </TouchableOpacity >
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 get 1')}}>
+                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 Get 1')}}>
                     <Text style={Fonts.md} >2 แถม 1</Text>
                 </TouchableOpacity >
               }
           </ScrollView>
         </View>
         
-        {promotionType == 'Price off' && (<Catalog data={priceOff} press ={showProduct}/>)}
-        {promotionType == 'Buy 1 get 1' && (<Catalog data={buy1Get1} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
+        {promotionType == 'Price Off' && (<Catalog data={priceOff} press ={showProduct}/>)}
+        {promotionType == 'Buy 1 Get 1' && (<Catalog data={buy1Get1} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
         {promotionType == 'Buy 2 Cheaper' && (<Catalog data={buy2Cheaper} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
-        {promotionType == 'Buy 2 get 1' && (<Catalog data={buy2Free1} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)}
+        {promotionType == 'Buy 2 Get 1' && (<Catalog data={buy2Free1} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)}
 
         <Modal
             animationType="fade"
@@ -252,7 +245,22 @@ const  RedeemScreen = ({navigation}) => {
                         </View>
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 
-            </Modal>        
+            </Modal>
+            <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalAds}
+          onRequestClose={() => {
+            setModalAds(false);
+          }}
+        >
+          <View style={{...styles.centeredView,...{backgroundColor:'rgba(0,0,0,0.5)',opacity:0.9,marginTop:0}}}>
+            <TouchableOpacity style={{backgroundColor:'white',borderRadius:15}} onPress={() => {setModalAds(false)}} >
+              <Image source={require('../../image/firstPost.jpg')} style={{width:(Dimensions.Width/1.1)*0.96,height:(Dimensions.Width/1.1)*1.2,borderRadius:15}} />
+            </TouchableOpacity>
+            
+          </View>
+        </Modal>        
       </View> 
     );  
 }
