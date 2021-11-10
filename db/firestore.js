@@ -67,12 +67,12 @@ export const fetchBrandMember = () => {
 export const fetchCarousel = () => {
   let data = []
     // console.log(data)
-    return db.collection('Carousel').get().then(function(snapshot){
+    return db.collection('AdminSetting').doc('customerCarousel').get().then(function(snapshot){
         snapshot.forEach(function(docs){
           let xx = docs.data()
-          // console.log("xx")
-          // console.log(xx.picture[0])
-          // console.log("xx")
+          console.log("xx")
+          console.log(xx.picture[0])
+          console.log("xx")
             data.push(xx.picture[0])
             // console.log(data)
         })
@@ -90,6 +90,24 @@ export const fetchCarousel = () => {
       //     return arrObject[0].picture
       //   }
       // })
+  }
+
+  export const fetchShopCoupon = () => {
+    const promise = new Promise((resolve,reject)=>{
+      db
+      .collection('AdminSetting')
+      .doc('shopCoupon')
+      .get()
+      .then((qsnapshot) => {
+        let arrObject = []
+            arrObject.push(qsnapshot.data())
+          return arrObject[0]?.picture
+      })
+      .then(res => resolve(res))
+      .catch(err => reject(err))
+    });
+    
+    return promise
   }
 
 

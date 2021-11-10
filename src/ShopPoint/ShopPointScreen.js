@@ -3,11 +3,13 @@ import { Text, StyleSheet, View, FlatList, Image, TouchableOpacity} from "react-
 import Dimensions from '../constants/Dimensions'
 import Colors from "../constants/Colors";
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
+import {Context as ShopCouponContext} from '../context/ShopCouponContext'
 import db from '../../db/firestore'
 import Fonts from "../constants/Fonts";
 
 const  ShopPointScreen = ({navigation}) => {
     const {state : {shopMember,shopProfile},getShopProfile}= useContext(ShopMemberContext)
+    const {state : rewardData}= useContext(ShopCouponContext)
     const checkShop =  (shopId) => {
         let filter = shopProfile.filter((item) => {return(item.shopId == shopId)})
          if (filter.length == 0){
@@ -15,14 +17,14 @@ const  ShopPointScreen = ({navigation}) => {
                 snapshot.forEach(function(docs){
                     shopProfile.push(docs.data())
                     getShopProfile(shopProfile)
-                    navigation.navigate('ShopPointDetail',{shopId:shopId}) 
+                    navigation.navigate('ShopPointDetail',{shopId:shopId,rewardData:rewardData}) 
                 })})
         } else {
-            navigation.navigate('ShopPointDetail',{shopId:shopId}) 
+            navigation.navigate('ShopPointDetail',{shopId:shopId,rewardData:rewardData}) 
         }
         
     }
-    // console.log(shopMember)
+
     return (
         <View style = {styles.container} >
             <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center',justifyContent:'center'}} >

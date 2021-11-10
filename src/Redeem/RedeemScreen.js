@@ -16,6 +16,7 @@ import db from "../../db/firestore";
 import {Context as BrandMemberContext} from '../context/BrandMemberContext';
 import {Context as CustomerProfileContext} from '../context/CustomerProfileContext'
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
+import {Context as ShopCouponContext} from '../context/ShopCouponContext'
 
 import {PacmanIndicator,} from 'react-native-indicators';
 import QRCode from 'react-native-qrcode-svg';
@@ -36,6 +37,7 @@ const  RedeemScreen = ({navigation}) => {
     const {state : {brandMember}}= useContext(BrandMemberContext);
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
     const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1}}= useContext(ShopMemberContext)
+    const {fetchShopCoupon}= useContext(ShopCouponContext)
     const [fetchCustomerProfile]= CustomerHook();
     const [fetchBrandMember]= BrandMemberHook();
     const [fetchShopMember]= ShopMemberHook();
@@ -44,7 +46,7 @@ const  RedeemScreen = ({navigation}) => {
     const [productName, setProductName] = useState('')
     const [promotionType, setPromotionType] = useState('Buy 1 Get 1')
     const [carousel, setCarousel] = useState()
-    const [modalAds, setModalAds] = useState()
+    const [modalAds, setModalAds] = useState(false)
     
     
     useEffect(()=>{
@@ -52,11 +54,14 @@ const  RedeemScreen = ({navigation}) => {
         await fetchCustomerProfile() 
         await fetchBrandMember()
         await fetchShopMember()
-        await db.collection('Carousel').get().then(function(snapshot){
-          snapshot.forEach(function(docs){
-            let xx = docs.data()
+        await db.collection('AdminSetting').doc('customerCarousel').get().then(function(snapshot){
+          
+            let xx = snapshot.data()
             setCarousel(xx.picture)
-          })}).then((d)=>{setModalVisible(false)})
+          })
+          await setModalVisible(false)
+          await setModalAds(true)
+          await fetchShopCoupon()
       }
         
         loadStock();
@@ -366,6 +371,12 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
   });
 export default RedeemScreen;

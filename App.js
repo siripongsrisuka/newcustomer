@@ -15,7 +15,8 @@ import {
   BrandPointProvider,
   BrandMemberProvider,
   CustomerProfileProvider,
-  ShopMemberProvider
+  ShopMemberProvider,
+  ShopCouponProvider
 } from './src/context'
 
 
@@ -146,10 +147,9 @@ export default function App() {
         <BrandMemberProvider>
           <BrandPointProvider>
             <CustomerProfileProvider>
-              {/* <NavigationContainer>
+              <ShopCouponProvider>
                 <MyTabs />
-              </NavigationContainer> */}
-              <MyTabs />
+              </ShopCouponProvider>
             </CustomerProfileProvider>
           </BrandPointProvider>
         </BrandMemberProvider>

@@ -1,40 +1,48 @@
-import React, {useState,useContext} from "react";
+import React, {useState,useContext, useEffect} from "react";
 import { Text, StyleSheet, View,TouchableOpacity, TouchableWithoutFeedback, Image, Modal, ScrollView, FlatList,ImageBackground } from "react-native";
 import Colors from "../constants/Colors";
 import Dimensions from "../constants/Dimensions";
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
+import {Context as ShopCouponContext} from '../context/ShopCouponContext'
 import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
 
 const  ShopPointDetail = ({route}) => {
     const { shopId } = route.params;
     const {state : {shopMember,shopProfile,shopProduct},getShopProfile,getShopMember}= useContext(ShopMemberContext)
+    const {state : rewardData}= useContext(ShopCouponContext)
     const [redeemVisible, setRedeemVisible] = useState(false);
-    const [image, setImage] = useState();
     const [data, setData] = useState();
     let aShop = shopProfile.filter((item) => {return(item.shopId == shopId )})
     let reward = aShop[0].reward
     let aShopMember = shopMember.filter((item) => {return(item.shopId == shopId )})
 
     const confirmReward = () => {
-      aShopMember[0].remainPoint = aShopMember[0].remainPoint - data.pointConsume
-      let newReward = {
-        rewardId:String(new Date()),
-        qty:1,
-        status:'request',
-        imageId:data.imageId
+      if(aShopMember[0].remainPoint < data.pointConsume){
+        alert('สะสมแต้มเพิ่มอีกนิดนะ ')
+      } else {
+        aShopMember[0].remainPoint = aShopMember[0].remainPoint - data.pointConsume
+        let newReward = {
+          rewardId:String(new Date()),
+          qty:1,
+          status:'request',
+          id:data.id
+        }
+        //update Context
+        aShopMember[0].reward.push(newReward)
+        //update Firebase
+        db.collection("shopMember").doc(aShopMember[0].doc).update({
+          reward: aShopMember[0].reward,
+          remainPoint:aShopMember[0].remainPoint
+        })
+        getShopMember(shopMember)
       }
-      //update Context
-      aShopMember[0].reward.push(newReward)
-      //update Firebase
-      db.collection("shopMember").doc(aShopMember[0].doc).update({
-        reward: aShopMember[0].reward,
-        remainPoint:aShopMember[0].remainPoint
-      })
+      setRedeemVisible(false) 
+    }
 
-
-      setRedeemVisible(false)
-      getShopMember(shopMember)
+    function getRewardData(id){
+      let res = rewardData?.filter((a) => {return(a.id == id)})
+      return res
     }
 
     return (
@@ -69,19 +77,19 @@ const  ShopPointDetail = ({route}) => {
               showsVerticalScrollIndicator={false}
               data={reward}
               numColumns={2}
-              keyExtractor={(item) => item.imageId}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
               return (
                 <View style={styles.reward} >
                   <View style = {{alignSelf:'center',width:'100%'}} >
                       <View style={{width:'100%',borderTopRightRadius:8,borderTopLeftRadius:8}}  >
-                          <Image resizeMode='center' source={{uri : item.imageId}} style={{height:Dimensions.Width/4,width:Dimensions.Width/2.2}}/>
+                          <Image resizeMode='center' source={{uri : getRewardData(item.id)[0]?.imageId}} style={{height:Dimensions.Width/4,width:Dimensions.Width/2.2}}/>
                       </View>
                       <View style={{marginLeft:5,justifyContent:'center',alignItems:'center'}} >
                           <Text style={Fonts.lg}>{item.pointConsume} แต้ม</Text>
                       </View>
                   </View>
-                  <TouchableOpacity onPress = {() => {setRedeemVisible(true),setData(item),setImage(item.imageId)}} >
+                  <TouchableOpacity onPress = {() => {setRedeemVisible(true),setData(item)}} >
                       <View style={{borderTopWidth:1,padding:5,borderColor:Colors.InputColor,width:'90%',alignSelf:'center'}} >
                       <View style = {{...styles.redeem,...{borderRadius:30}}}>
                           <Text style={{fontSize:18,fontFamily: 'Prompt_500Medium',color:'white'}}>แลกรางวัล</Text>
@@ -110,7 +118,7 @@ const  ShopPointDetail = ({route}) => {
                       <View style={styles.modalView}>
                           <View style={{alignItems:'center'}} >
                             <Text style={{fontSize:20,fontFamily: 'Prompt_500Medium'}} >ยืนยันแลกของรางวัล?</Text>
-                            <Image resizeMode='center' source={{uri : image}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
+                            <Image resizeMode='center' source={{uri :getRewardData(data?.id)[0]?.imageId}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
                           </View>
                           <TouchableOpacity onPress ={confirmReward} style = {{...styles.redeem,...{backgroundColor:Colors.gold,borderBottomLeftRadius:30,borderBottomRightRadius:30,height:50}}} >
                           <Text style={{fontSize:20,fontFamily: 'Prompt_400Regular',color:'white'}}>ตกลง</Text>
@@ -154,10 +162,9 @@ const styles = StyleSheet.create({
       fontSize:18,
     },
     reward : {
-      width:'47%',
+      width:Dimensions.Width/2.1,
       margin:5,
       backgroundColor:'white',
-
       borderRadius:8,
       shadowColor:'black',
         shadowOpacity: 0.26,

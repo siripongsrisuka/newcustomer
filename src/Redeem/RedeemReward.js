@@ -12,6 +12,7 @@ import {
 import Colors from '../constants/Colors'
 import {Context as BrandMemberContext} from '../context/BrandMemberContext'
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
+import {Context as ShopCouponContext} from '../context/ShopCouponContext'
 import Dimensions from "../constants/Dimensions";
 import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
@@ -19,6 +20,7 @@ import Fonts from "../constants/Fonts";
 const  redeemReward = ({route}) => {
     const {state : {brandMember}}= useContext(BrandMemberContext);
     const {state : {shopMember},getShopMember}= useContext(ShopMemberContext);
+    const {state : rewardData}= useContext(ShopCouponContext)
     const [data, setData] = useState({});
     const [modalVisible, setModalVisible] = useState(false)
     const [storeVisible, setStoreVisible] = useState(true)
@@ -47,6 +49,11 @@ const  redeemReward = ({route}) => {
     db.collection('shopMember').doc(aShopMember[0].doc).update({
       reward:aShopMember[0].reward
     })
+  }
+
+  function getRewardData(id){
+    let res = rewardData?.filter((a) => {return(a.id == id)})
+    return res
   }
    
     return(
@@ -93,7 +100,7 @@ const  redeemReward = ({route}) => {
                     <TouchableOpacity style={styles.brandCoupon} onPress={() => {setModalVisible(true),setData(item)}}  >
                       <Text style={Fonts.lg} >{item.shopName}</Text>
                         <Image 
-                          source={{uri:item.imageId}} 
+                          source={{uri:getRewardData(item.id)[0]?.imageId}} 
                           style={{width:'100%',height:Dimensions.Width/4}}
                           resizeMode='stretch'
                         />
@@ -120,7 +127,7 @@ const  redeemReward = ({route}) => {
                           <View style={{backgroundColor:'white',width:Dimensions.Width/1.2,borderRadius:30}}>
                               <View style={{alignItems:'center',paddingTop:10}} >
                                 <Text style={Fonts.lg} >{data.shopName}</Text>
-                                <Image resizeMode='center' source={{uri : data.imageId}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
+                                <Image resizeMode='center' source={{uri : getRewardData(data?.id)[0]?.imageId}} style={{height:Dimensions.Width/2,width:Dimensions.Width/1.5}}/>
                                 
                               </View>
                               <TouchableOpacity style = {{backgroundColor:Colors.gold,alignItems:'center',borderBottomLeftRadius:30,borderBottomRightRadius:30}} onPress={useShopReward}>

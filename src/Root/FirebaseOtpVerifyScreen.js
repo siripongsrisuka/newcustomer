@@ -40,21 +40,9 @@ const FirebaseOtpVerifyScreen = ({navigation,route}) => {
   const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   const attemptInvisibleVerification = true;
 
-/*   useEffect(()=>{
-    // console.log('no recapcha')
-    if(recapchaRef.current){
-      // alert(recapchaRef)
-      // console.log('recapcha::::',recapchaRef)
-      recapchaVerify(recapchaRef.current)
-    }
-    
-  },[recapchaRef]) */
-
   useEffect(()=>{
     setTimeout(()=>{phoneLogin2(phone,recapchaRef.current)},2000)
-    // phoneLogin2(phone,recapchaRef.current)
     setTimeout(()=>{textInput.focus()},3000)   // some trick to let auto focus work, wait little for webview of invisible recapcha accomplish then do the auto focus
-    return () => {}
 
   },[])
 
@@ -93,7 +81,6 @@ const FirebaseOtpVerifyScreen = ({navigation,route}) => {
         firebaseConfig={firebase.app().options}
         androidHardwareAccelerationDisabled   // Prevent app cashed from this RECAPCHA webview , Boolean value to disable Hardware Acceleration in the WebView, https://github.com/expo/expo/issues/11256
         attemptInvisibleVerification={attemptInvisibleVerification}
-        // appVerificationDisabledForTesting={true}
       /> 
       <Modal
         animationType="fade"
@@ -153,20 +140,6 @@ const FirebaseOtpVerifyScreen = ({navigation,route}) => {
             }
           </View>
         </View>
-        
-
-        {/* <View style={styles.bottomView}>
-            <TouchableOpacity onPress={() => navigation.navigate('FirebaseLoginScreen')}>
-              <View style={styles.btnChangeNumber}>
-                <Text style={styles.textChange}>เปลี่ยนเบอร์</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('FirebaseLoginScreen')}>
-              <View style={styles.btnResend}>
-                <Text style={styles.textResend}>ขอ OTP ใหม่อีกครั้ง</Text>
-              </View>
-            </TouchableOpacity>
-        </View> */}
 
       </KeyboardAvoidingView>
     </View>
