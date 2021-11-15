@@ -29,10 +29,10 @@ const authReducer = (state,action) => {
 
 
 const tryLocalSignIn = dispatch => async () =>{
-    const uidToken = await AsyncStorage.getItem('@๊uidToken');
+    // const uidToken = await AsyncStorage.getItem('@๊uidToken');
     
 
-    // const uidToken = 'xxxx'
+    const uidToken = 'xxxx'
 
     if(uidToken){
         dispatch({type:'signIn',payload:uidToken});

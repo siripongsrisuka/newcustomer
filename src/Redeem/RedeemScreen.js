@@ -48,7 +48,7 @@ const  RedeemScreen = ({navigation}) => {
     const [carousel, setCarousel] = useState()
     const [modalAds, setModalAds] = useState(false)
     
-    
+
     useEffect(()=>{
       const loadStock = async() => {
         await fetchCustomerProfile() 
@@ -64,8 +64,10 @@ const  RedeemScreen = ({navigation}) => {
           await fetchShopCoupon()
       }
         
-        loadStock();
+      loadStock();
+      console.log('big fetch')
     },[])
+
 
     const useCoupon = () => {
       setToken(customerProfile[0].token);
@@ -84,8 +86,6 @@ const  RedeemScreen = ({navigation}) => {
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
         {carousel !== undefined && <Carousel data ={carousel} />}
-        
-
         <View style={styles.bar} >
             <TouchableOpacity 
               style={{width:'50%',alignItems:'center',justifyContent:'center',borderRightWidth:1,borderColor:Colors.InputColor,height:'50%'}} 

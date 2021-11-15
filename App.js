@@ -1,14 +1,15 @@
 import Colors from './src/constants/Colors'
-import React,{useContext} from 'react';
+import React,{useContext, useEffect} from 'react';
+import { 
+  View
+} from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import { createStackNavigator } from 'react-navigation-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import ShopPoint from './src/ShopPoint/ShopPointStack';
 import BrandPoint from './src/BrandPoint/BrandPointStack'
 import Profile from './src/Profile/ProfileStack';
 import Redeem from './src/Redeem/RedeemStack';
 import Root from './src/Root/RootStack'
-import LoadingScreen from './src/LoadingScreen';
 
 import {    
   AuthProvider,AuthContext,
@@ -56,6 +57,14 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
 
   const {state:{token},tryLocalSignIn} = useContext(AuthContext)
+
+  useEffect(()=>{
+    const checkAuth =  async ()=>{
+      await tryLocalSignIn()
+    }
+
+    checkAuth()
+  },[])
 
   return (
     <NavigationContainer>
@@ -110,6 +119,7 @@ function MyTabs() {
       )}      
     </NavigationContainer>
   );
+  
 }
 
 
@@ -138,8 +148,12 @@ export default function App() {
   let fontSize = 24;
   let paddingVertical = 6;
 
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
+
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <View />;
   }
   return (
     <AuthProvider>

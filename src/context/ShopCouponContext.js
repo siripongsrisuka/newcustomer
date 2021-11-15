@@ -15,9 +15,9 @@ const fetchShopCoupon = (dispatch) => async () => {
 
     dispatch({type:'fetchShopCoupon',payload:await firebaseFetchSC()})
     let datedae = await firebaseFetchSC()
-    console.log("chexkDate")
+/*     console.log("chexkDate")
     console.log(datedae)
-    console.log("chexkDate")
+    console.log("chexkDate") */
     
 }
 
