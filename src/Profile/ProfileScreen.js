@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
-import { Text, StyleSheet, View, TextInput,TouchableOpacity,Button } from "react-native";
+import { Text, StyleSheet, View, TextInput,TouchableOpacity,Button, Keyboard,  TouchableWithoutFeedback, ScrollView } from "react-native";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons'; 
 import Colors from "../constants/Colors";
 import db from "../../db/firestore";
@@ -9,41 +9,36 @@ import { AuthContext,CustomerProfileContext } from "../context";
 
 const  ProfileScreen = () => {
     const {signOut} = useContext(AuthContext)
-    const {state : {customerProfile}} = useContext(CustomerProfileContext)
-    const [customerName, setCustomerName] = useState(customerProfile[0].customerName);
-    // const [email, setEmail] = useState(customerProfile[0].email);
-    const [tel, setTel] = useState(customerProfile[0].tel);
-    const [address, setAddress] = useState(customerProfile[0].address);
-    const [birthday, setBirthday] = useState(customerProfile[0].birthday);
+    const {state : {customerProfile},fetchUserProfile} = useContext(CustomerProfileContext)
+    const [customerName, setCustomerName] = useState(customerProfile[0]?.customerName);
+    const [tel, setTel] = useState(customerProfile[0]?.tel);
+    const [address, setAddress] = useState(customerProfile[0]?.address);
+    const [birthday, setBirthday] = useState(customerProfile[0]?.birthday);
     const [editable, setEditable] = useState(false);
-
-    // useEffect(() => {
-    //     setCustomerName(customerProfile[0].customerName);
-    //     setEmail(customerProfile[0].email);
-    //     setTel(customerProfile[0].tel);
-    //     setAddress(customerProfile[0].address);
-    //     setBirthday(customerProfile[0].birthday);
-    // },[]);
-    // console.log(customerProfile)
+    const DismissKeyboard = ({ children }) => (
+        <TouchableWithoutFeedback 
+        onPress={() => Keyboard.dismiss()}> {children}
+        </TouchableWithoutFeedback>
+        );
     const customerUpdate = () => {
-        // console.log(customerName)
-        // console.log(customerProfile[0].doc)
-        db.collection('customer').doc(customerProfile[0].doc).update({
+        db.collection('customer').doc(customerProfile[0]?.id).update({
             customerName:customerName,
-            // email:email,
             tel:tel,
             address:address,
             birthday:birthday,
         }).catch(err => console.log(err))
         setEditable(false)
+        fetchUserProfile([{...customerProfile[0],customerName:customerName,tel:tel,address:address,birthday:birthday}])
     };
 
     return (
-        <View style = {{flex:1,justifyContent:'space-between'}} >
+        
+        <ScrollView contentContainerStyle={{flexGrow: 1,justifyContent:'space-between'}} keyboardShouldPersistTaps='handled'>
             <View>
                 <View style={styles.TextInput} >
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}} >ชื่อ-นามสกุล : </Text>
-                    <TextInput
+                  
+                        <TextInput
                         placeholder=' กรอกชื่อ นามสกุล'
                         value={customerName}
                         autoCapitalize="none"
@@ -53,6 +48,7 @@ const  ProfileScreen = () => {
                         style ={{flex:1,fontFamily: 'Prompt_400Regular'}}
                         editable={editable}
                     />
+                        
                 </View> 
                 <View style={styles.TextInput} >                
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}}>วันเดือนปีเกิด : </Text>
@@ -130,7 +126,7 @@ const  ProfileScreen = () => {
                     </View>
                 </TouchableOpacity>  
             }
-        </View> 
+        </ScrollView> 
     )
 }
 

@@ -1,16 +1,19 @@
 import React from 'react'
-import {View, StyleSheet, Text, Image, Dimensions,TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Text, Image, Dimensions,TouchableOpacity,Linking} from 'react-native'
 
 const {width, height} = Dimensions.get('window')
 
 const CarouselItem = ({item}) => {
+
+    function link(){
+        if(item.link !== ''){
+            Linking.openURL(item.link)
+        } 
+    }
     return(
-        <TouchableOpacity style={styles.cardView} onPress={()=>{alert(item.uri)}} >
+        <TouchableOpacity style={styles.cardView} onPress={link} >
             <Image style={styles.image} source = {{uri:item.uri}} />
         </TouchableOpacity>
-    //     <View style={styles.cardView} >
-    //     <Image style={styles.image} source = {{uri:item.uri}} />
-    // </View>
     )
 }
 
@@ -18,7 +21,7 @@ const styles = StyleSheet.create({
     cardView : {
         flex:1,
         width: width,
-        height: width/1.9,
+        height: 310,
         backgroundColor:'white',
     },
 

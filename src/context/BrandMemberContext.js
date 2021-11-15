@@ -17,9 +17,6 @@ const brandMemberReducer = (state,action) => {
 
 const getBrandMember = (dispatch) =>  (data) => {
      dispatch({type:'getBrandMember',payload:data});
-    //  console.log("getBrandMember")
-    //  console.log(data)
-    //  console.log("getBrandMember")
 };
 
 const getBrandProfile = (dispatch) =>  (data) => {

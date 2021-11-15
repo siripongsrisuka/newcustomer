@@ -14,7 +14,7 @@ const  ShopPointDetail = ({route}) => {
     const [redeemVisible, setRedeemVisible] = useState(false);
     const [data, setData] = useState();
     let aShop = shopProfile.filter((item) => {return(item.shopId == shopId )})
-    let reward = aShop[0].reward
+    let reward = aShop[0].reward.filter((a) =>{return(a.status == 'valid')})
     let aShopMember = shopMember.filter((item) => {return(item.shopId == shopId )})
 
     const confirmReward = () => {
@@ -72,7 +72,7 @@ const  ShopPointDetail = ({route}) => {
                 <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_500Medium'}}>มาแลกรางวัลจาก {aShop[0].shopName} กันเถอะ!!</Text>
           </View>
 
-          <View style={{alignItems:'center',marginBottom:280}} >
+          <View style={{alignItems:'center',marginBottom:350}} >
             <FlatList
               showsVerticalScrollIndicator={false}
               data={reward}

@@ -1,4 +1,5 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useEffect, useState, useContext, useCallback} from "react";
+
 import { 
   Text, 
   StyleSheet, 
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback ,
   FlatList,
+  Linking
 } from "react-native";
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors'
@@ -26,7 +28,7 @@ import { ShopMemberHook } from "../Hooks";
 import Fonts from "../constants/Fonts";
 import Carousel from "../../component/Carousel";
 import Catalog from "../../component/Catalog";
-
+import { Feather, FontAwesome5 } from '@expo/vector-icons'; 
 
 const  RedeemScreen = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(true);
@@ -34,7 +36,6 @@ const  RedeemScreen = ({navigation}) => {
     const [token, setToken] = useState('');
     const [name, setName] = useState('');
     const [productVisible, setProductVisible] = useState(false);
-    const {state : {brandMember}}= useContext(BrandMemberContext);
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
     const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1}}= useContext(ShopMemberContext)
     const {fetchShopCoupon}= useContext(ShopCouponContext)
@@ -47,30 +48,44 @@ const  RedeemScreen = ({navigation}) => {
     const [promotionType, setPromotionType] = useState('Buy 1 Get 1')
     const [carousel, setCarousel] = useState()
     const [modalAds, setModalAds] = useState(false)
+    const [ads, setAds] = useState()
     
+    const loadStock = async() => {
+      await fetchCustomerProfile() 
+      await fetchBrandMember()
+      await fetchShopMember()
+      await db.collection('AdminSetting').doc('customerCarousel').get().then(function(snapshot){
+          let xx = snapshot.data()
+          setCarousel(xx.picture)
+        })
+      await db.collection('AdminSetting').doc('customerAdsModal').get().then(function(snapshot){
+        let xx = snapshot.data()
+        setAds(xx.picture[Math.floor(Math.random() * xx.picture.length)])
+        console.log(xx.picture[Math.floor(Math.random() * xx.picture.length)]);
+        console.log(xx.picture.length)
+      })
+      await setModalVisible(false)
+      await setModalAds(true)
+      await fetchShopCoupon()
+    }
     
+    useEffect(() => {
+          loadStock()
+          console.log('i fire once')
+    },[])
+
     useEffect(()=>{
-      const loadStock = async() => {
-        await fetchCustomerProfile() 
-        await fetchBrandMember()
-        await fetchShopMember()
-        await db.collection('AdminSetting').doc('customerCarousel').get().then(function(snapshot){
-          
-            let xx = snapshot.data()
-            setCarousel(xx.picture)
-          })
-          await setModalVisible(false)
-          await setModalAds(true)
-          await fetchShopCoupon()
-      }
-        
-        loadStock();
+      const arrAdvertise = ['A','B','C'];
+      console.log(arrAdvertise[Math.floor(Math.random() * arrAdvertise.length)]);
     },[])
 
     const useCoupon = () => {
-      setToken(customerProfile[0].token);
+      let token = customerProfile[0].id+new Date()
+      db.collection('customer').doc(customerProfile[0].id).update({token:token})
+      setToken(token);
       setCouponVisible(true);
       setName(customerProfile[0].customerName);
+      console.log(customerProfile)
     }
 
     const showProduct = (item) => {
@@ -212,7 +227,6 @@ const  RedeemScreen = ({navigation}) => {
                   activeOpacity={1} 
                   onPress={() => {setProductVisible(false)}}
                 >
-
                     <TouchableWithoutFeedback>
                         <View style={styles.product}>
                             <View style={{flexDirection:'row',width:'100%'}} >
@@ -223,9 +237,7 @@ const  RedeemScreen = ({navigation}) => {
                                   <Text style={Fonts.lg} >{productName}</Text>
                                 </View>
                             </View>
-
                             <Text style={Fonts.lg} >ค้นพบ : {filterShop.length} ร้านค้าใกล้คุณ</Text>
-                           
                             <FlatList
                               data={filterShop}
                               keyExtractor={(item) => item.shopId}
@@ -239,10 +251,19 @@ const  RedeemScreen = ({navigation}) => {
                                   <View style={{paddingLeft:5,width:'50%'}} >
                                       <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {item.instock} ชิ้น</Text>
                                       <Text style={Fonts.md} >{item.shopName}</Text>
-                                      <View style={{flexDirection:'row'}} >
+                                      <View style={{flexDirection:'row',alignItems:'center'}} >
                                           <Text style={Fonts.sm}>โทร : </Text>
                                           <Text>{item.shopTel}</Text>
+                                          <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${item.shopTel}`)}} >
+                                            <Feather name="phone-call" size={24} color="black" />
+                                          </TouchableOpacity>
+                                          
                                       </View>
+                                      <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() =>{Linking.openURL("https://lin.ee/X5atVYI")}}>
+                                        <Text>สั่งผ่านไลน์---</Text>
+                                        <FontAwesome5 name="line" size={30} color="#56c759" />
+                                      </TouchableOpacity>
+                                      
                                   </View>    
                                 </View>
                               )}}
@@ -251,21 +272,22 @@ const  RedeemScreen = ({navigation}) => {
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 
             </Modal>
-            <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalAds}
-          onRequestClose={() => {
-            setModalAds(false);
-          }}
-        >
-          <View style={{...styles.centeredView,...{backgroundColor:'rgba(0,0,0,0.5)',opacity:0.9,marginTop:0}}}>
-            <TouchableOpacity style={{backgroundColor:'white',borderRadius:15}} onPress={() => {setModalAds(false)}} >
-              <Image source={require('../../image/firstPost.jpg')} style={{width:(Dimensions.Width/1.1)*0.96,height:(Dimensions.Width/1.1)*1.2,borderRadius:15}} />
-            </TouchableOpacity>
-            
-          </View>
-        </Modal>        
+            {ads && 
+              <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalAds}
+              onRequestClose={() => {
+                setModalAds(false);
+              }}
+            >
+              <View style={{...styles.centeredView,...{backgroundColor:'rgba(0,0,0,0.5)',opacity:0.9,marginTop:0}}}>
+                <TouchableOpacity style={{backgroundColor:'white',borderRadius:15}} onPress={() => {setModalAds(false)}} >
+                  <Image source={{uri:ads?.uri}} style={{width:(Dimensions.Width/1.1)*0.96,height:(Dimensions.Width/1.1)*1.2,borderRadius:15}} />
+                </TouchableOpacity>
+              </View>
+            </Modal> 
+            }        
       </View> 
     );  
 }
@@ -366,7 +388,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     position:'absolute',
     height:60,
-    marginTop:Dimensions.Width/2,
+    marginTop:180,
     zIndex:999,
     flexDirection:'row',
     alignItems:'center',

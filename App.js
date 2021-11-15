@@ -1,5 +1,6 @@
 import Colors from './src/constants/Colors'
 import React,{useContext} from 'react';
+import {View} from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { createStackNavigator } from 'react-navigation-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -58,57 +59,106 @@ function MyTabs() {
   const {state:{token},tryLocalSignIn} = useContext(AuthContext)
 
   return (
-    <NavigationContainer>
-      {!token?
-      (
-        <Root/>
-      ):(
-        <Tab.Navigator 
-          tabBarOptions = {{
-            activeTintColor:Colors.primaryColor,
-            inactiveTintColor:Colors.bottom,
-            activeBackgroundColor:'white',
-            inactiveBackgroundColor:'white',
-            showLabel:'true',
-            keyboardHidesTabBar:'true',
-          }}
-          backBehavior='initialRoute'
-          initialRouteName="Redeem" 
-        >
-          <Tab.Screen name="Redeem" component={Redeem} 
-            options={{
-              // tabBarBadge:'3',
-              tabBarLabel: 'โปรโมชั่น',
-              tabBarColor:Colors.primaryColor,
-              tabBarIcon: ({ color }) => (
-                <Fontisto name="shopping-sale" size={24} color= {color} />
-              )}}
-              />
-          <Tab.Screen name="BrandPoint" component={BrandPoint} 
-            options={{
-              tabBarLabel: 'แบรนด์',
-              tabBarColor:Colors.primaryColor,
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons name="redeem" size={24} color={color}/>
-              )}}/>
-          <Tab.Screen name="ShopPoint" component={ShopPoint} 
-            options={{
-              tabBarLabel: 'ร้านค้า',
-              tabBarColor:Colors.primaryColor,
-              tabBarIcon: ({ color }) => (
-                <Fontisto name="shopping-package" size={24} color={color} />
-              )}}/>
-          <Tab.Screen name="Profile" component={Profile} 
-            options={{
-              tabBarLabel: 'ฉัน',
-              size:24,
-              tabBarColor:Colors.primaryColor,
-              tabBarIcon: ({ color }) => (
-                <Ionicons name="person" size={24} color={color}/>
-              )}}/>
-        </Tab.Navigator>
-      )}      
-    </NavigationContainer>
+    // <NavigationContainer>
+      
+    //     <Tab.Navigator 
+    //       tabBarOptions = {{
+    //         activeTintColor:Colors.primaryColor,
+    //         inactiveTintColor:Colors.bottom,
+    //         activeBackgroundColor:'white',
+    //         inactiveBackgroundColor:'white',
+    //         showLabel:'true',
+    //         keyboardHidesTabBar:'true',
+    //       }}
+    //       backBehavior='initialRoute'
+    //       initialRouteName="Redeem" 
+    //     >
+    //       <Tab.Screen name="Redeem" component={Redeem} 
+    //         options={{
+    //           // tabBarBadge:'3',
+    //           tabBarLabel: 'โปรโมชั่น',
+    //           tabBarColor:Colors.primaryColor,
+    //           tabBarIcon: ({ color }) => (
+    //             <Fontisto name="shopping-sale" size={24} color= {color} />
+    //           )}}
+    //           />
+    //       <Tab.Screen name="BrandPoint" component={BrandPoint} 
+    //         options={{
+    //           tabBarLabel: 'แบรนด์',
+    //           tabBarColor:Colors.primaryColor,
+    //           tabBarIcon: ({ color }) => (
+    //             <MaterialIcons name="redeem" size={24} color={color}/>
+    //           )}}/>
+    //       <Tab.Screen name="ShopPoint" component={ShopPoint} 
+    //         options={{
+    //           tabBarLabel: 'ร้านค้า',
+    //           tabBarColor:Colors.primaryColor,
+    //           tabBarIcon: ({ color }) => (
+    //             <Fontisto name="shopping-package" size={24} color={color} />
+    //           )}}/>
+    //       <Tab.Screen name="Profile" component={Profile} 
+    //         options={{
+    //           tabBarLabel: 'ฉัน',
+    //           size:24,
+    //           tabBarColor:Colors.primaryColor,
+    //           tabBarIcon: ({ color }) => (
+    //             <Ionicons name="person" size={24} color={color}/>
+    //           )}}/>
+    //     </Tab.Navigator>
+           
+    // </NavigationContainer>
+
+ <NavigationContainer>
+{!token?
+(
+  <Root/>
+):(
+  <Tab.Navigator 
+    tabBarOptions = {{
+      activeTintColor:Colors.primaryColor,
+      inactiveTintColor:Colors.bottom,
+      activeBackgroundColor:'white',
+      inactiveBackgroundColor:'white',
+      showLabel:'true',
+      keyboardHidesTabBar:'true',
+    }}
+    backBehavior='initialRoute'
+    initialRouteName="Redeem" 
+  >
+    <Tab.Screen name="Redeem" component={Redeem} 
+      options={{
+        // tabBarBadge:'3',
+        tabBarLabel: 'โปรโมชั่น',
+        tabBarColor:Colors.primaryColor,
+        tabBarIcon: ({ color }) => (
+          <Fontisto name="shopping-sale" size={24} color= {color} />
+        )}}
+        />
+    <Tab.Screen name="BrandPoint" component={BrandPoint} 
+      options={{
+        tabBarLabel: 'แบรนด์',
+        tabBarColor:Colors.primaryColor,
+        tabBarIcon: ({ color }) => (
+          <MaterialIcons name="redeem" size={24} color={color}/>
+        )}}/>
+    <Tab.Screen name="ShopPoint" component={ShopPoint} 
+      options={{
+        tabBarLabel: 'ร้านค้า',
+        tabBarColor:Colors.primaryColor,
+        tabBarIcon: ({ color }) => (
+          <Fontisto name="shopping-package" size={24} color={color} />
+        )}}/>
+    <Tab.Screen name="Profile" component={Profile} 
+      options={{
+        tabBarLabel: 'ฉัน',
+        size:24,
+        tabBarColor:Colors.primaryColor,
+        tabBarIcon: ({ color }) => (
+          <Ionicons name="person" size={24} color={color}/>
+        )}}/>
+  </Tab.Navigator>
+)}      
+</NavigationContainer> 
   );
 }
 
@@ -139,7 +189,7 @@ export default function App() {
   let paddingVertical = 6;
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <View />;
   }
   return (
     <AuthProvider>

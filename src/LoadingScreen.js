@@ -18,27 +18,34 @@ import {
 
 
 const LoadingScreen = ({navigation}) => {
-    useEffect(()=>{
-        const loadStock = async() => {
-            await fetchCustomerProfile()
+    // useEffect(()=>{
+    //     const loadStock = async() => {
+    //         // await fetchCustomerProfile()
             
-            // console.log('shopMember')
+    //         // console.log('shopMember')
 
-            setTimeout(() => {
-                navigation.navigate("Redeem")
-            },1000)
-        }
-        loadStock()
+    //         setTimeout(() => {
+    //             navigation.navigate("Redeem")
+    //         },1000)
+    //     }
+    //     loadStock()
         
-    },[])
+    // },[])
    
 
     return (
         <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center'}} >      
-            <Image source = {require('../image/Shopcham_FINAL_CF-03.png')} style={{width:Dimensions.Width/1.5, height:Dimensions.Width/1.5}}/>            
+            {/* <Image source = {require('../image/Shopcham_FINAL_CF-03.png')} style={{width:Dimensions.Width/1.5, height:Dimensions.Width/1.5}}/>             */}
             <View style = {{height:80,width:Dimensions.Width}} >
-                <PacmanIndicator color= {Colors.primaryColor} size = {60} />
+                {/* <PacmanIndicator color= {Colors.primaryColor} size = {60} /> */}
                 <Text>fjgdhkl</Text>
+                <Text>fjgdhkl</Text>
+                <Text>fjgdhkl</Text>
+                <Text>fjgdhkl</Text>
+                <Text>fjgdhkl</Text>
+                
+                <Text>fjgdhkl</Text>
+                
             </View>
         </View>
     )

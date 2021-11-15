@@ -21,7 +21,7 @@ const  BrandPointDetails = ({route}) => {
         if(rewardData.pointConsume >filterBrandMember[0].remainPoint){
             alert('สะสมแต้มเพิ่มอีกหน่อย แล้วมารับรางวัลไปได้เลย')
         } else {
-            filterBrandMember[0].remainPoint = filterBrandMember[0].remainPoint - rewardData.pointConsume
+            filterBrandMember[0].remainPoint = Number(filterBrandMember[0].remainPoint) - Number(rewardData.pointConsume)
             filterBrandMember[0].reward.push({
                 rewardId:filterBrandReward[0].brandId + stringDtNumOnly(),
                 rewardName:rewardData.rewardName,
