@@ -34,6 +34,7 @@
     "react-native-gesture-handler": "~1.10.2",
     "react-native-indicators": "^0.17.0",
     "react-native-material-textfield": "^0.16.1",
+    "react-native-paper": "^4.10.0",
     "react-native-qrcode-svg": "^6.1.1",
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
@@ -45,9 +46,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "typescript": "~4.0.0",
     "@types/react": "~16.9.35",
-    "@types/react-native": "~0.63.2"
+    "@types/react-native": "~0.63.2",
+    "typescript": "~4.0.0"
   },
   "private": true
 }

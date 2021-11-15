@@ -2,7 +2,7 @@
   "expo": {
     "name": "newcustomer",
     "slug": "newcustomer",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/shopcham_customer_logo.png",
     "splash": {
@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.packgift.newcustomer"
+      "package": "com.packgift.newcustomer",
+      "versionCode":2
     },
     "web": {
       "favicon": "./assets/favicon.png"

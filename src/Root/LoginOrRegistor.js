@@ -11,21 +11,9 @@ import {
 } from 'react-native';
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
-import db from '../../db/firestore'
-import { AuthContext } from '../context';
 
-
-
-
-const LoginOrRegistor = ({navigation,route}) => {
-  const {phoneLogin2} = useContext(AuthContext);
-  const [phoneNumber,setPhoneNumber]= useState();
-
-
+const LoginOrRegistor = ({navigation}) => {
   const [phone, setPhone] = useState("");
-
-
-
 
   const checkPhoneNumber = () => {
     if(phone.length != 10){
@@ -35,51 +23,13 @@ const LoginOrRegistor = ({navigation,route}) => {
       alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
       return 
     } else {
-        
         navigation.navigate('FirebaseOtpVerifyScreen',{phone:phone})
-
-        // navigation.navigate('aa01')
-
-/*         db.collection('customer').where("tel","==",phone).get().then((qsnapshot) => {
-          if (qsnapshot.docs.length > 0) {
-            try {
-              const thGlobalPhoneNum = '+66' + phone.substring(1)
-              const phoneProvider = new firebase.auth.PhoneAuthProvider();
-              const verificationId = phoneProvider.verifyPhoneNumber(
-                thGlobalPhoneNum,
-                recaptchaVerifier.current
-              );
-              // setVerificationId(verificationId);
-              alert(verificationId)
-              // navigation.navigate('FirebaseOtpVerifyScreen',{verificationId:verificationId})
-              // showMessage({
-              //   text: 'Verification code has been sent to your phone.',
-              // });
-            } catch (err) {
-              alert({ text: `Error: ${err.message}`, color: 'red' });
-            }
-              
-          } else {
-            alert('กรุณาสมัครสมาชิก เพื่อเข้าใช้งานระบบ')
-          }
-        }) */
     }
   }
 
-  // const active = () => {
-
-  // }
-  // const checkPhoneNumber = () => {
-  //   phoneLogin2(phone),navigation.navigate('aa')
-  // }
-
   return (
     <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}  >
-        {/* <FirebaseRecaptchaVerifierModal
-          ref={recaptchaVerifier}
-          firebaseConfig={firebase.app().options}
-          attemptInvisibleVerification={attemptInvisibleVerification}
-        />  */}
+
         <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
         
         {Platform.OS === 'android' ? (
@@ -102,10 +52,6 @@ const LoginOrRegistor = ({navigation,route}) => {
         <View style={{margin:2}} >
             <Text style={{fontSize:20}} >หรือ</Text>
         </View>
-        {/* <TouchableOpacity 
-            onPress={() => {navigation.navigate("RegisterForm")}}>
-            <Text style={{fontSize:16,textDecorationLine:'underline',color:Colors.secondaryColor}} >สมัครสมาชิก</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity 
             onPress={() => {navigation.navigate("aa")}}>
             <Text style={{fontSize:16,textDecorationLine:'underline',color:Colors.secondaryColor}} >สมัครสมาชิก</Text>

@@ -79,6 +79,7 @@ const  RedeemScreen = ({navigation}) => {
       console.log(arrAdvertise[Math.floor(Math.random() * arrAdvertise.length)]);
     },[])
 
+
     const useCoupon = () => {
       let token = customerProfile[0].id+new Date()
       db.collection('customer').doc(customerProfile[0].id).update({token:token})
@@ -99,8 +100,6 @@ const  RedeemScreen = ({navigation}) => {
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
         {carousel !== undefined && <Carousel data ={carousel} />}
-        
-
         <View style={styles.bar} >
             <TouchableOpacity 
               style={{width:'50%',alignItems:'center',justifyContent:'center',borderRightWidth:1,borderColor:Colors.InputColor,height:'50%'}} 

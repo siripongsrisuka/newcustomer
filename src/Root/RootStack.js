@@ -3,8 +3,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
-import EmptyScreen from './EmptyScreen'
-import WaitProcessScreen from './WaitProcessScreen';
+// import EmptyScreen from './EmptyScreen'
+// import WaitProcessScreen from './WaitProcessScreen';
 import LoginOrRegistor from './LoginOrRegistor';
 import RegisterForm from './RegisterForm';
 import FirebaseOtpVerifyScreen from './FirebaseOtpVerifyScreen';
@@ -14,9 +14,10 @@ import aa from './aa'
 const RootStack = createStackNavigator();
 
 const Root = ({navigation}) => (
-    <RootStack.Navigator headerMode='none' initialRouteName="EmptyScreen">
-        <RootStack.Screen name="EmptyScreen" component={EmptyScreen}/>
-        <RootStack.Screen name="WaitProcessScreen" component={WaitProcessScreen}/>
+    // <RootStack.Navigator headerMode='none' initialRouteName="EmptyScreen">
+    <RootStack.Navigator headerMode='none' initialRouteName="LoginOrRegistor">
+        {/* <RootStack.Screen name="EmptyScreen" component={EmptyScreen}/>
+        <RootStack.Screen name="WaitProcessScreen" component={WaitProcessScreen}/> */}
         <RootStack.Screen name="LoginOrRegistor" component={LoginOrRegistor}/>
         <RootStack.Screen name='aa' component={aa} />
 
