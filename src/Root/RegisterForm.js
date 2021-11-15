@@ -21,6 +21,7 @@ const RegisterForm = ({navigation,route}) => {
   const [storeName,setStoreName] = useState('');
   const [storeOnwerName,setStoreOnwerName] = useState('');
   const [storeOnwerSurname,setStoreOnwerSurname] = useState('');
+  const [gender, setGender] = useState()
 
   const checkData = () => {
     // if(storeOnwerName == ''){
@@ -38,9 +39,9 @@ const RegisterForm = ({navigation,route}) => {
   }
 
   const checkPhoneNumber = () => {
-    // navigation.navigate('RegisterForm2',{phoneNumber:phoneNumber}) 
-    phoneLogin2(phoneNumber)
-    navigation.navigate('FirebaseOtpVerifyScreen')
+    navigation.navigate('RegisterForm2') 
+    // phoneLogin2(phoneNumber)
+    // navigation.navigate('FirebaseOtpVerifyScreen')
 
 /*     if(phoneNumber == ''){
       alert('กรุณากรอกหมายเลขโทรศัพท์มือถือ')
@@ -67,14 +68,14 @@ const RegisterForm = ({navigation,route}) => {
  
 
   return (
-    <View style={{flex:1,backgroundColor:'white',alignItems:'center',justifyContent:'space-between',alignItems:'center'}}  >
+    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
         <View >
-          <Image source={require('../../image/firstPost.jpg')} style={{width:Dimensions.Width,height:Dimensions.Width/1.5}} resizeMode='stretch' />
+          <Image source={require('../../image/firstPost.jpg')} style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch' />
           
         </View>
         <View style={{alignItems:'center'}} >
           <Text style={{fontSize:18,fontWeight:'bold'}} >สร้างบัญชี</Text>
-          <Text>1/3</Text>
+          <Text>1/2</Text>
         </View>
         
         <View style={styles.card} >
@@ -90,7 +91,7 @@ const RegisterForm = ({navigation,route}) => {
         </View>
         <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
             <TextInput
-                placeholder='นามสกุล'
+                placeholder='วันเดือนปีเกิด เช่น 4 พฤษภาคม 1992'
                 value={storeOnwerSurname}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -101,12 +102,12 @@ const RegisterForm = ({navigation,route}) => {
 
         <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}} >
             <TextInput
-                placeholder=' กรอกชื่อร้านค้า'
-                value={storeName}
+                placeholder='เพศ'
+                value={gender}
                 autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={60}
-                onChangeText={setStoreName}
+                onChangeText={setGender}
             />
         </View>
 
@@ -127,7 +128,7 @@ const RegisterForm = ({navigation,route}) => {
         </TouchableOpacity>
 
         </View>
-    </View>
+    </ScrollView>
   );
 };
 

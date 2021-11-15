@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import WaitProcessScreen from './WaitProcessScreen';
 import LoginOrRegistor from './LoginOrRegistor';
 import RegisterForm from './RegisterForm';
+import RegisterForm2 from './RegisterForm2';
 import FirebaseOtpVerifyScreen from './FirebaseOtpVerifyScreen';
 
 import aa from './aa'
@@ -23,6 +24,7 @@ const Root = ({navigation}) => (
 
         {/* ฝากแพ็คทำต่อทีเอา UI จากฝั่งร้านค้ามาโปะให้แล้วแต่ยังไม่ได้ต่อ */}
         <RootStack.Screen name="RegisterForm" component={RegisterForm}/>
+        <RootStack.Screen name="RegisterForm2" component={RegisterForm2}/>
         <RootStack.Screen name="FirebaseOtpVerifyScreen" component={FirebaseOtpVerifyScreen}/>
 
         

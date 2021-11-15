@@ -8,12 +8,22 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  Modal
 } from 'react-native';
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
+import {    
+  AuthProvider,AuthContext,
+  BrandPointProvider,
+  BrandMemberProvider,
+  CustomerProfileProvider,
+  ShopMemberProvider,
+  ShopCouponProvider
+} from '../context'
 
 const LoginOrRegistor = ({navigation}) => {
   const [phone, setPhone] = useState("");
+  const {state:{token},tryLocalSignIn} = useContext(AuthContext)
 
   const checkPhoneNumber = () => {
     if(phone.length != 10){
@@ -29,12 +39,22 @@ const LoginOrRegistor = ({navigation}) => {
 
   return (
     <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}  >
+      {/* <Modal
+        animationType="fade"
+        transparent={true}
+        visible={!token}
+      >
+        <View style={styles.modalView}>
+          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center',height:300}} >      
+          </View>
+        </View>
+      </Modal> */}
 
         <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
         
         {Platform.OS === 'android' ? (
-        <View>
-          <TextInput
+          <View>
+            <TextInput
                 placeholder='กรอกเบอร์โทรศัพท์'
                 value={phone}
                 autoCapitalize="none"
@@ -44,8 +64,8 @@ const LoginOrRegistor = ({navigation}) => {
                 keyboardType='phone-pad'
                 style={{margin:10,borderRadius:10,fontSize:18,backgroundColor:Colors.InputColor,width:Dimensions.Width/1.2,alignItems:'center',height:50}}
             />
-        </View>
-      ) : null}
+          </View>
+        ) : null}
         <TouchableOpacity style={styles.touch} onPress={checkPhoneNumber} >
             <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >เข้าสู่ระบบ</Text>
         </TouchableOpacity>
@@ -53,7 +73,7 @@ const LoginOrRegistor = ({navigation}) => {
             <Text style={{fontSize:20}} >หรือ</Text>
         </View>
         <TouchableOpacity 
-            onPress={() => {navigation.navigate("aa")}}>
+            onPress={() => {navigation.navigate("RegisterForm")}}>
             <Text style={{fontSize:16,textDecorationLine:'underline',color:Colors.secondaryColor}} >สมัครสมาชิก</Text>
         </TouchableOpacity>
     </View>

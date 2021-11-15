@@ -67,54 +67,6 @@ function MyTabs() {
   },[])
 
   return (
-    // <NavigationContainer>
-      
-    //     <Tab.Navigator 
-    //       tabBarOptions = {{
-    //         activeTintColor:Colors.primaryColor,
-    //         inactiveTintColor:Colors.bottom,
-    //         activeBackgroundColor:'white',
-    //         inactiveBackgroundColor:'white',
-    //         showLabel:'true',
-    //         keyboardHidesTabBar:'true',
-    //       }}
-    //       backBehavior='initialRoute'
-    //       initialRouteName="Redeem" 
-    //     >
-    //       <Tab.Screen name="Redeem" component={Redeem} 
-    //         options={{
-    //           // tabBarBadge:'3',
-    //           tabBarLabel: 'โปรโมชั่น',
-    //           tabBarColor:Colors.primaryColor,
-    //           tabBarIcon: ({ color }) => (
-    //             <Fontisto name="shopping-sale" size={24} color= {color} />
-    //           )}}
-    //           />
-    //       <Tab.Screen name="BrandPoint" component={BrandPoint} 
-    //         options={{
-    //           tabBarLabel: 'แบรนด์',
-    //           tabBarColor:Colors.primaryColor,
-    //           tabBarIcon: ({ color }) => (
-    //             <MaterialIcons name="redeem" size={24} color={color}/>
-    //           )}}/>
-    //       <Tab.Screen name="ShopPoint" component={ShopPoint} 
-    //         options={{
-    //           tabBarLabel: 'ร้านค้า',
-    //           tabBarColor:Colors.primaryColor,
-    //           tabBarIcon: ({ color }) => (
-    //             <Fontisto name="shopping-package" size={24} color={color} />
-    //           )}}/>
-    //       <Tab.Screen name="Profile" component={Profile} 
-    //         options={{
-    //           tabBarLabel: 'ฉัน',
-    //           size:24,
-    //           tabBarColor:Colors.primaryColor,
-    //           tabBarIcon: ({ color }) => (
-    //             <Ionicons name="person" size={24} color={color}/>
-    //           )}}/>
-    //     </Tab.Navigator>
-           
-    // </NavigationContainer>
 
  <NavigationContainer>
 {!token?
@@ -197,12 +149,8 @@ export default function App() {
   let fontSize = 24;
   let paddingVertical = 6;
 
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
-
   if (!fontsLoaded) {
-    return <View />;
+    return <View style={{flex:1,backgroundColor:'white'}} />;
   }
   return (
     <AuthProvider>
