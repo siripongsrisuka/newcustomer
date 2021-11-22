@@ -2,6 +2,7 @@ import React, {useContext,useState} from "react";
 import { Text, StyleSheet, View, FlatList, Image, TouchableOpacity, Modal, TouchableWithoutFeedback, Button, ImageBackground } from "react-native";
 import Dimensions from '../constants/Dimensions'
 import {Context as BrandMemberContext} from '../context/BrandMemberContext'
+import {CustomerProfileContext } from "../context";
 import db from "../../db/firestore";
 
 import Colors from "../constants/Colors";
@@ -9,6 +10,7 @@ import Fonts from "../constants/Fonts";
 
 const  BrandPointDetails = ({navigation}) => {
     const {state : {brandMember,brandProfile},getBrandMember}= useContext(BrandMemberContext);
+    const {state : {customerProfile}} = useContext(CustomerProfileContext)
     const [registerVisible, setRegisterVisible] = useState(false)
     const [brandName,setBrandName] = useState('')
     const [registerImage, setRegisterImage] = useState('')
@@ -44,12 +46,15 @@ const  BrandPointDetails = ({navigation}) => {
         
         brandMemberData.status = "member"
         let checkCoupon = brandMemberData.coupon.filter((b) =>{return(b.sku == couponRegis.sku)})
-        if(checkCoupon.length > 0){
-            checkCoupon[0].qty = checkCoupon[0].qty + couponRegis.qty
-        } else {
-            brandMemberData.coupon.push(couponRegis)
+        if(couponRegis !== ''){
+            if(checkCoupon.length > 0){
+                checkCoupon[0].qty = Number(checkCoupon[0].qty) + Number(couponRegis.qty)
+            } else {
+                brandMemberData.coupon.push(couponRegis)
+            }
         }
-        brandMemberData.remainPoint = brandMemberData.remainPoint + point
+        
+        brandMemberData.remainPoint = Number(brandMemberData.remainPoint) + Number(point)
         brandMember.map((item) => {
             return item.brandId == brandMemberData.brandId
                 ? brandMemberData
@@ -58,7 +63,13 @@ const  BrandPointDetails = ({navigation}) => {
         db.collection("brandMember").doc(brandMemberData.doc).update({
             status : "member",
             coupon : brandMemberData.coupon,
-            remainPoint : brandMemberData.remainPoint
+            remainPoint : brandMemberData.remainPoint,
+            address:customerProfile[0]?.address,
+            brandName:'',
+            gender:customerProfile[0]?.gender,
+            userBirthDay:customerProfile[0]?.birthday,
+            userName:customerProfile[0]?.customerName,
+            userTel:customerProfile[0]?.tel,
         })
         navigation.navigate('BrandPointDetails',{brandId:brandMemberData.brandId})
         setRegisterImage('')
@@ -66,6 +77,7 @@ const  BrandPointDetails = ({navigation}) => {
         setCouponName('')
         setPoint('')
         setPointName('')
+        setCouponRegis('')
     }
 
         

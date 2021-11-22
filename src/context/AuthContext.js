@@ -21,6 +21,8 @@ const authReducer = (state,action) => {
             return {...state,objPhoneConfirm:action.payload};
         case 'objPhoneConfirm':
             return {...state,objPhoneConfirm:action.payload};
+        case 'updateRegisterData':
+            return {...state,registerData:action.payload}
         default:
             return state;
     }
@@ -29,10 +31,10 @@ const authReducer = (state,action) => {
 
 
 const tryLocalSignIn = dispatch => async () =>{
-    // const uidToken = await AsyncStorage.getItem('@๊uidToken');
+    const uidToken = await AsyncStorage.getItem('@๊uidToken');
     
 
-    const uidToken = 'xxxx'
+    // const uidToken = 'xxxx'
 
     if(uidToken){
         dispatch({type:'signIn',payload:uidToken});
@@ -50,6 +52,7 @@ const recapchaVerify = (dispatch) => (recaptchaVerifier) =>{
 const phoneLogin2 = (dispatch) => async (phoneNum='',recaptchaVerifier ='') => {
     
     console.log('xxxxx',recaptchaVerifier)
+    console.log(phoneNum)
     try {
         const thGlobalPhoneNum = '+66' + phoneNum.substring(1)
 
@@ -59,15 +62,17 @@ const phoneLogin2 = (dispatch) => async (phoneNum='',recaptchaVerifier ='') => {
           recaptchaVerifier
         );
         dispatch({type:'objPhoneConfirm',payload:objPhoneConfirm});
+        console.log('phonenumber')
 
     } catch (err) {
         alert('error')
+        console.log('error')
     }
 
 };
 
 
-const tryExpoFirebaseOtp = (dispatch) => async(objPhoneConfirm,verificationCode) =>{
+const tryExpoFirebaseOtp = (dispatch) => async(objPhoneConfirm,verificationCode,address='',birthday='',customerName='',email='',tel='',gender='') =>{
     try {
         const credential = firebase.auth.PhoneAuthProvider.credential(
             objPhoneConfirm,
@@ -76,7 +81,34 @@ const tryExpoFirebaseOtp = (dispatch) => async(objPhoneConfirm,verificationCode)
         
         const objRes = await firebase.auth().signInWithCredential(credential);
         await AsyncStorage.setItem('@๊uidToken',objRes.user.uid);
-        dispatch({type:'signIn',payload:objRes.user.uid})
+        // dispatch({type:'signIn',payload:objRes.user.uid})
+        db.collection('customer').where("customerId","==",objRes.user.uid).get().then((qsnapshot) => {
+            if (qsnapshot.docs.length > 0) {
+                dispatch({type:'signIn',payload:objRes.user.uid})
+                console.log('allready')
+            } else {
+                console.log('fff')
+                db.collection('customer').add({
+                    address:address,
+                    birthday:birthday,
+                    customerId:objRes.user.uid,
+                    customerName:customerName,
+                    detail:'',
+                    district:'',
+                    email:email,
+                    imageId:'',
+                    latitude:'',
+                    longitude:'',
+                    postcode:'',
+                    province:'',
+                    state:'',
+                    tambon:'',
+                    tel:tel,
+                    token:'',
+                    gender:gender
+                }).then((ddd) => {dispatch({type:'signIn',payload:objRes.user.uid}),console.log('ggg')})
+            }
+        })
 
     } catch (err) {
         console.log("Error Code:"+err.code+"\nMessage:"+err.message)
@@ -100,9 +132,13 @@ const signOut = (dispatch) => async() => {
     await dispatch({type:'signOut'});
     firebaseSignOut();
 };
+const updateRegisterData = (dispatch) => (data) => {
+    dispatch({type:'updateRegisterData',payload:data});
+
+};
 
 export const {Provider,Context} = CreateDataContext(
     authReducer,
-    {signOut,tryLocalSignIn,recapchaVerify,phoneLogin2,tryExpoFirebaseOtp},
-    {token:null,loading:true,recaptchaVerifier:null,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:''}
+    {signOut,tryLocalSignIn,recapchaVerify,phoneLogin2,tryExpoFirebaseOtp,updateRegisterData},
+    {token:null,loading:true,recaptchaVerifier:null,objPhoneConfirm:null,errMessage:'',userName:'',email:'',password:'',registerData:{}}
 );

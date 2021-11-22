@@ -16,54 +16,27 @@ import db from '../../db/firestore'
 import { AuthContext } from '../context';
 
 const RegisterForm = ({navigation,route}) => {
-  const {phoneLogin2} = useContext(AuthContext);
-  const [phoneNumber,setPhoneNumber]= useState('');
-  const [storeName,setStoreName] = useState('');
-  const [storeOnwerName,setStoreOnwerName] = useState('');
-  const [storeOnwerSurname,setStoreOnwerSurname] = useState('');
-  const [gender, setGender] = useState()
+  const {state: {registerData},updateRegisterData } = useContext(AuthContext);
+  const [customerName,setCustomerName] = useState('');
+  const [birthDay,setBirthDay] = useState('');
+  const [gender, setGender] = useState('')
 
   const checkData = () => {
-    // if(storeOnwerName == ''){
-    //   alert('กรุณาใส่ชื่อ')
-    // } else if(storeOnwerSurname == ''){
-    //   alert('กรุณาใส่นามสกุล')
-    // } else if(storeName == ''){
-    //   alert('กรุณาใส่ชื่อร้านค้า')
-    // } else {
-    //   checkPhoneNumber()
-    // }
-
-
-    checkPhoneNumber()
-  }
-
-  const checkPhoneNumber = () => {
-    navigation.navigate('RegisterForm2') 
-    // phoneLogin2(phoneNumber)
-    // navigation.navigate('FirebaseOtpVerifyScreen')
-
-/*     if(phoneNumber == ''){
-      alert('กรุณากรอกหมายเลขโทรศัพท์มือถือ')
-      return 
-    } else if(phoneNumber.length != 10){
-      alert('กรุณากรอกหมายเลขโทรศัพท์มือถือให้พอดี 10 หลัก')
-    } else if(phoneNumber.substring(0,1) != '0' ){
-      alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
-      return 
+    if(customerName == ''){
+      alert('กรุณาใส่ชื่อ')
+    } else if(birthDay == ''){
+      alert('กรุณาวันเดือนปีเกิด')
+    } else if(gender == ''){
+      alert('กรุณาใส่เพศ')
     } else {
-        navigation.navigate('RegisterForm2',{phoneNumber:phoneNumber}) 
-        db.collection('shop').where("tel","==",phoneNumber).get().then((qsnapshot) => {
-          if (qsnapshot.docs.length > 0) {
-            alert('เบอร์นี้ ถูกใช้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบ')
-          } else {
-            navigation.navigate('RegisterForm2',{phoneNumber:phoneNumber}) 
-          }
-        })
-    } */
-
-
+      registerData.customerName = customerName
+      registerData.birthDay = birthDay
+      registerData.gender = gender
+      updateRegisterData(registerData)
+      navigation.navigate('RegisterForm2') 
+    }
   }
+
 
  
 
@@ -82,21 +55,21 @@ const RegisterForm = ({navigation,route}) => {
         <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
             <TextInput
                 placeholder='ชื่อ '
-                value={storeOnwerName}
+                value={customerName}
                 autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={30}
-                onChangeText={setStoreOnwerName}
+                onChangeText={setCustomerName}
             />
         </View>
         <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
             <TextInput
                 placeholder='วันเดือนปีเกิด เช่น 4 พฤษภาคม 1992'
-                value={storeOnwerSurname}
+                value={birthDay}
                 autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={30}
-                onChangeText={setStoreOnwerSurname}
+                onChangeText={setBirthDay}
             />
         </View>
 
@@ -108,18 +81,6 @@ const RegisterForm = ({navigation,route}) => {
                 autoCorrect={false}
                 maxLength={60}
                 onChangeText={setGender}
-            />
-        </View>
-
-        <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}>
-            <TextInput
-                placeholder='กรอกเบอร์โทรศพท์'
-                value={String(phoneNumber)}
-                autoCapitalize="none"
-                autoCorrect={false}
-                maxLength={10}
-                onChangeText={setPhoneNumber}
-                keyboardType='phone-pad'
             />
         </View>
         <TouchableOpacity style={styles.touch} onPress={checkData} >

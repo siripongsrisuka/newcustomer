@@ -1,4 +1,5 @@
 import React, {useContext, useState,useEffect} from 'react';
+import db from '../../db/firestore'
 import {
   View,
   Text,
@@ -24,6 +25,7 @@ import {
 const LoginOrRegistor = ({navigation}) => {
   const [phone, setPhone] = useState("");
   const {state:{token},tryLocalSignIn} = useContext(AuthContext)
+  const [modalVisible, setModalVisible] = useState(true);
 
   const checkPhoneNumber = () => {
     if(phone.length != 10){
@@ -33,50 +35,56 @@ const LoginOrRegistor = ({navigation}) => {
       alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
       return 
     } else {
-        navigation.navigate('FirebaseOtpVerifyScreen',{phone:phone})
+      db.collection('customer').where("tel","==",phone).get().then((qsnapshot) => {
+        if (qsnapshot.docs.length > 0) {
+            navigation.navigate('FirebaseOtpVerifyScreen',{phone:phone})
+        } else {
+          alert('กรุณาสมัครสมาชิก เพื่อเข้าใช้งานระบบ')
+        }
+      })
+        
     }
   }
 
-  return (
-    <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}  >
-      {/* <Modal
-        animationType="fade"
-        transparent={true}
-        visible={!token}
-      >
-        <View style={styles.modalView}>
-          <View style={{backgroundColor:'white',flex:1,justifyContent:'center',alignItems:'center',height:300}} >      
-          </View>
-        </View>
-      </Modal> */}
+ 
+    // setTimeout(() =>{
+    //   setModalVisible(false)
+    // },2000)
+    useEffect(() =>{
+      if(!token){
+        setModalVisible(false)
+      }
+    },[token])
 
-        <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
-        
-        {Platform.OS === 'android' ? (
-          <View>
-            <TextInput
-                placeholder='กรอกเบอร์โทรศัพท์'
-                value={phone}
-                autoCapitalize="none"
-                autoCorrect={false}
-                maxLength={10}
-                onChangeText={setPhone}
-                keyboardType='phone-pad'
-                style={{margin:10,borderRadius:10,fontSize:18,backgroundColor:Colors.InputColor,width:Dimensions.Width/1.2,alignItems:'center',height:50}}
-            />
-          </View>
-        ) : null}
-        <TouchableOpacity style={styles.touch} onPress={checkPhoneNumber} >
-            <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >เข้าสู่ระบบ</Text>
-        </TouchableOpacity>
-        <View style={{margin:2}} >
-            <Text style={{fontSize:20}} >หรือ</Text>
-        </View>
-        <TouchableOpacity 
-            onPress={() => {navigation.navigate("RegisterForm")}}>
-            <Text style={{fontSize:16,textDecorationLine:'underline',color:Colors.secondaryColor}} >สมัครสมาชิก</Text>
-        </TouchableOpacity>
-    </View>
+
+  return (
+    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
+            <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
+            {Platform.OS === 'android' ? (
+             <View>
+               <TextInput
+                 placeholder='กรอกเบอร์โทรศัพท์'
+                 value={phone}
+                 autoCapitalize="none"
+                 autoCorrect={false}
+                 maxLength={10}
+                 onChangeText={setPhone}
+                 keyboardType='phone-pad'
+                 style={{margin:10,borderRadius:10,fontSize:18,backgroundColor:Colors.InputColor,width:Dimensions.Width/1.2,alignItems:'center',height:50}}
+               />
+             </View>
+           ) : null}
+           <TouchableOpacity style={styles.touch} onPress={checkPhoneNumber} >
+               <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >เข้าสู่ระบบ</Text>
+           </TouchableOpacity>
+           <View style={{margin:2}} >
+               <Text style={{fontSize:20}} >หรือ</Text>
+           </View>
+           <TouchableOpacity 
+               onPress={() => {navigation.navigate("RegisterForm")}}>
+               <Text style={{fontSize:16,textDecorationLine:'underline',color:Colors.secondaryColor}} >สมัครสมาชิก</Text>
+           </TouchableOpacity> 
+    </ScrollView>
   );
 };
 
@@ -97,6 +105,21 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginBottom: 10,
     color: '#051d5f',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
 
 });

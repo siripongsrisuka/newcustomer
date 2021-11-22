@@ -77,7 +77,7 @@ const  ProfileScreen = () => {
                         editable={editable}
                     />
                 </View> */}
-                <View style={styles.TextInput} >                
+                {/* <View style={styles.TextInput} >                
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}}>เบอร์โทรศพท์ : </Text>
                     <TextInput
                         placeholder='กรอกเบอร์โทรศพท์'
@@ -90,7 +90,7 @@ const  ProfileScreen = () => {
                         style ={{flex:1,fontFamily: 'Prompt_400Regular'}}
                         editable={editable}
                     />
-                </View>
+                </View> */}
                 <View style={{...styles.TextInput,...{height:70}}} >                
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}} >ที่อยู่ : </Text>
                     <TextInput
@@ -106,26 +106,28 @@ const  ProfileScreen = () => {
                     />
                 </View>
            </View>
-           <Button
-                title="Log Out"
-                onPress={()=>{signOut()}}
-            />
-
-            {editable
-                ?<TouchableOpacity onPress = {customerUpdate} style = {styles.button}>
-                    <View style={{flexDirection:'row',alignItems:'center'}} >
-                        <Ionicons name="person" size={24} color="white" />
-                        <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}}>   ยืนยันข้อมูล</Text>
-                    </View>
+           
+            <View style={{flexDirection:'row',width:'100%'}} >
+                <TouchableOpacity onPress={()=>{signOut()}} style={{width:'50%',justifyContent:'center',alignItems:'center',backgroundColor:Colors.bottom,height:50}}>
+                    <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}}>Log Out</Text>
                 </TouchableOpacity>
-                
-                :<TouchableOpacity onPress = {() => setEditable(true)} style = {styles.button}>
-                    <View style={{flexDirection:'row',alignItems:'center'}} >
-                        <FontAwesome5 name="user-edit" size={24} color="white" />
-                        <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}} >   แก้ไขข้อมูลส่วนตัว</Text>  
-                    </View>
-                </TouchableOpacity>  
-            }
+                {editable
+                    ?<TouchableOpacity onPress = {customerUpdate} style = {styles.button}>
+                        <View style={{flexDirection:'row',alignItems:'center'}} >
+                            <Ionicons name="person" size={24} color="white" />
+                            <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}}>  ยืนยันข้อมูล</Text>
+                        </View>
+                    </TouchableOpacity>
+                    
+                    :<TouchableOpacity onPress = {() => setEditable(true)} style = {styles.button}>
+                        <View style={{flexDirection:'row',alignItems:'center'}} >
+                            <FontAwesome5 name="user-edit" size={24} color="white" />
+                            <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}} >  แก้ไขข้อมูล</Text>  
+                        </View>
+                    </TouchableOpacity>  
+                }
+            </View>
+            
         </ScrollView> 
     )
 }
@@ -144,12 +146,11 @@ const styles = StyleSheet.create({
     button:{
         backgroundColor:'red',
         flexDirection:'row',
-        width:'100%',
+        width:'50%',
         alignSelf:'center',
         backgroundColor:Colors.primaryColor,
         height:50,
         justifyContent:'center',
-        marginTop:10, 
     }
 })
 

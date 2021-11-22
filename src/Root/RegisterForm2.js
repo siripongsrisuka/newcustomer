@@ -18,24 +18,41 @@ import { FontAwesome5, Ionicons ,AntDesign} from '@expo/vector-icons';
 
 
 const RegisterForm2 = ({navigation,route}) => {
-  const {phoneLogin2} = useContext(AuthContext);
+  const {state: {registerData},phoneLogin2,updateRegisterData} = useContext(AuthContext);
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState()
+  const [phoneNumber,setPhoneNumber]= useState('');
 
   const checkData = () => {
     if(address == ''){
         alert('กรุณาใส่ที่อยู่ร้านค้า')
-    } else if(valueProvince == null){
-        alert('กรุณาเลือกจังหวัด')
-    } else if(valueAmphure == null){
-        alert('กรุณาเลือกอำเภอ')
-    } else if(valueTombon == ''){
-        alert('กรุณาเลือกตำบล')
+    }  else {
+        checkPhoneNumber()
+    }   
+  }
+
+  const checkPhoneNumber = () => {
+    if(phoneNumber == ''){
+      alert('กรุณากรอกหมายเลขโทรศัพท์มือถือ')
+      return 
+    } else if(phoneNumber.length != 10){
+      alert('กรุณากรอกหมายเลขโทรศัพท์มือถือให้พอดี 10 หลัก')
+    } else if(phoneNumber.substring(0,1) != '0' ){
+      alert('กรุณาให้เลขหลักแรกโทรศัพท์เป็น 0')
+      return 
     } else {
-        phoneLogin2(phoneNumber)
-        navigation.navigate('FirebaseOtpVerifyScreen')
+        db.collection('customer').where("tel","==",phoneNumber).get().then((qsnapshot) => {
+            if (qsnapshot.docs.length > 0) {
+              alert('เบอร์นี้ ถูกใช้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบ')
+            } else {
+                registerData.address = address
+                registerData.phoneNumber = phoneNumber
+                updateRegisterData(registerData)
+                // phoneLogin2(phoneNumber)
+                navigation.navigate('FirebaseOtpVerifyScreen',{phone:phoneNumber})
+            }
+          })
     }
-    
   }
 
   return (
@@ -70,7 +87,21 @@ const RegisterForm2 = ({navigation,route}) => {
                     onChangeText={setEmail}
                 />
             </View>
-            <View style={{height:50}}>
+            
+             <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}>
+                <TextInput
+                    placeholder='กรอกเบอร์โทรศพท์'
+                    value={phoneNumber}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    maxLength={10}
+                    onChangeText={setPhoneNumber}
+                    keyboardType='phone-pad'
+                />
+            </View>
+           
+           
+            <View >
                 <Text>ข้อตกลง/เงื่อนไขในการใช้บริการ</Text>
             </View>
             <TouchableOpacity style={styles.touch} onPress={checkData}  >

@@ -1,16 +1,18 @@
 import {useContext} from 'react';
 import db from '../../db/firestore'
 import {Context as BrandMemberContext} from '../context/BrandMemberContext'
+import { AuthContext } from '../context';
 
 
 
 
 const BrandMemberHook = () => {
     const {state : {brandMember,brandProfile},getBrandMember,getBrandProfile}= useContext(BrandMemberContext)
+    const {state: {token}} = useContext(AuthContext);
 
     const fetchBrandMember = async () => {
         let res = []
-        await db.collection('brandMember').where("userId","==","GkZhwokCkUgdKrmqhxRw").get().then(function(snapshot){
+        await db.collection('brandMember').where("userId","==",token).get().then(function(snapshot){
             snapshot.forEach(function(docs){
                 
                 let addId = docs.data()
@@ -21,19 +23,14 @@ const BrandMemberHook = () => {
                         addId.brandAdsImage = brand.brandAdsImage
                         addId.brandLogoId = brand.imageId
                         brandProfile.push(docs.data())
-                        getBrandProfile(brandProfile);
-                        
+                        getBrandProfile(brandProfile); 
                     })
-                    
                 })
                 res.push(addId)
                    
             })
         });
         getBrandMember(res);  
-        console.log("res")
-        console.log(res)
-        console.log("res")
         
     }
 

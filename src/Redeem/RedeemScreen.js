@@ -37,7 +37,7 @@ const  RedeemScreen = ({navigation}) => {
     const [name, setName] = useState('');
     const [productVisible, setProductVisible] = useState(false);
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
-    const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1}}= useContext(ShopMemberContext)
+    const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1,productCobrand,shopMember}}= useContext(ShopMemberContext)
     const {fetchShopCoupon}= useContext(ShopCouponContext)
     const [fetchCustomerProfile]= CustomerHook();
     const [fetchBrandMember]= BrandMemberHook();
@@ -61,8 +61,6 @@ const  RedeemScreen = ({navigation}) => {
       await db.collection('AdminSetting').doc('customerAdsModal').get().then(function(snapshot){
         let xx = snapshot.data()
         setAds(xx.picture[Math.floor(Math.random() * xx.picture.length)])
-        console.log(xx.picture[Math.floor(Math.random() * xx.picture.length)]);
-        console.log(xx.picture.length)
       })
       await setModalVisible(false)
       await setModalAds(true)
@@ -73,12 +71,12 @@ const  RedeemScreen = ({navigation}) => {
           loadStock()
           console.log('i fire once')
     },[])
+    console.log(productCobrand)
 
-    useEffect(()=>{
-      const arrAdvertise = ['A','B','C'];
-      console.log(arrAdvertise[Math.floor(Math.random() * arrAdvertise.length)]);
-    },[])
-
+    function productPromotion(type){
+      let res = productCobrand?.filter((a) =>{return(a.promotion[0]?.detail == type)})
+      return res
+    }
 
     const useCoupon = () => {
       let token = customerProfile[0].id+new Date()
@@ -86,7 +84,11 @@ const  RedeemScreen = ({navigation}) => {
       setToken(token);
       setCouponVisible(true);
       setName(customerProfile[0].customerName);
-      console.log(customerProfile)
+    }
+
+    function shopProfile(shopId){
+      let res = shopMember.filter((a) =>{return(a.shopId == shopId)})
+      return res
     }
 
     const showProduct = (item) => {
@@ -161,10 +163,10 @@ const  RedeemScreen = ({navigation}) => {
           </ScrollView>
         </View>
         
-        {promotionType == 'Price Off' && (<Catalog data={priceOff} press ={showProduct}/>)}
-        {promotionType == 'Buy 1 Get 1' && (<Catalog data={buy1Get1} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
-        {promotionType == 'Buy 2 Cheaper' && (<Catalog data={buy2Cheaper} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
-        {promotionType == 'Buy 2 Get 1' && (<Catalog data={buy2Free1} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)}
+        {promotionType == 'Price Off' && (<Catalog data={productPromotion('Price Off')} press ={showProduct}/>)}
+        {promotionType == 'Buy 1 Get 1' && (<Catalog data={productPromotion('Buy 1 Get 1')} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
+        {promotionType == 'Buy 2 Cheaper' && (<Catalog data={productPromotion('Buy 2 Cheaper')} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
+        {promotionType == 'Buy 2 Get 1' && (<Catalog data={productPromotion('Buy 2 Get 1')} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)}
 
         <Modal
             animationType="fade"
@@ -245,18 +247,17 @@ const  RedeemScreen = ({navigation}) => {
                               return (
                                 <View style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}}  >
                                   <View >
-                                      <Image source={{uri:item.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
+                                      <Image source={{uri:shopProfile(item.shopId)[0]?.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
                                   </View>
                                   <View style={{paddingLeft:5,width:'50%'}} >
                                       <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {item.instock} ชิ้น</Text>
-                                      <Text style={Fonts.md} >{item.shopName}</Text>
+                                      <Text style={Fonts.md} >{shopProfile(item.shopId)[0]?.shopName}</Text>
                                       <View style={{flexDirection:'row',alignItems:'center'}} >
                                           <Text style={Fonts.sm}>โทร : </Text>
-                                          <Text>{item.shopTel}</Text>
-                                          <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${item.shopTel}`)}} >
+                                          <Text>{shopProfile(item.shopId)[0]?.shopTel}</Text>
+                                          <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${shopProfile(item.shopId)[0]?.shopTel}`)}} >
                                             <Feather name="phone-call" size={24} color="black" />
                                           </TouchableOpacity>
-                                          
                                       </View>
                                       <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() =>{Linking.openURL("https://lin.ee/X5atVYI")}}>
                                         <Text>สั่งผ่านไลน์---</Text>
