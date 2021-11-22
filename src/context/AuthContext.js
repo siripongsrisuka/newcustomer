@@ -62,10 +62,14 @@ const phoneLogin2 = (dispatch) => async (phoneNum='',recaptchaVerifier ='') => {
           recaptchaVerifier
         );
         dispatch({type:'objPhoneConfirm',payload:objPhoneConfirm});
-        console.log('phonenumber')
+        console.log('objPhoneConfirm')
+        console.log(objPhoneConfirm)
+        console.log('objPhoneConfirm')
 
     } catch (err) {
         alert('error')
+        console.log('error')
+        console.log(err)
         console.log('error')
     }
 

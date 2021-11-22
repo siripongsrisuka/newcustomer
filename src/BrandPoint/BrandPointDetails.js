@@ -18,10 +18,10 @@ const  BrandPointDetails = ({route}) => {
     let filterBrandMember = brandMember.filter((brand)=> brand.brandId == brandId)
     
     const RedeemPoint = () => {
-        if(rewardData.pointConsume >filterBrandMember[0].remainPoint){
+        if(rewardData.pointConsume >filterBrandMember[0]?.remainPoint){
             alert('สะสมแต้มเพิ่มอีกหน่อย แล้วมารับรางวัลไปได้เลย')
         } else {
-            filterBrandMember[0].remainPoint = Number(filterBrandMember[0].remainPoint) - Number(rewardData.pointConsume)
+            filterBrandMember[0].remainPoint = Number(filterBrandMember[0]?.remainPoint) - Number(rewardData.pointConsume)
             filterBrandMember[0].reward.push({
                 rewardId:filterBrandReward[0].brandId + stringDtNumOnly(),
                 rewardName:rewardData.rewardName,
@@ -54,7 +54,7 @@ const  BrandPointDetails = ({route}) => {
                     
                     <View style={{flexDirection:'row',padding:5}} >
                         <Text style={Fonts.mdb} >แต้มสะสม : </Text>
-                        <Text style={{...Fonts.mdb,...{color:Colors.primaryColor}}}>{filterBrandMember[0].remainPoint}</Text>
+                        <Text style={{...Fonts.mdb,...{color:Colors.primaryColor}}}>{filterBrandMember[0]?.remainPoint}</Text>
                     </View>
                 </View>
             </View>

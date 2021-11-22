@@ -37,7 +37,7 @@ const  RedeemScreen = ({navigation}) => {
     const [name, setName] = useState('');
     const [productVisible, setProductVisible] = useState(false);
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
-    const {state : {shopProduct,priceOff,buy1Get1,buy2Cheaper,buy2Free1,productCobrand,shopMember}}= useContext(ShopMemberContext)
+    const {state : {shopProduct,productCobrand,shopMember}}= useContext(ShopMemberContext)
     const {fetchShopCoupon}= useContext(ShopCouponContext)
     const [fetchCustomerProfile]= CustomerHook();
     const [fetchBrandMember]= BrandMemberHook();

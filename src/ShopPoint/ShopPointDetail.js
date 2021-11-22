@@ -10,13 +10,14 @@ import Catalog from "../../component/Catalog";
 
 const  ShopPointDetail = ({route}) => {
     const { shopId } = route.params;
-    const {state : {shopMember,shopProfile,shopProduct},getShopProfile,getShopMember}= useContext(ShopMemberContext)
+    const {state : {shopMember,shopProfile,shopProduct,productCobrand},getShopMember}= useContext(ShopMemberContext)
     const {state : rewardData}= useContext(ShopCouponContext)
     const [redeemVisible, setRedeemVisible] = useState(false);
     const [productVisible, setProductVisible] = useState(true);
     const [showType, setShowType] = useState('product')
     const [promotionType, setPromotionType] = useState('Buy 1 Get 1')
     const [data, setData] = useState();
+    const [thisShopProduct, setThisShopProduct] = useState([])
     let aShop = shopProfile.filter((item) => {return(item.shopId == shopId )})
     let reward = aShop[0].reward.filter((a) =>{return(a.status == 'valid')})
     let aShopMember = shopMember.filter((item) => {return(item.shopId == shopId )})
@@ -25,9 +26,16 @@ const  ShopPointDetail = ({route}) => {
       aShopProduct()
     },[])
 
-    function aShopProduct(){
+    const aShopProduct = async() => {
       let res = shopProduct.filter((a) => {return(a.shopId == shopId)})
-      console.log(res)
+      let newData = []
+      await res?.forEach((item) =>{
+        let xx = productCobrand?.filter((a) => {return(a.sku == item.sku)})
+        if(xx.length > 0){
+          newData.push(xx[0])
+        }
+      })
+      await setThisShopProduct(newData)
     }
 
     const confirmReward = () => {
@@ -55,6 +63,10 @@ const  ShopPointDetail = ({route}) => {
 
     function getRewardData(id){
       let res = rewardData?.filter((a) => {return(a.id == id)})
+      return res
+    }
+    function productPromotion(type){
+      let res = thisShopProduct?.filter((a) =>{return(a.promotion[0]?.detail == type)})
       return res
     }
 
@@ -113,97 +125,90 @@ const  ShopPointDetail = ({route}) => {
           </View>
           {productVisible
           ?<View>
-          <Text>shopcham</Text>
-          {/* <View style={{height:40,marginTop:50}} >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-              {(promotionType == 'Buy 1 Get 1')
-                ?<TouchableOpacity style={styles.border} >
-                    <View style={styles.choose} >
+            <View style={{height:40}} >
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+                {(promotionType == 'Buy 1 Get 1')
+                  ?<TouchableOpacity style={styles.border2} >
+                      <View style={styles.choose2} >
+                        <Text style={Fonts.md}>1 แถม 1</Text>
+                      </View>
+                  </TouchableOpacity>
+                  :<TouchableOpacity style={styles.border2} onPress={() => {setPromotionType('Buy 1 Get 1')}}> 
                       <Text style={Fonts.md}>1 แถม 1</Text>
+                  </TouchableOpacity> 
+                }
+                {(promotionType == 'Price Off')
+                  ?<TouchableOpacity  style={styles.border2} >
+                    <View style={styles.choose2} >
+                        <Text style={Fonts.md} >ลดราคา</Text>
                     </View>
-                </TouchableOpacity>
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 1 Get 1')}}> 
-                    <Text style={Fonts.md}>1 แถม 1</Text>
-                </TouchableOpacity> 
-              }
-              {(promotionType == 'Price Off')
-                ?<TouchableOpacity  style={styles.border} >
-                  <View style={styles.choose} >
+                  </TouchableOpacity>
+                  :<TouchableOpacity style={styles.border2} onPress={() => {setPromotionType('Price Off')}}>
                       <Text style={Fonts.md} >ลดราคา</Text>
-                  </View>
-                </TouchableOpacity>
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Price Off')}}>
-                    <Text style={Fonts.md} >ลดราคา</Text>
-                </TouchableOpacity> 
-              }
-              {(promotionType == 'Buy 2 Cheaper')
-                ?<TouchableOpacity  style={styles.border} >
-                  <View style={styles.choose} >
-                    <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
-                  </View>
-                </TouchableOpacity>
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 Cheaper')}}>
-                    <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
-                </TouchableOpacity>
-              }
-              {(promotionType == 'Buy 2 Get 1')
-                ?<TouchableOpacity  style={styles.border}>
-                  <View style={styles.choose} >
-                    <Text style={Fonts.md} >2 แถม 1</Text>
-                  </View>
-                </TouchableOpacity >
-                :<TouchableOpacity style={styles.border} onPress={() => {setPromotionType('Buy 2 Get 1')}}>
-                    <Text style={Fonts.md} >2 แถม 1</Text>
-                </TouchableOpacity >
-              }
-          </ScrollView>
-        </View>
-        {promotionType == 'Price Off' && (<Catalog data={productPromotion('Price Off')} press ={showProduct}/>)}
-        {promotionType == 'Buy 1 Get 1' && (<Catalog data={productPromotion('Buy 1 Get 1')} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
-        {promotionType == 'Buy 2 Cheaper' && (<Catalog data={productPromotion('Buy 2 Cheaper')} detail='2 ชิ้น ปกติ' multiply={2} press ={showProduct} />)}
-        {promotionType == 'Buy 2 Get 1' && (<Catalog data={productPromotion('Buy 2 Get 1')} detail='3 ชิ้น ปกติ' multiply={3} press ={showProduct} />)} */}
-        </View>
-        : <View>
-        <View style={{alignSelf:'center',marginTop:10}} >
-              <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_500Medium'}}>มาแลกรางวัลจาก {aShop[0].shopName} กันเถอะ!!</Text>
-        </View>
-
-        <View style={{alignItems:'center',marginBottom:350}} >
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={reward}
-            numColumns={2}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-            return (
-              <View style={styles.reward} >
-                <View style = {{alignSelf:'center',width:'100%'}} >
-                    <View style={{width:'100%',borderTopRightRadius:8,borderTopLeftRadius:8}}  >
-                        <Image resizeMode='center' source={{uri : getRewardData(item.id)[0]?.imageId}} style={{height:Dimensions.Width/4,width:Dimensions.Width/2.2}}/>
+                  </TouchableOpacity> 
+                }
+                {(promotionType == 'Buy 2 Cheaper')
+                  ?<TouchableOpacity  style={styles.border2} >
+                    <View style={styles.choose2} >
+                      <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
                     </View>
-                    <View style={{marginLeft:5,justifyContent:'center',alignItems:'center'}} >
-                        <Text style={Fonts.lg}>{item.pointConsume} แต้ม</Text>
+                  </TouchableOpacity>
+                  :<TouchableOpacity style={styles.border2} onPress={() => {setPromotionType('Buy 2 Cheaper')}}>
+                      <Text style={Fonts.md} >2 ชิ้นถูกกว่า</Text>
+                  </TouchableOpacity>
+                }
+                {(promotionType == 'Buy 2 Get 1')
+                  ?<TouchableOpacity  style={styles.border2}>
+                    <View style={styles.choose2} >
+                      <Text style={Fonts.md} >2 แถม 1</Text>
                     </View>
-                </View>
-                <TouchableOpacity onPress = {() => {setRedeemVisible(true),setData(item)}} >
-                    <View style={{borderTopWidth:1,padding:5,borderColor:Colors.InputColor,width:'90%',alignSelf:'center'}} >
-                    <View style = {{...styles.redeem,...{borderRadius:30}}}>
-                        <Text style={{fontSize:18,fontFamily: 'Prompt_500Medium',color:'white'}}>แลกรางวัล</Text>
-                    </View>
-                    </View>
-                </TouchableOpacity>  
+                  </TouchableOpacity >
+                  :<TouchableOpacity style={styles.border2} onPress={() => {setPromotionType('Buy 2 Get 1')}}>
+                      <Text style={Fonts.md} >2 แถม 1</Text>
+                  </TouchableOpacity >
+                }
+              </ScrollView>
             </View>
-            )}}
-          />
-        </View>
-        </View>
-        
+            {promotionType == 'Price Off' && (<Catalog data={productPromotion('Price Off')} press ={() =>{}}/>)}
+            {promotionType == 'Buy 1 Get 1' && (<Catalog data={productPromotion('Buy 1 Get 1')} detail='2 ชิ้น ปกติ' multiply={2} press ={() =>{}} />)}
+            {promotionType == 'Buy 2 Cheaper' && (<Catalog data={productPromotion('Buy 2 Cheaper')} detail='2 ชิ้น ปกติ' multiply={2} press ={() =>{}} />)}
+            {promotionType == 'Buy 2 Get 1' && (<Catalog data={productPromotion('Buy 2 Get 1')} detail='3 ชิ้น ปกติ' multiply={3} press ={() =>{}} />)}
+          </View>
+        : <View>
+            <View style={{alignSelf:'center',marginTop:10}} >
+                  <Text numberOfLines={2} style={{fontSize:18,fontFamily: 'Prompt_500Medium'}}>มาแลกรางวัลจาก {aShop[0].shopName} กันเถอะ!!</Text>
+            </View>
+            <View style={{alignItems:'center',marginBottom:350}} >
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={reward}
+                numColumns={2}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => {
+                return (
+                  <View style={styles.reward} >
+                    <View style = {{alignSelf:'center',width:'100%'}} >
+                        <View style={{width:'100%',borderTopRightRadius:8,borderTopLeftRadius:8}}  >
+                            <Image resizeMode='center' source={{uri : getRewardData(item.id)[0]?.imageId}} style={{height:Dimensions.Width/4,width:Dimensions.Width/2.2}}/>
+                        </View>
+                        <View style={{marginLeft:5,justifyContent:'center',alignItems:'center'}} >
+                            <Text style={Fonts.lg}>{item.pointConsume} แต้ม</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity onPress = {() => {setRedeemVisible(true),setData(item)}} >
+                        <View style={{borderTopWidth:1,padding:5,borderColor:Colors.InputColor,width:'90%',alignSelf:'center'}} >
+                        <View style = {{...styles.redeem,...{borderRadius:30}}}>
+                            <Text style={{fontSize:18,fontFamily: 'Prompt_500Medium',color:'white'}}>แลกรางวัล</Text>
+                        </View>
+                        </View>
+                    </TouchableOpacity>  
+                </View>
+                )}}
+              />
+            </View>
+          </View>
         }
           
-          
-         
-          
-
           <Modal
             animationType="fade"
             transparent={true}
@@ -312,6 +317,34 @@ const styles = StyleSheet.create({
       borderColor:Colors.primaryColor,
       height:35,
       width:'100%',
+    },
+    choose2: {
+      justifyContent:'center',
+      alignItems:'center',
+      backgroundColor:'white',
+      shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      borderRadius:50,
+      borderWidth:1,
+      borderColor:'#ff6900',
+      height:35,
+      width:100,
+    },
+    border2 : {
+      borderLeftWidth:1,
+      paddingRight:8,
+      borderColor:Colors.InputColor,
+      paddingLeft:8,
+      justifyContent:'center',
+      height:40,
+      width:110,
+      alignItems:'center',
     },
     
 })
