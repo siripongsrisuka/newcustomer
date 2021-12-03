@@ -3,30 +3,47 @@ import {
   View,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Image,
   Platform,
   StyleSheet,
   TextInput,
-  ScrollView
+  ScrollView,
+  Modal,
 } from 'react-native';
+import Fonts from '../constants/Fonts';
 
-import {Context as AuthContext} from '../context/AuthContext';
+import { AuthContext,CustomerLoginContext } from '../context';
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
 import db from '../../db/firestore'
-import { FontAwesome5, Ionicons ,AntDesign} from '@expo/vector-icons'; 
+import {AntDesign} from '@expo/vector-icons'; 
 
 
 const RegisterForm2 = ({navigation,route}) => {
-  const {state: {registerData},phoneLogin2,updateRegisterData} = useContext(AuthContext);
+  const {state: {registerData},updateRegisterData} = useContext(AuthContext);
+  const {state:customerLogin} = useContext(CustomerLoginContext)
   const [address, setAddress] = useState('');
   const [email, setEmail] = useState()
   const [phoneNumber,setPhoneNumber]= useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [approve, setApprove] = useState(false)
+  const picture = () =>{
+    let res = customerLogin.filter((a) =>{return(a.id == 'register2')})
+    return res
+  }
+  const condition = () =>{
+    let res = customerLogin.filter((a) =>{return(a.id == 'condition')})
+    return res
+  }
 
   const checkData = () => {
     if(address == ''){
         alert('กรุณาใส่ที่อยู่ร้านค้า')
-    }  else {
+    }  else if(approve == false){
+        setModalVisible(true)
+    }
+    else {
         checkPhoneNumber()
     }   
   }
@@ -56,10 +73,10 @@ const RegisterForm2 = ({navigation,route}) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
+    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center',backgroundColor:'white'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
         <Image 
             style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch'
-            source={{uri:"https://ขนส่งราคาถูก.com/wp-content/uploads/2019/08/%E0%B8%9B%E0%B8%81%E0%B8%A3%E0%B8%96%E0%B8%82%E0%B8%99%E0%B8%AA%E0%B9%88%E0%B8%87-1.jpg"}} 
+            source={{uri:picture()[0]?.uri}} 
         />
         <View style={{alignItems:'center'}} >
           <Text style={{fontSize:18,fontWeight:'bold'}} >สร้างบัญชี</Text>
@@ -101,13 +118,37 @@ const RegisterForm2 = ({navigation,route}) => {
             </View>
            
            
-            <View >
+            <TouchableOpacity onPress={() =>{setModalVisible(true)}} >
                 <Text>ข้อตกลง/เงื่อนไขในการใช้บริการ</Text>
-            </View>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.touch} onPress={checkData}  >
                 <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >ต่อไป   </Text>
                 <AntDesign name='arrowright' size={25} color="white" />
             </TouchableOpacity>
+            <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+        >
+            <TouchableOpacity 
+                style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center'}} 
+                activeOpacity={1} 
+                onPress={() => {setModalVisible(false)}}
+            >
+                <TouchableWithoutFeedback>
+                  <View style={{height:'70%',margin:20}} >
+                    <ScrollView contentContainerStyle={{backgroundColor: "white",alignSelf:'center',padding:20,alignItems:'center'}}>
+                      <View onStartShouldSetResponder={()  => true}>
+                        <Text style={Fonts.md}>{condition()[0]?.text}</Text>
+                      </View>
+                    </ScrollView>
+                    <TouchableOpacity onPress={() =>{setModalVisible(false),setApprove(true)}} style={{backgroundColor:'#29bd04',height:40,justifyContent:'center',alignItems:'center'}} >
+                      <Text style={Fonts.smw}>ยอมรับเงื่อนไข</Text>
+                    </TouchableOpacity>
+                  </View>   
+                </TouchableWithoutFeedback>
+            </TouchableOpacity>
+        </Modal>
         </View>
     </ScrollView>
   );
@@ -154,6 +195,21 @@ const styles = StyleSheet.create({
         width: "90%",
         borderTopRightRadius:8,
         borderTopLeftRadius:8
+      },
+    modalView: {
+        backgroundColor: "white",
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width:'100%',
+        height:'100%'
       },
 
 });

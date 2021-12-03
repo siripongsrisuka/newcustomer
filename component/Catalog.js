@@ -3,11 +3,8 @@ import {
   Text, 
   StyleSheet, 
   View,
-  ScrollView, 
-  Modal, 
   Image,
   TouchableOpacity,
-  TouchableWithoutFeedback ,
   FlatList,
 } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,10 +12,7 @@ import Dimensions from "../src/constants/Dimensions";
 import Colors from "../src/constants/Colors";
 import Fonts from "../src/constants/Fonts";
 
-
-
-
-const Catalog = ({data,detail='1 ชิ้นปกติ',multiply=1,press}) => {
+const Catalog = ({data,detail='1 ชิ้นปกติ',multiply=1,press,stock=0}) => {
     
     return(
         <View style={{...styles.card,...{marginBottom:280}}} >
@@ -35,8 +29,23 @@ const Catalog = ({data,detail='1 ชิ้นปกติ',multiply=1,press}) =>
                         style={{width:"100%",borderTopRightRadius:20,borderTopLeftRadius:20,padding:7}}>
                         <Text numberOfLines={1} style={{fontSize:18,fontFamily: 'Prompt_400Regular',color:'white',textAlign:'center'}}>{item.name}</Text>
                       </LinearGradient>
-                      
-                      <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/3,height:Dimensions.Width/3,borderRadius:10}} />
+                     <View style={{width:'100%',alignItems:'center',justifyContent:'center'}} >
+                       {item.point.length > 0 && (
+                          <View style={{position:'absolute',left:0,zIndex:99,backgroundColor:Colors.primaryColor,flexDirection:'row',borderTopRightRadius:10,borderBottomRightRadius:10,alignItem:'center',bottom:5}} >
+                            <View style={{alignItems:'center',paddingRight:2}} >
+                              <Text style={{...Fonts.sm,...{color:'white'}}} textAlign='center' >รับ</Text>
+                              <Text style={{...Fonts.sm,...{fontSize:10,color:'white'}}}>คะแนน</Text>
+                            </View>
+                            <View style={{padding:3,borderLeftWidth:1,height:'70%',justifyContent:'center',alignSelf:'center',borderColor:'white'}} >
+                              <Text style={{...Fonts.sm,...{fontSize:16,color:'white'}}}>{item.point[0].point}</Text>
+                            </View>
+                          </View>
+                       )}
+                       
+                       
+                     <Image source={{uri:item.imageId}} style={{width:Dimensions.Width/3,height:Dimensions.Width/3,borderRadius:10}} />
+                     </View>
+
                       <View style={{flexDirection:'row',borderTopWidth:1,width:'90%',borderColor:Colors.InputColor,justifyContent:'center'}} >
                         <Text style={Fonts.sm} >{detail} </Text>
                         <Text style={{textDecorationLine:'line-through',fontFamily: 'Prompt_400Regular'}}>{multiply*item.price} </Text>

@@ -41,6 +41,7 @@ const  BrandPointDetails = ({navigation}) => {
         } 
         setRegisterVisible(true)
     }
+
     const postRegister = () => {
         setRegisterVisible(false)
         
@@ -83,12 +84,11 @@ const  BrandPointDetails = ({navigation}) => {
         
     return (
         <View style = {styles.container} >
-            <View style = {{flexDirection:'row',justifyContent:'space-between',width:'100%',height:40}} >
-                <View style = {{flex:1,borderRightWidth:1,justifyContent:'center',alignItems:'center',flexDirection:'row',borderColor:'#b5b5b5'}} >
-                    <Text style={Fonts.md}>แบรนด์ที่คุณมีส่วนร่วม : </Text>
-                    <Text style={{...Fonts.md,...{color:Colors.primaryColor}}}>{brandMember.length}</Text>
-                </View>
+            <View style = {{borderColor:'#b5b5b5',flexDirection:'row',padding:10,borderBottomWidth:1,width:'95%',alignSelf:'center',justifyContent:'center'}} >
+                <Text style={Fonts.md}>แบรนด์ที่คุณมีส่วนร่วม : </Text>
+                <Text style={{...Fonts.md,...{color:Colors.primaryColor}}}>{brandMember.length}</Text>
             </View>
+
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={brandMember}

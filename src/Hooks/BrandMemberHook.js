@@ -7,7 +7,7 @@ import { AuthContext } from '../context';
 
 
 const BrandMemberHook = () => {
-    const {state : {brandMember,brandProfile},getBrandMember,getBrandProfile}= useContext(BrandMemberContext)
+    const {state : {brandProfile},getBrandMember,getBrandProfile}= useContext(BrandMemberContext)
     const {state: {token}} = useContext(AuthContext);
 
     const fetchBrandMember = async () => {

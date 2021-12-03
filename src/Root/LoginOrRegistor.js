@@ -13,19 +13,13 @@ import {
 } from 'react-native';
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
-import {    
-  AuthProvider,AuthContext,
-  BrandPointProvider,
-  BrandMemberProvider,
-  CustomerProfileProvider,
-  ShopMemberProvider,
-  ShopCouponProvider
-} from '../context'
+import {AuthContext,CustomerLoginContext} from '../context'
 
 const LoginOrRegistor = ({navigation}) => {
   const [phone, setPhone] = useState("");
   const {state:{token},tryLocalSignIn} = useContext(AuthContext)
-  const [modalVisible, setModalVisible] = useState(true);
+  const {state:customerLogin,fetchCustomerLogin} = useContext(CustomerLoginContext)
+  const [loginPicture, setLoginPicture] = useState([])
 
   const checkPhoneNumber = () => {
     if(phone.length != 10){
@@ -46,20 +40,26 @@ const LoginOrRegistor = ({navigation}) => {
     }
   }
 
- 
-    // setTimeout(() =>{
-    //   setModalVisible(false)
-    // },2000)
     useEffect(() =>{
-      if(!token){
-        setModalVisible(false)
-      }
-    },[token])
-
+      // db.collection('AdminSetting').doc('customerLogin').get().then(function(snapshot){
+      //   let xx = snapshot.data().picture
+      //   // if(!token){
+      //   //   setLoginPicture(xx)
+      //   // }
+        
+      //   console.log('hello word')
+      // })
+      fetchCustomerLogin()
+      
+    },[])
+    const picture = () =>{
+        let res = customerLogin.filter((a) =>{return(a.id == 'customerLogin')})
+        return res
+    }
 
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
-            <Image source={require('../../image/coverphoto.jpg')} style={{width:"100%",height:300,borderWidth:3}} resizeMode='contain' />
+            <Image source={{uri:picture()[0]?.uri}} style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch' />
             {Platform.OS === 'android' ? (
              <View>
                <TextInput

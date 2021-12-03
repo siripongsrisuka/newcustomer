@@ -1,5 +1,5 @@
 import React, {useState,useContext, useEffect} from "react";
-import { Text, StyleSheet, View,TouchableOpacity, TouchableWithoutFeedback, Image, Modal, ScrollView, FlatList,ImageBackground } from "react-native";
+import { Text, StyleSheet, View,TouchableOpacity, TouchableWithoutFeedback, Image, Modal, ScrollView, FlatList,  Linking } from "react-native";
 import Colors from "../constants/Colors";
 import Dimensions from "../constants/Dimensions";
 import {Context as ShopMemberContext} from '../context/ShopMemberContext'
@@ -7,6 +7,7 @@ import {Context as ShopCouponContext} from '../context/ShopCouponContext'
 import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
 import Catalog from "../../component/Catalog";
+import { Feather } from '@expo/vector-icons'; 
 
 const  ShopPointDetail = ({route}) => {
     const { shopId } = route.params;
@@ -42,7 +43,7 @@ const  ShopPointDetail = ({route}) => {
       if(aShopMember[0].remainPoint < data.pointConsume){
         alert('สะสมแต้มเพิ่มอีกนิดนะ ')
       } else {
-        aShopMember[0].remainPoint = aShopMember[0].remainPoint - data.pointConsume
+        aShopMember[0].remainPoint = Number(aShopMember[0].remainPoint) - Number(data.pointConsume)
         let newReward = {
           rewardId:String(new Date()),
           qty:1,
@@ -82,10 +83,11 @@ const  ShopPointDetail = ({route}) => {
                   <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>ที่อยู่ : </Text>
                   <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={1}>{aShop[0].address}</Text>
               </View>
-              <View style={{flexDirection:'row'}} >
-                  <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>เบอร์ติดต่อ : </Text>
-                  <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={2}>{aShop[0].tel}</Text>
-              </View>
+              <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${aShop[0].tel}`)}} style={{flexDirection:'row'}} >
+                <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>เบอร์ติดต่อ : </Text>
+                <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={2}>{aShop[0].tel}</Text>
+                <Feather name="phone-call" size={24} color="black" />
+              </TouchableOpacity>
               <View style={{flexDirection:'row'}} >
                   <Text style={{fontSize:16,fontFamily: 'Prompt_500Medium'}}>แต้มสะสม : </Text>
                   <Text style={{fontSize:16,fontFamily: 'Prompt_400Regular'}} numberOfLines={2}>{aShopMember[0].remainPoint}</Text>

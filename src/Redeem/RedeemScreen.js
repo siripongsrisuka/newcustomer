@@ -36,12 +36,6 @@ const  RedeemScreen = ({navigation}) => {
     const [token, setToken] = useState('');
     const [name, setName] = useState('');
     const [productVisible, setProductVisible] = useState(false);
-    const {state : {customerProfile}}= useContext(CustomerProfileContext);
-    const {state : {shopProduct,productCobrand,shopMember}}= useContext(ShopMemberContext)
-    const {fetchShopCoupon}= useContext(ShopCouponContext)
-    const [fetchCustomerProfile]= CustomerHook();
-    const [fetchBrandMember]= BrandMemberHook();
-    const [fetchShopMember]= ShopMemberHook();
     const [image, setImage] = useState('')
     const [filterShop, setFilterShop] = useState([])
     const [productName, setProductName] = useState('')
@@ -49,7 +43,18 @@ const  RedeemScreen = ({navigation}) => {
     const [carousel, setCarousel] = useState()
     const [modalAds, setModalAds] = useState(false)
     const [ads, setAds] = useState()
+
+    //useContext
+    const {state : {customerProfile}}= useContext(CustomerProfileContext);
+    const {state : {shopProduct,productCobrand,shopMember}}= useContext(ShopMemberContext)
+    const {fetchShopCoupon}= useContext(ShopCouponContext)
+
+    //Hook
+    const [fetchCustomerProfile]= CustomerHook();
+    const [fetchBrandMember]= BrandMemberHook();
+    const [fetchShopMember]= ShopMemberHook();
     
+
     const loadStock = async() => {
       await fetchCustomerProfile() 
       await fetchBrandMember()
@@ -66,12 +71,12 @@ const  RedeemScreen = ({navigation}) => {
       await setModalAds(true)
       await fetchShopCoupon()
     }
+
     
     useEffect(() => {
           loadStock()
           console.log('i fire once')
     },[])
-    console.log(productCobrand)
 
     function productPromotion(type){
       let res = productCobrand?.filter((a) =>{return(a.promotion[0]?.detail == type)})
@@ -114,6 +119,7 @@ const  RedeemScreen = ({navigation}) => {
               style={{width:'50%',alignItems:'center',justifyContent:'center'}}
               onPress={() =>{navigation.navigate("redeemReward")}}
             >
+              <Image source={require('../../image/reward.png')} style={{width:30,height:30}} />
               <Text style={Fonts.md}>รางวัลของฉัน</Text>
             </TouchableOpacity>
           </View>
@@ -230,6 +236,7 @@ const  RedeemScreen = ({navigation}) => {
                 >
                     <TouchableWithoutFeedback>
                         <View style={styles.product}>
+                          
                             <View style={{flexDirection:'row',width:'100%'}} >
                                 <View style={{flex:1}} >
                                     <Image source={{uri:image}} style={{height:Dimensions.Width/2.5,width:Dimensions.Width/2.5}}/>
@@ -239,35 +246,30 @@ const  RedeemScreen = ({navigation}) => {
                                 </View>
                             </View>
                             <Text style={Fonts.lg} >ค้นพบ : {filterShop.length} ร้านค้าใกล้คุณ</Text>
-                            <FlatList
-                              data={filterShop}
-                              keyExtractor={(item) => item.shopId}
-                              scrollEnabled
-                              renderItem={({ item }) => {
-                              return (
-                                <View style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}}  >
-                                  <View >
-                                      <Image source={{uri:shopProfile(item.shopId)[0]?.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
-                                  </View>
-                                  <View style={{paddingLeft:5,width:'50%'}} >
-                                      <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {item.instock} ชิ้น</Text>
-                                      <Text style={Fonts.md} >{shopProfile(item.shopId)[0]?.shopName}</Text>
-                                      <View style={{flexDirection:'row',alignItems:'center'}} >
-                                          <Text style={Fonts.sm}>โทร : </Text>
-                                          <Text>{shopProfile(item.shopId)[0]?.shopTel}</Text>
-                                          <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${shopProfile(item.shopId)[0]?.shopTel}`)}} >
-                                            <Feather name="phone-call" size={24} color="black" />
-                                          </TouchableOpacity>
+                                <View style={{height:'60%'}} >
+                                  <ScrollView contentContainerStyle={{backgroundColor: "white"}}>
+                                    <View onStartShouldSetResponder={()  => true}>
+                                      {filterShop.map((item,index) =>(
+                                        <View key={index} style={{flexDirection:'row',padding:5,width:Dimensions.Width/1.2}}  >
+                                        <View >
+                                            <Image source={{uri:shopProfile(item.shopId)[0]?.shopImageId}} style={{width:100,height:100,borderRadius:15}} />
+                                        </View>
+                                        <View style={{paddingLeft:5,width:'50%'}} >
+                                            <Text style={{...Fonts.lg,...{color:Colors.primaryColor}}} >มีสินค้า {item.instock} ชิ้น</Text>
+                                            <Text style={Fonts.md} >{shopProfile(item.shopId)[0]?.shopName}</Text>
+                                            <View style={{flexDirection:'row',alignItems:'center'}} >
+                                                <Text style={Fonts.sm}>โทร : </Text>
+                                                <Text>{shopProfile(item.shopId)[0]?.shopTel}</Text>
+                                                <TouchableOpacity onPress={() =>{Linking.openURL(`tel:${shopProfile(item.shopId)[0]?.shopTel}`)}} >
+                                                  <Feather name="phone-call" size={24} color="black" />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>    
                                       </View>
-                                      <TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={() =>{Linking.openURL("https://lin.ee/X5atVYI")}}>
-                                        <Text>สั่งผ่านไลน์---</Text>
-                                        <FontAwesome5 name="line" size={30} color="#56c759" />
-                                      </TouchableOpacity>
-                                      
-                                  </View>    
+                                      ))}
+                                    </View>
+                                  </ScrollView>
                                 </View>
-                              )}}
-                            />
                         </View>
                     </TouchableWithoutFeedback>
                 </TouchableOpacity> 

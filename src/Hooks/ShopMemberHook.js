@@ -18,6 +18,9 @@ const ShopMemberHook = () => {
     const {state: {token}} = useContext(AuthContext);
 
     const fetchShopMember = async () => {
+        // shopProduct = productของทุกร้าน
+        // shopMember = shopmember ของทุกร้าน
+        // shopCobrand = รายละเอียดของสินค้า
         await db.collection('shopMember').where("userId","==",token).get().then(function(snapshot){
             snapshot.forEach(function(docs){
                 let addId = docs.data()

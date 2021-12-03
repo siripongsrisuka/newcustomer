@@ -37,8 +37,7 @@ const  ProfileScreen = () => {
             <View>
                 <View style={styles.TextInput} >
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}} >ชื่อ-นามสกุล : </Text>
-                  
-                        <TextInput
+                    <TextInput
                         placeholder=' กรอกชื่อ นามสกุล'
                         value={customerName}
                         autoCapitalize="none"
@@ -50,7 +49,7 @@ const  ProfileScreen = () => {
                     />
                         
                 </View> 
-                <View style={styles.TextInput} >                
+                {/* <View style={styles.TextInput} >                
                     <Text style={{color:Colors.primaryColor,fontFamily: 'Prompt_500Medium'}}>วันเดือนปีเกิด : </Text>
                     <TextInput
                         placeholder=' เช่น 4 พฤษภาคม 2538'
@@ -62,7 +61,7 @@ const  ProfileScreen = () => {
                         style ={{flex:1,fontFamily: 'Prompt_400Regular'}}
                         editable={editable}
                     />               
-                </View>
+                </View> */}
                 {/* <View style={styles.TextInput} >                
                     <Text style={{color:Colors.primaryColor}}>email : </Text>
                     <TextInput
@@ -118,7 +117,6 @@ const  ProfileScreen = () => {
                             <Text style={{fontSize:18,color:'white',fontFamily: 'Prompt_400Regular'}}>  ยืนยันข้อมูล</Text>
                         </View>
                     </TouchableOpacity>
-                    
                     :<TouchableOpacity onPress = {() => setEditable(true)} style = {styles.button}>
                         <View style={{flexDirection:'row',alignItems:'center'}} >
                             <FontAwesome5 name="user-edit" size={24} color="white" />

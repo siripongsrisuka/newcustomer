@@ -58,11 +58,9 @@ export const fetchBrandMember = () => {
             data.push(docs.data())
             // console.log(data)
         })
-    });
-
-    
-   
+    });  
 }
+
 
 export const fetchCarousel = () => {
   let data = []
@@ -106,6 +104,24 @@ export const fetchCarousel = () => {
     
     return promise
   }
+
+  // export const fetchCustomerLogin = () => {
+  //   const promise = new Promise((resolve,reject)=>{
+  //     db
+  //     .collection('AdminSetting')
+  //     .doc('customerLogin')
+  //     .get()
+  //     .then((qsnapshot) => {
+  //       let arrObject = []
+  //           arrObject.push(qsnapshot.data())
+  //         return arrObject[0]?.picture
+  //     })
+  //     .then(res => resolve(res))
+  //     .catch(err => reject(err))
+  //   });
+    
+  //   return promise
+  // }
 
 
 export const signOut = async () => {

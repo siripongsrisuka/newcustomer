@@ -32,10 +32,10 @@ const  BrandPointDetails = ({route}) => {
                 dateTime:new Date()
             })
             getBrandMember(brandMember)
-            // db.collection("brandMember").doc(filterBrandMember[0].doc).update({
-            //     remainPoint : filterBrandMember[0].remainPoint,
-            //     reward :filterBrandMember[0].reward
-            // })
+            db.collection("brandMember").doc(filterBrandMember[0].doc).update({
+                remainPoint : filterBrandMember[0].remainPoint,
+                reward :filterBrandMember[0].reward
+            })
             alert('แลกรางวัลสำเร็จ')
         }
         setShowReward(false)

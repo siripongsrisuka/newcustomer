@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,45 +7,73 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-  TextInput
+  TextInput,
+  Button,
+  Modal
 } from 'react-native';
 import {AntDesign} from '@expo/vector-icons'; 
 import Dimensions from '../constants/Dimensions';
 import Colors from '../constants/Colors';
 import db from '../../db/firestore'
-import { AuthContext } from '../context';
+import { AuthContext,CustomerLoginContext } from '../context';
+import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { stringDateTime2 } from '../Utility/dateTime';
 
 const RegisterForm = ({navigation,route}) => {
   const {state: {registerData},updateRegisterData } = useContext(AuthContext);
+  const {state:customerLogin} = useContext(CustomerLoginContext)
   const [customerName,setCustomerName] = useState('');
-  const [birthDay,setBirthDay] = useState('');
   const [gender, setGender] = useState('')
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const picture = () =>{
+    let res = customerLogin.filter((a) =>{return(a.id == 'register')})
+    return res
+  }
 
   const checkData = () => {
     if(customerName == ''){
       alert('กรุณาใส่ชื่อ')
-    } else if(birthDay == ''){
+    } else if(date.getDate() == new Date().getDate()){
       alert('กรุณาวันเดือนปีเกิด')
     } else if(gender == ''){
       alert('กรุณาใส่เพศ')
     } else {
       registerData.customerName = customerName
-      registerData.birthDay = birthDay
+      registerData.birthDay = date
       registerData.gender = gender
       updateRegisterData(registerData)
       navigation.navigate('RegisterForm2') 
     }
   }
 
+  
 
- 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
+    <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center',backgroundColor:'white'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
         <View >
-          <Image source={require('../../image/firstPost.jpg')} style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch' />
-          
+          <Image source={{uri:picture()[0]?.uri}} style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch' />
         </View>
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={'date'}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+        
         <View style={{alignItems:'center'}} >
           <Text style={{fontSize:18,fontWeight:'bold'}} >สร้างบัญชี</Text>
           <Text>1/2</Text>
@@ -62,26 +90,36 @@ const RegisterForm = ({navigation,route}) => {
                 onChangeText={setCustomerName}
             />
         </View>
-        <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
-            <TextInput
+        <TouchableOpacity onPress={() =>{setShow(true)}} style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor,flexDirection:'row',alignItems:'center'}}  >
+            <Text>วันเดือนปีเกิด : </Text>
+            {date.getDate() !== new Date().getDate() && (
+              <Text>{stringDateTime2(date)}</Text>
+            )}
+            
+            {/* <TextInput
                 placeholder='วันเดือนปีเกิด เช่น 4 พฤษภาคม 1992'
                 value={birthDay}
                 autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={30}
                 onChangeText={setBirthDay}
-            />
-        </View>
+            /> */}
+        </TouchableOpacity>
 
-        <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}} >
-            <TextInput
-                placeholder='เพศ'
-                value={gender}
-                autoCapitalize="none"
-                autoCorrect={false}
-                maxLength={60}
-                onChangeText={setGender}
-            />
+        <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor,flexDirection:'row',alignItems:'center'}} >
+            <Text>เพศ :</Text>
+            <RadioButtonGroup
+              containerStyle={{ flexDirection:'row',padding:10,width:'50%',justifyContent:'space-between' }}
+              selected={gender}
+              onSelected={(value) => setGender(value)}
+              radioBackground="#faa550"
+            >
+              <RadioButtonItem value="test2" label="ชาย" />
+              <RadioButtonItem
+                value="test"
+                label='หญิง'
+              />
+            </RadioButtonGroup>
         </View>
         <TouchableOpacity style={styles.touch} onPress={checkData} >
             <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >ต่อไป   </Text>

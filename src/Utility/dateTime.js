@@ -11,6 +11,15 @@ export const stringDateTime = () => {
     return cDateTime;  // 27/06/2021 00:25:26
 }
 
+export const stringDateTime2 = (today) => {
+    // const today = new Date();
+    const cDateTime =
+        today.getDate().toString().padStart(2,"0") + "/"+
+        parseInt(today.getMonth()+1).toString().padStart(2,"0") +"/"+
+        today.getFullYear().toString().padStart(4,"0")
+    return cDateTime;  // 27/06/2021 
+}
+
 export const stringDtNumOnly = () => {
     const today = new Date();
     const cDateTime =

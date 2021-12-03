@@ -4,6 +4,7 @@ import {Provider as BrandMemberProvider,Context as BrandMemberContext} from './B
 import {Provider as CustomerProfileProvider,Context as CustomerProfileContext} from './CustomerProfileContext';
 import {Provider as ShopMemberProvider,Context as ShopMemberContext} from './ShopMemberContext'
 import {Provider as ShopCouponProvider,Context as ShopCouponContext} from './ShopCouponContext'
+import {Provider as CustomerLoginProvider,Context as CustomerLoginContext} from './CustomerLoginContext'
 
 
 export {    
@@ -13,4 +14,5 @@ export {
     CustomerProfileProvider,CustomerProfileContext,
     ShopMemberProvider,ShopMemberContext,
     ShopCouponProvider,ShopCouponContext,
+    CustomerLoginProvider,CustomerLoginContext
 };

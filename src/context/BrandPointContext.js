@@ -1,5 +1,4 @@
 import CreateDataContext from './CreateDataContext';
-import BrandPointData from '../Data/Brand'
 
 const BrandReducer = (state,action) => {
 
