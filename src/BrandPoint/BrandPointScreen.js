@@ -66,7 +66,6 @@ const  BrandPointDetails = ({navigation}) => {
             coupon : brandMemberData.coupon,
             remainPoint : brandMemberData.remainPoint,
             address:customerProfile[0]?.address,
-            brandName:'',
             gender:customerProfile[0]?.gender,
             userBirthDay:customerProfile[0]?.birthday,
             userName:customerProfile[0]?.customerName,
