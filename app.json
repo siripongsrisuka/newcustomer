@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.shopcham.shopchamcustomer"
     },
     "android": {
-      "icon": "./assets/shopcham_customer_logo.png.png",
+      "icon": "./assets/shopcham_customer_logo.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/shopcham_customer_logo.png",
         "backgroundColor": "#FFFFFF"
