@@ -2,9 +2,9 @@
   "expo": {
     "name": "Shopcham",
     "slug": "Shopcham",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/shopcham_customer_logo.png",
+    "icon": "./assets/icon_shopcham_expo.png",
     "splash": {
       "image": "./assets/shopcham_customer_splash.png",
       "resizeMode": "contain",
@@ -17,17 +17,18 @@
       "**/*"
     ],
     "ios": {
+      "icon": "./assets/icon_shopcham_expo.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.shopcham.shopchamcustomer2"
     },
     "android": {
-      "icon": "./assets/shopcham_customer_logo.png",
+      "icon": "./assets/icon_shopcham_expo.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/shopcham_customer_logo.png",
+        "foregroundImage": "./assets/adaptive-icon_shopcham_expo.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.shopcham.shopchamcustomer2",
-      "versionCode":3
+      "versionCode":4
     },
     "web": {
       "favicon": "./assets/shopcham_customer_splash.png"
