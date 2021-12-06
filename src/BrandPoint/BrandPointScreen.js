@@ -66,12 +66,13 @@ const  BrandPointDetails = ({navigation}) => {
             coupon : brandMemberData.coupon,
             remainPoint : brandMemberData.remainPoint,
             address:customerProfile[0]?.address,
-            brandName:'',
+            brandName:brandMemberData.brandName,
             gender:customerProfile[0]?.gender,
             userBirthDay:customerProfile[0]?.birthday,
             userName:customerProfile[0]?.customerName,
             userTel:customerProfile[0]?.tel,
         })
+        console.log(brandMemberData.brandName)
         navigation.navigate('BrandPointDetails',{brandId:brandMemberData.brandId})
         setRegisterImage('')
         setCouponQty('')
