@@ -27,14 +27,14 @@ const  BrandPointDetails = ({navigation}) => {
         setBrandMemberData(data)
         
 
-        if(filterBrandProfile[0].couponRegister.length > 0){
+        if(filterBrandProfile[0].couponRegister.length > 0 && filterBrandProfile[0].couponRegister[0].status == 'active'){
             let couponRegister = filterBrandProfile[0].couponRegister[0]
             setRegisterImage(couponRegister.imageId)
             setCouponQty(couponRegister.qty)
             setCouponName(couponRegister.productName)
             setCouponRegis(couponRegister)
         } 
-        if(filterBrandProfile[0].pointRegister.length > 0){
+        if(filterBrandProfile[0].pointRegister.length > 0 && filterBrandProfile[0].pointRegister[0].status == 'active'){
             let pointRegister = filterBrandProfile[0].pointRegister[0]
             setPoint(pointRegister.point)
             setPointName(pointRegister.pointName)
