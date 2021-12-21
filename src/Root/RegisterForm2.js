@@ -10,6 +10,7 @@ import {
   TextInput,
   ScrollView,
   Modal,
+  ImageBackground
 } from 'react-native';
 import Fonts from '../constants/Fonts';
 
@@ -65,7 +66,6 @@ const RegisterForm2 = ({navigation,route}) => {
                 registerData.address = address
                 registerData.phoneNumber = phoneNumber
                 updateRegisterData(registerData)
-                // phoneLogin2(phoneNumber)
                 navigation.navigate('FirebaseOtpVerifyScreen',{phone:phoneNumber})
             }
           })
@@ -74,27 +74,23 @@ const RegisterForm2 = ({navigation,route}) => {
 
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1,alignItems:'center',backgroundColor:'white'}} keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator ={false}>
-        <Image 
-            style={{width:Dimensions.Width,height:Dimensions.Width}} resizeMode='stretch'
-            source={{uri:picture()[0]?.uri}} 
-        />
-        <View style={{alignItems:'center'}} >
-          <Text style={{fontSize:18,fontWeight:'bold'}} >สร้างบัญชี</Text>
-          <Text>2/2</Text>
-        </View>
-        <View style={styles.card} >
-            <Text style={{fontSize:18}} >ตั้งค่าที่อยู่สำหรับจัดส่งของรางวัล</Text>
-            <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
-            <TextInput
-                placeholder='ที่อยู่*'
-                value={address}
-                autoCapitalize="none"
-                autoCorrect={false}
-                maxLength={30}
-                onChangeText={setAddress}
-            />
-            </View>
-            <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
+       
+        <ImageBackground style={{width:Dimensions.Width,height:Dimensions.Height}} source={{uri:picture()[0]?.uri}} >
+          <View style={{flex:1,alignItems:'center',justifyContent:'flex-end'}} >
+            <View style={styles.card} >
+              <Text style={Fonts.md} >ตั้งค่าที่อยู่สำหรับจัดส่งของรางวัล</Text>
+              <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
+                <TextInput
+                    placeholder='ที่อยู่*'
+                    value={address}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    maxLength={30}
+                    onChangeText={setAddress}
+                    style={{...Fonts.md}}
+                />
+              </View>
+              <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}  >
                 <TextInput
                     placeholder='email'
                     value={email}
@@ -102,10 +98,11 @@ const RegisterForm2 = ({navigation,route}) => {
                     autoCorrect={false}
                     maxLength={30}
                     onChangeText={setEmail}
+                    style={{...Fonts.md}}
                 />
-            </View>
-            
-             <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}>
+              </View>
+                
+              <View style={{height:50,width:Dimensions.Width/1.2,margin:10,borderBottomWidth:1,borderColor:Colors.InputColor}}>
                 <TextInput
                     placeholder='กรอกเบอร์โทรศพท์'
                     value={phoneNumber}
@@ -114,42 +111,46 @@ const RegisterForm2 = ({navigation,route}) => {
                     maxLength={10}
                     onChangeText={setPhoneNumber}
                     keyboardType='phone-pad'
+                    style={{...Fonts.md}}
                 />
+              </View>
+              
+              
+              <TouchableOpacity onPress={() =>{setModalVisible(true)}} >
+                  <Text style={{...Fonts.md,...{textDecorationLine:'underline'}}}>ข้อตกลง/เงื่อนไขในการใช้บริการ</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.touch} onPress={checkData}  >
+                  <Text style={{...Fonts.lgwb}} >ต่อไป   </Text>
+                  <AntDesign name='arrowright' size={25} color="white" />
+              </TouchableOpacity>
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+              >
+                <TouchableOpacity 
+                    style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center'}} 
+                    activeOpacity={1} 
+                    onPress={() => {setModalVisible(false)}}
+                >
+                    <TouchableWithoutFeedback>
+                      <View style={{height:'70%',margin:20}} >
+                        <ScrollView contentContainerStyle={{backgroundColor: "white",alignSelf:'center',padding:20,alignItems:'center'}}>
+                          <View onStartShouldSetResponder={()  => true}>
+                            <Text style={Fonts.md}>{condition()[0]?.text}</Text>
+                          </View>
+                        </ScrollView>
+                        <TouchableOpacity onPress={() =>{setModalVisible(false),setApprove(true)}} style={{backgroundColor:'#29bd04',height:40,justifyContent:'center',alignItems:'center'}} >
+                          <Text style={Fonts.smw}>ยอมรับเงื่อนไข</Text>
+                        </TouchableOpacity>
+                      </View>   
+                    </TouchableWithoutFeedback>
+                </TouchableOpacity>
+              </Modal>
             </View>
-           
-           
-            <TouchableOpacity onPress={() =>{setModalVisible(true)}} >
-                <Text>ข้อตกลง/เงื่อนไขในการใช้บริการ</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.touch} onPress={checkData}  >
-                <Text style={{fontSize:24,fontWeight:'bold',color:'white'}} >ต่อไป   </Text>
-                <AntDesign name='arrowright' size={25} color="white" />
-            </TouchableOpacity>
-            <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-        >
-            <TouchableOpacity 
-                style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'center'}} 
-                activeOpacity={1} 
-                onPress={() => {setModalVisible(false)}}
-            >
-                <TouchableWithoutFeedback>
-                  <View style={{height:'70%',margin:20}} >
-                    <ScrollView contentContainerStyle={{backgroundColor: "white",alignSelf:'center',padding:20,alignItems:'center'}}>
-                      <View onStartShouldSetResponder={()  => true}>
-                        <Text style={Fonts.md}>{condition()[0]?.text}</Text>
-                      </View>
-                    </ScrollView>
-                    <TouchableOpacity onPress={() =>{setModalVisible(false),setApprove(true)}} style={{backgroundColor:'#29bd04',height:40,justifyContent:'center',alignItems:'center'}} >
-                      <Text style={Fonts.smw}>ยอมรับเงื่อนไข</Text>
-                    </TouchableOpacity>
-                  </View>   
-                </TouchableWithoutFeedback>
-            </TouchableOpacity>
-        </Modal>
-        </View>
+          </View>
+        </ImageBackground>
+        
     </ScrollView>
   );
 };

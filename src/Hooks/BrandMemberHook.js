@@ -18,11 +18,11 @@ const BrandMemberHook = () => {
                 let addId = docs.data()
                 addId.doc = docs.id
                 db.collection('brand').where("brandId","==",addId.brandId).get().then(function(snapshot){
-                    snapshot.forEach(function(docs){
-                        let brand = docs.data()
+                    snapshot.forEach(function(doc){
+                        let brand = doc.data()
                         addId.brandAdsImage = brand.brandAdsImage
                         addId.brandLogoId = brand.imageId
-                        brandProfile.push(docs.data())
+                        brandProfile.push({...doc.data(),id:doc.id})
                         getBrandProfile(brandProfile); 
                     })
                 })

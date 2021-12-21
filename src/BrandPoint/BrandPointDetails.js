@@ -1,17 +1,23 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState,useEffect} from "react";
 import { Text, StyleSheet, View, Image,TouchableOpacity, Modal, TouchableWithoutFeedback, FlatList } from "react-native";
 import Dimensions from '../constants/Dimensions';
 import {Context as BrandMemberContext} from '../context/BrandMemberContext';
 import Colors from '../constants/Colors'
 import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
-import {stringDtNumOnly} from '../Utility/dateTime'
+import {stringDtNumOnly2} from '../Utility/dateTime'
 
 const  BrandPointDetails = ({route}) => {
     const {brandId} = route.params
-    const {state : {brandMember,brandProfile},getBrandMember}= useContext(BrandMemberContext);
-    let filterBrandReward = brandProfile.filter((brand)=> brand.brandId == brandId)
-    let brandReward = filterBrandReward[0].reward
+    const {state : {brandMember,brandProfile},getBrandMember,getBrandProfile}= useContext(BrandMemberContext);
+    let copyBrandProfile = brandProfile.slice()
+    let filterBrandReward = copyBrandProfile.filter((brand)=> brand.brandId == brandId)
+    // let brandReward = filterBrandReward[0].reward
+    const [rewardOfBrand,setRewardOfBrand] = useState()
+    let brandReward = filterBrandReward[0].reward.filter((a) => {return(a.status == true && stringDtNumOnly2(a.expireDate.toDate() )> stringDtNumOnly2(new Date()) && stringDtNumOnly2(a.startDate.toDate() )<= stringDtNumOnly2(new Date()))})
+    useEffect(() =>{
+        setRewardOfBrand(brandReward)
+    },[])
     const [showReward, setShowReward] = useState(false);
     const [rewardData, setRewardData] = useState({})
 
@@ -21,22 +27,45 @@ const  BrandPointDetails = ({route}) => {
         if(rewardData.pointConsume >filterBrandMember[0]?.remainPoint){
             alert('สะสมแต้มเพิ่มอีกหน่อย แล้วมารับรางวัลไปได้เลย')
         } else {
-            filterBrandMember[0].remainPoint = Number(filterBrandMember[0]?.remainPoint) - Number(rewardData.pointConsume)
-            filterBrandMember[0].reward.push({
-                rewardId:filterBrandReward[0].brandId + stringDtNumOnly(),
-                rewardName:rewardData.rewardName,
-                rewardDetail:rewardData.rewardDetail,
-                rewardImageId:rewardData.imageId,
-                qty:1,
-                status:'request',
-                dateTime:new Date()
+            db.collection('brand').doc(filterBrandReward[0].id).get().then(function(docs){
+                
+                    let res = docs.data()
+                    let rewart0 = res.reward
+                    let reward = rewart0?.filter(((a) =>{return(a.rewardId == rewardData.rewardId)}))
+                    if(reward.length > 0 && reward[0].remainQty >0){
+                        reward[0].remainQty = reward[0].remainQty -1
+                        reward[0].usedQty = reward[0].usedQty +1
+                        filterBrandMember[0].remainPoint = Number(filterBrandMember[0]?.remainPoint) - Number(rewardData.pointConsume)
+                        filterBrandMember[0].reward.push({
+                            // rewardId:filterBrandReward[0].brandId + stringDtNumOnly2(),
+                            rewardId:rewardData.rewardId,
+                            rewardName:rewardData.rewardName,
+                            rewardDetail:rewardData.rewardDetail,
+                            rewardImageId:rewardData.imageId,
+                            qty:1,
+                            status:'request',
+                            dateTime:new Date()
+                        })
+                        filterBrandReward[0].reward = rewart0
+                        console.log(filterBrandReward)
+                        getBrandMember(brandMember)
+                        getBrandProfile(copyBrandProfile)
+                        setRewardOfBrand(rewart0)
+                        db.collection("brandMember").doc(filterBrandMember[0].doc).update({
+                            remainPoint : filterBrandMember[0].remainPoint,
+                            reward :filterBrandMember[0].reward
+                        })
+                        db.collection("brand").doc(filterBrandReward[0].id).update({ 
+                            reward: rewart0
+                        })
+                        alert('แลกรางวัลสำเร็จ')
+                        
+                    } else {
+                        alert('ขออภัย สิทธิ์เต็ม')
+                    }
+                
             })
-            getBrandMember(brandMember)
-            db.collection("brandMember").doc(filterBrandMember[0].doc).update({
-                remainPoint : filterBrandMember[0].remainPoint,
-                reward :filterBrandMember[0].reward
-            })
-            alert('แลกรางวัลสำเร็จ')
+            
         }
         setShowReward(false)
     };
@@ -64,7 +93,7 @@ const  BrandPointDetails = ({route}) => {
             </View>
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={brandReward}
+                data={rewardOfBrand}
                 keyExtractor={(item) => item.rewardId}
                 renderItem={({ item }) => {
                     return (
@@ -72,8 +101,10 @@ const  BrandPointDetails = ({route}) => {
                             <TouchableOpacity onPress = {() => {setShowReward(true),setRewardData(item)}} style={styles.card} >
                                 <Image source={{uri: item.imageId}} style={{height:Dimensions.Width-20,width:Dimensions.Width-20,borderRadius:30}}  />
                                 <View style = {styles.absulute} >
-                                    <Text style={Fonts.smw}>ใช้ {item.pointConsume} คะแนน</Text>
-                                </View> 
+                                    <Text style={Fonts.mdw}>ใช้ {item.pointConsume} คะแนน</Text>
+                                    <Text style={Fonts.smw}>คงเหลือ : {item.remainQty} สิทธิ์ </Text>
+                                </View>
+                                 
                             </TouchableOpacity>
 
                             <Modal
@@ -164,7 +195,7 @@ const styles = StyleSheet.create({
     },
     absulute: {
         height:40, 
-        width:100,
+        width:130,
         backgroundColor:Colors.absolute,
         justifyContent:'center',
         alignItems:'center',

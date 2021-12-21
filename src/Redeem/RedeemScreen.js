@@ -29,6 +29,7 @@ import Fonts from "../constants/Fonts";
 import Carousel from "../../component/Carousel";
 import Catalog from "../../component/Catalog";
 import { Feather, FontAwesome5 } from '@expo/vector-icons'; 
+import {stringDateTime2,getDuration,stringDtNumOnly2} from '../Utility/dateTime'
 
 const  RedeemScreen = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(true);
@@ -43,6 +44,7 @@ const  RedeemScreen = ({navigation}) => {
     const [carousel, setCarousel] = useState()
     const [modalAds, setModalAds] = useState(false)
     const [ads, setAds] = useState()
+    const [showProductCobrand, setShowProductCobrand] = useState(undefined)
 
     //useContext
     const {state : {customerProfile}}= useContext(CustomerProfileContext);
@@ -75,11 +77,11 @@ const  RedeemScreen = ({navigation}) => {
     
     useEffect(() => {
           loadStock()
-          console.log('i fire once')
     },[])
 
+
     function productPromotion(type){
-      let res = productCobrand?.filter((a) =>{return(a.promotion[0]?.detail == type)})
+      let res = productCobrand?.filter((a) =>{return(a.promotion[0]?.detail == type && stringDtNumOnly2(a.promotion[0]?.expireDate.toDate() )> stringDtNumOnly2(new Date()) && stringDtNumOnly2(a.promotion[0]?.startDate.toDate() )<= stringDtNumOnly2(new Date()))})
       return res
     }
 
@@ -102,8 +104,9 @@ const  RedeemScreen = ({navigation}) => {
         setImage(item.imageId)
         setProductVisible(true)
         setProductName(item.name)
+        setShowProductCobrand(item)
+        console.log(item)
     }
-
     return (
       <View style={{flex:1,alignItems:'center',backgroundColor:'white'}} >
         {carousel !== undefined && <Carousel data ={carousel} />}
@@ -245,8 +248,14 @@ const  RedeemScreen = ({navigation}) => {
                                   <Text style={Fonts.lg} >{productName}</Text>
                                 </View>
                             </View>
+                            <View style={{width:'100%',backgroundColor:'white',shadowColor: "#000",shadowOffset: {width: 0,height: 2},shadowOpacity: 0.25,shadowRadius: 4,elevation: 5,padding:10,borderRadius:30,alignItems:'center'}} >
+                              {showProductCobrand !== undefined && (<Text style={Fonts.md}>มีโปรโมชั่นจนถึง {stringDateTime2(showProductCobrand?.promotion[0].expireDate.toDate())} </Text>)}
+                              {showProductCobrand !== undefined && Number(getDuration(new Date(),showProductCobrand?.promotion[0].expireDate.toDate())) >=1 && (<Text style={{...Fonts.lgb,...{color:"red"}}} >เหลือเวลา {getDuration(new Date(),showProductCobrand?.promotion[0].expireDate.toDate())} วัน </Text>)}
+                              {showProductCobrand !== undefined && Number(getDuration(new Date(),showProductCobrand?.promotion[0].expireDate.toDate())) <3  && (<Text style={{...Fonts.xlb,...{color:"red"}}} >วันสุดท้าย!!!</Text>)}  
+                            </View>
+                           
                             <Text style={Fonts.lg} >ค้นพบ : {filterShop.length} ร้านค้าใกล้คุณ</Text>
-                                <View style={{height:'60%'}} >
+                                <View style={{height:'50%'}} >
                                   <ScrollView contentContainerStyle={{backgroundColor: "white"}}>
                                     <View onStartShouldSetResponder={()  => true}>
                                       {filterShop.map((item,index) =>(

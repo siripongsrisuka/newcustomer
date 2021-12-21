@@ -19,9 +19,18 @@ export const stringDateTime2 = (today) => {
         today.getFullYear().toString().padStart(4,"0")
     return cDateTime;  // 27/06/2021 
 }
+export function getDuration(date1, date2) {
+    const dt1 = new Date(date1);
+    const dt2 = new Date(date2);
+    return Math.floor(
+      (Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) -
+        Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate())) /
+        (1000 * 60 * 60 * 24)
+    );
+  }
 
-export const stringDtNumOnly = () => {
-    const today = new Date();
+export const stringDtNumOnly = (today) => {
+    // const today = new Date();
     const cDateTime =
         today.getDate().toString().padStart(2,"0") +
         parseInt(today.getMonth()+1).toString().padStart(2,"0") +
@@ -31,6 +40,19 @@ export const stringDtNumOnly = () => {
         today.getSeconds().toString().padStart(2,"0");
 
     return cDateTime;  // 27062021002526
+}
+
+export const stringDtNumOnly2 = (today) => {
+    // const today = new Date();
+    const cDateTime =
+        today.getFullYear().toString().padStart(4,"0")+
+        parseInt(today.getMonth()+1).toString().padStart(2,"0") +
+        today.getDate().toString().padStart(2,"0") +
+        today.getHours().toString().padStart(2,"0")+
+        today.getMinutes().toString().padStart(2,"0")+
+        today.getSeconds().toString().padStart(2,"0");
+
+    return cDateTime;  // 20210612002526
 }
 
 

@@ -1,5 +1,6 @@
 export default {
     xlwb:{fontSize:30,color:'white',fontFamily: 'Prompt_600SemiBold'},
+    xlw:{fontSize:30,color:'white',fontFamily: 'Prompt_400Regular'},
     xlb:{fontSize:30,fontFamily: 'Prompt_600SemiBold'},
     lgwb:{fontSize:18,fontFamily: 'Prompt_600SemiBold',color:'white'},
     lgb:{fontSize:18,fontFamily: 'Prompt_600SemiBold'},

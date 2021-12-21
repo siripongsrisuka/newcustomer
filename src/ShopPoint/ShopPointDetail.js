@@ -8,6 +8,7 @@ import db from "../../db/firestore";
 import Fonts from "../constants/Fonts";
 import Catalog from "../../component/Catalog";
 import { Feather } from '@expo/vector-icons'; 
+import {stringDateTime2,getDuration,stringDtNumOnly2} from '../Utility/dateTime'
 
 const  ShopPointDetail = ({route}) => {
     const { shopId } = route.params;
@@ -66,8 +67,9 @@ const  ShopPointDetail = ({route}) => {
       let res = rewardData?.filter((a) => {return(a.id == id)})
       return res
     }
+
     function productPromotion(type){
-      let res = thisShopProduct?.filter((a) =>{return(a.promotion[0]?.detail == type)})
+      let res = thisShopProduct?.filter((a) =>{return(a.promotion[0]?.detail == type && stringDtNumOnly2(a.promotion[0]?.expireDate.toDate() )> stringDtNumOnly2(new Date()) && stringDtNumOnly2(a.promotion[0]?.startDate.toDate() )<= stringDtNumOnly2(new Date()))})
       return res
     }
 

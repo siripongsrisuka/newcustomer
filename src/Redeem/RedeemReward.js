@@ -144,7 +144,8 @@ const  redeemReward = ({route}) => {
             <FlatList
               data={brandReward}
               numColumns={2}
-              keyExtractor={(item) => item.rewardId}
+              // keyExtractor={(item) => item.rewardId}
+              keyExtractor={(item) => item.dateTime}
               showsVerticalScrollIndicator={false}
               renderItem={({item}) => {
                 return (
